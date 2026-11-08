@@ -88,8 +88,7 @@ async function load() {
     flavors = d.flavors || [];
     $("status").textContent = "Live. Updates every second.";
     renderMenu();
-    renderFlavors();
-    if (token) loadOrders();
+    if (token) { loadOrders(); loadOwnerFlavors(); }
     loadMine();
   } catch (e) {
     $("status").textContent = "Could not load cookies. Check your connection.";
@@ -194,10 +193,20 @@ async function loadOrders() {
   }).join("") || '<p class="muted">No orders yet.</p>';
 }
 
+let ownerFlavors = [];
+async function loadOwnerFlavors() {
+  const d = await post({ action: "listFlavors" });
+  if (d.error) return;
+  ownerFlavors = d.flavors || [];
+  renderFlavors();
+}
+
 function renderFlavors() {
-  $("flavors").innerHTML = flavors.map(f => `<div class="row">
-    <span><strong>${esc(f.flavor)}</strong> (${esc(f.batch)}) — ₱${esc(f.price)}, ${Number(f.stock) || 0} in stock</span>
+  $("flavors").innerHTML = ownerFlavors.map(f => `<div class="row">
+    <span><strong>${esc(f.flavor)}</strong> (${esc(f.batch)}) — ₱${esc(f.price)}, ${Number(f.stock) || 0} in stock
+      ${f.hidden ? '<span style="color:#b00;font-weight:600">(hidden from customers)</span>' : ""}</span>
     <span>
+      <button data-toggle-hide="${esc(f.id)}">${f.hidden ? "Show" : "Hide"}</button>
       <button data-edit-flavor="${esc(f.id)}">Edit</button>
       <button data-del-flavor="${esc(f.id)}">Delete</button>
     </span>
@@ -278,6 +287,13 @@ function startEdit(f) {
 }
 
 $("admin").addEventListener("click", async e => {
+  const th = e.target.dataset.toggleHide;
+  if (th) {
+    const f = ownerFlavors.find(x => x.id === th);
+    await post({ action: "setHidden", id: th, hidden: !(f && f.hidden) });
+    await loadOwnerFlavors();
+    return load();
+  }
   const df = e.target.dataset.delFlavor, dof = e.target.dataset.delOrder, ef = e.target.dataset.editFlavor;
   if (ef) {
     const f = flavors.find(x => x.id === ef);
