@@ -19,6 +19,10 @@ button{padding:8px 14px;cursor:pointer;margin-right:4px;color:#000;background:#e
 button:disabled{opacity:.5}
 .row{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding:6px 0;gap:8px}
 .hidden{display:none}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:13px;font-weight:600;margin-right:4px}
+.badge.pending{background:#e8f5e9;color:#1b5e20;border:1px solid #66bb6a}
+.badge.delayed{background:#fff3e0;color:#e65100;border:1px solid #ffa726}
+.badge.completed{background:#e3f2fd;color:#0d47a1;border:1px solid #42a5f5}
 </style>
 </head>
 <body>
@@ -174,7 +178,7 @@ async function loadOrders() {
     const items = JSON.parse(o.items || "[]").map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ");
     const st = o.status || "pending";
     return `<div class="row" style="flex-wrap:wrap">
-      <span style="flex:1"><strong>${esc(o.name)}</strong> — ${items} (₱${esc(o.total)})</span>
+      <span style="flex:1">${statusBadge(st)}<strong>${esc(o.name)}</strong> — ${items} (₱${esc(o.total)})</span>
       <div style="width:100%">
         <select id="status-${esc(o.id)}">
           <option value="pending" ${st === "pending" ? "selected" : ""}>Pending</option>
@@ -298,6 +302,11 @@ $("admin").addEventListener("click", async e => {
 
 // ---- Customer: orders placed from this device ----
 const MY_KEY = "myOrderIds";
+function statusBadge(status) {
+  if (status === "completed") return '<span class="badge completed">✅ Completed</span>';
+  if (status === "delayed") return '<span class="badge delayed">⚠️ Delayed</span>';
+  return '<span class="badge pending">🕒 Pending</span>';
+}
 function myIds() {
   try { return JSON.parse(localStorage.getItem(MY_KEY) || "[]"); } catch (_) { return []; }
 }
@@ -321,9 +330,9 @@ async function loadMine() {
   if (d.error) return;
   $("mine-list").innerHTML = (d.orders || []).map(o => {
     const items = JSON.parse(o.items || "[]").map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ");
-    const label = o.status === "completed" ? "Completed" : o.status === "delayed" ? "Delayed" : "Pending";
+    const badge = statusBadge(o.status);
     return `<div class="row">
-      <span><strong>${label}</strong> — ${items} (₱${esc(o.total)})
+      <span>${badge} ${items} (₱${esc(o.total)})
         ${o.note ? `<br><span class="muted">Note: ${esc(o.note)}</span>` : ""}
       </span>
       <button data-dismiss="${esc(o.id)}">Dismiss</button>
