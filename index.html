@@ -36,6 +36,12 @@ button:disabled{opacity:.5}
   <p id="msg" class="muted"></p>
 </section>
 
+<section id="mine">
+  <h2>My orders</h2>
+  <p class="muted">Orders placed from this device.</p>
+  <div id="mine-list"></div>
+</section>
+
 <section id="admin" class="hidden">
   <h2>Owner</h2>
   <div id="login">
@@ -80,6 +86,7 @@ async function load() {
     renderMenu();
     renderFlavors();
     if (token) loadOrders();
+    loadMine();
   } catch (e) {
     $("status").textContent = "Could not load cookies. Check your connection.";
   }
@@ -140,6 +147,7 @@ $("place").onclick = async () => {
   });
   const d = await r.json();
   if (d.error) return ($("msg").textContent = d.error);
+  saveMyOrderId(d.id);
   cart = {};
   $("name").value = "";
   $("msg").textContent = "Order placed! Thank you.";
@@ -160,11 +168,23 @@ async function loadOrders() {
   const d = await post({ action: "listOrders" });
   if (d.error) return;
   orders = d.orders || [];
+  // Don't redraw while the owner is typing in a note or choosing a status.
+  if ($("orders").contains(document.activeElement)) return;
   $("orders").innerHTML = orders.map(o => {
     const items = JSON.parse(o.items || "[]").map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ");
-    return `<div class="row">
-      <span><strong>${esc(o.name)}</strong> — ${items} (₱${esc(o.total)})</span>
-      <button data-del-order="${esc(o.id)}">Delete</button>
+    const st = o.status || "pending";
+    return `<div class="row" style="flex-wrap:wrap">
+      <span style="flex:1"><strong>${esc(o.name)}</strong> — ${items} (₱${esc(o.total)})</span>
+      <div style="width:100%">
+        <select id="status-${esc(o.id)}">
+          <option value="pending" ${st === "pending" ? "selected" : ""}>Pending</option>
+          <option value="delayed" ${st === "delayed" ? "selected" : ""}>Delayed</option>
+          <option value="completed" ${st === "completed" ? "selected" : ""}>Completed</option>
+        </select>
+        <input id="note-${esc(o.id)}" placeholder="Note for the customer (e.g. ready Monday)" value="${esc(o.note)}">
+        <button data-save-order="${esc(o.id)}">Save</button>
+        <button data-del-order="${esc(o.id)}">Delete</button>
+      </div>
     </div>`;
   }).join("") || '<p class="muted">No orders yet.</p>';
 }
@@ -259,6 +279,12 @@ $("admin").addEventListener("click", async e => {
     if (f) startEdit(f);
     return;
   }
+  const so = e.target.dataset.saveOrder;
+  if (so) {
+    const status = $("status-" + so).value, note = $("note-" + so).value.trim();
+    await post({ action: "updateOrder", id: so, status, note });
+    return loadOrders();
+  }
   if (dof) { await post({ action: "deleteOrder", id: dof }); return loadOrders(); }
   if (df) {
     if (e.target.dataset.armed) {
@@ -268,6 +294,44 @@ $("admin").addEventListener("click", async e => {
     e.target.dataset.armed = "1";
     e.target.textContent = "Confirm delete";
   }
+});
+
+// ---- Customer: orders placed from this device ----
+const MY_KEY = "myOrderIds";
+function myIds() {
+  try { return JSON.parse(localStorage.getItem(MY_KEY) || "[]"); } catch (_) { return []; }
+}
+function saveMyOrderId(id) {
+  if (!id) return;
+  localStorage.setItem(MY_KEY, JSON.stringify([...myIds(), id]));
+}
+function dismissOrder(id) {
+  localStorage.setItem(MY_KEY, JSON.stringify(myIds().filter(x => x !== id)));
+  loadMine();
+}
+async function loadMine() {
+  const ids = myIds();
+  if (!ids.length) { $("mine-list").innerHTML = '<p class="muted">No orders from this device yet.</p>'; return; }
+  const r = await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify({ action: "myOrders", ids })
+  });
+  const d = await r.json();
+  if (d.error) return;
+  $("mine-list").innerHTML = (d.orders || []).map(o => {
+    const items = JSON.parse(o.items || "[]").map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ");
+    const label = o.status === "completed" ? "Completed" : o.status === "delayed" ? "Delayed" : "Pending";
+    return `<div class="row">
+      <span><strong>${label}</strong> — ${items} (₱${esc(o.total)})
+        ${o.note ? `<br><span class="muted">Note: ${esc(o.note)}</span>` : ""}
+      </span>
+      <button data-dismiss="${esc(o.id)}">Dismiss</button>
+    </div>`;
+  }).join("") || '<p class="muted">No orders to show.</p>';
+}
+$("mine-list").addEventListener("click", e => {
+  if (e.target.dataset.dismiss) dismissOrder(e.target.dataset.dismiss);
 });
 
 if (location.hash === "#admin") $("admin").classList.remove("hidden");
