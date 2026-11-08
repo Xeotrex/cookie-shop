@@ -75,7 +75,7 @@ async function load() {
     const r = await fetch(API);
     const d = await r.json();
     flavors = d.flavors || [];
-    $("status").textContent = "Live. Updates every 15 seconds.";
+    $("status").textContent = "Live. Updates every second.";
     renderMenu();
     renderFlavors();
     if (token) loadOrders();
