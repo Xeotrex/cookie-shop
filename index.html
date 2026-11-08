@@ -173,7 +173,8 @@ async function loadOrders() {
   if (d.error) return;
   orders = d.orders || [];
   // Don't redraw while the owner is typing in a note or choosing a status.
-  if ($("orders").contains(document.activeElement)) return;
+  const ae = document.activeElement;
+  if (ae && $("orders").contains(ae) && (ae.tagName === "INPUT" || ae.tagName === "SELECT")) return;
   $("orders").innerHTML = orders.map(o => {
     const items = JSON.parse(o.items || "[]").map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ");
     const st = o.status || "pending";
