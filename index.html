@@ -65,6 +65,7 @@ const API = "https://script.google.com/macros/s/AKfycby8RP9-In1-SxqX1wW7gxc7XW1w
 
 const $ = id => document.getElementById(id);
 let flavors = [], orders = [], cart = {}, token = sessionStorage.getItem("token") || "";
+let editingId = null; // set while editing an existing flavor
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -171,7 +172,10 @@ async function loadOrders() {
 function renderFlavors() {
   $("flavors").innerHTML = flavors.map(f => `<div class="row">
     <span><strong>${esc(f.flavor)}</strong> (${esc(f.batch)}) — ₱${esc(f.price)}, ${Number(f.stock) || 0} in stock</span>
-    <button data-del-flavor="${esc(f.id)}">Delete</button>
+    <span>
+      <button data-edit-flavor="${esc(f.id)}">Edit</button>
+      <button data-del-flavor="${esc(f.id)}">Delete</button>
+    </span>
   </div>`).join("") || '<p class="muted">No flavors yet.</p>';
 }
 
@@ -214,7 +218,8 @@ $("save").onclick = async () => {
   const batch = $("f-batch").value.trim() || "current";
   if (!flavor || !price) return ($("save-msg").textContent = "Need a flavor and price.");
   $("save-msg").textContent = "Saving…";
-  const id = slug(flavor) + "-" + slug(batch);
+  // When editing, keep the original id so the row is updated, not duplicated.
+  const id = editingId || (slug(flavor) + "-" + slug(batch));
   const old = flavors.find(f => f.id === id);
   const photo = (await readPhoto($("f-photo").files[0])) || (old && old.photo) || "";
   const d = await post({
@@ -222,12 +227,38 @@ $("save").onclick = async () => {
     flavor: { id, flavor, price, description: $("f-desc").value.trim(), batch,
               stock: Number($("f-stock").value) || 0, photo }
   });
-  $("save-msg").textContent = d.error ? d.error : "Saved.";
+  $("save-msg").textContent = d.error ? d.error : (editingId ? "Updated." : "Saved.");
+  if (!d.error) clearForm();
   load();
 };
 
+function clearForm() {
+  editingId = null;
+  ["f-flavor", "f-price", "f-desc", "f-stock", "f-batch"].forEach(id => ($(id).value = ""));
+  $("f-photo").value = "";
+  $("save").textContent = "Save flavor";
+}
+
+function startEdit(f) {
+  editingId = f.id;
+  $("f-flavor").value = f.flavor || "";
+  $("f-price").value = f.price || "";
+  $("f-desc").value = f.description || "";
+  $("f-stock").value = f.stock || 0;
+  $("f-batch").value = f.batch || "";
+  $("f-photo").value = "";
+  $("save").textContent = "Update flavor";
+  $("save-msg").textContent = "Editing " + f.flavor + ". Leave the photo blank to keep the current one.";
+  $("f-flavor").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 $("admin").addEventListener("click", async e => {
-  const df = e.target.dataset.delFlavor, dof = e.target.dataset.delOrder;
+  const df = e.target.dataset.delFlavor, dof = e.target.dataset.delOrder, ef = e.target.dataset.editFlavor;
+  if (ef) {
+    const f = flavors.find(x => x.id === ef);
+    if (f) startEdit(f);
+    return;
+  }
   if (dof) { await post({ action: "deleteOrder", id: dof }); return loadOrders(); }
   if (df) {
     if (e.target.dataset.armed) {
