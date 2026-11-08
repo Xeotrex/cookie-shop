@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cookie Pre-Order</title>
+<style>
+html,body{background:#fff;color:#000}
+body{font-family:system-ui,sans-serif;max-width:720px;margin:0 auto;padding:16px}
+h1{margin-bottom:4px}
+.card{border:1px solid #ddd;border-radius:10px;padding:12px;margin:12px 0;display:flex;gap:12px}
+.card img{width:110px;height:110px;object-fit:cover;border-radius:8px;background:#f3f3f3;flex-shrink:0}
+.info{flex:1}
+.sold{color:#b00;font-weight:600}
+.muted{color:#555;font-size:14px}
+input,textarea{width:100%;padding:8px;margin:4px 0 8px;box-sizing:border-box;background:#eeeeee;color:#000;border:1px solid #ddd;border-radius:6px}
+input[type=file]{background:#fff}
+button{padding:8px 14px;cursor:pointer;margin-right:4px;color:#000;background:#eeeeee;border:1px solid #ccc;border-radius:6px}
+button:disabled{opacity:.5}
+.row{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding:6px 0;gap:8px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<h1>Cookie Pre-Order</h1>
+<p class="muted" id="status">Loading…</p>
+
+<section id="menu"></section>
+
+<section id="order">
+  <h2>Your order</h2>
+  <input id="name" placeholder="Your name">
+  <div id="cart"></div>
+  <p><strong>Total: ₱<span id="total">0</span></strong></p>
+  <button id="place">Place order</button>
+  <p id="msg" class="muted"></p>
+</section>
+
+<section id="admin" class="hidden">
+  <h2>Owner</h2>
+  <div id="login">
+    <input id="token" type="password" placeholder="Owner password">
+    <button id="unlock">Unlock</button>
+    <span id="login-msg" class="muted"></span>
+  </div>
+  <div id="tools" class="hidden">
+    <input id="f-flavor" placeholder="Flavor (e.g. S'mores)">
+    <input id="f-price" type="number" placeholder="Price ₱">
+    <textarea id="f-desc" placeholder="Description"></textarea>
+    <input id="f-stock" type="number" placeholder="Stock for this batch">
+    <input id="f-batch" placeholder="Batch name (e.g. Nov 9 pickup)">
+    <input id="f-photo" type="file" accept="image/*">
+    <button id="save">Save flavor</button>
+    <span id="save-msg" class="muted"></span>
+    <h3>Flavors</h3>
+    <div id="flavors"></div>
+    <h3>Orders</h3>
+    <div id="orders"></div>
+  </div>
+</section>
+
+<script>
+// Paste your Apps Script Web app URL here.
+const API = "https://script.google.com/macros/s/AKfycby8RP9-In1-SxqX1wW7gxc7XW1wzMwyopJMU-W5gfAom7CWbcQNdTLhZf8Qjb41GepnbQ/exec";
+
+const $ = id => document.getElementById(id);
+let flavors = [], orders = [], cart = {}, token = sessionStorage.getItem("token") || "";
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const left = f => Math.max(0, (Number(f.stock) || 0) - (Number(f.sold) || 0));
+
+async function load() {
+  try {
+    const r = await fetch(API);
+    const d = await r.json();
+    flavors = d.flavors || [];
+    $("status").textContent = "Live. Updates every 15 seconds.";
+    renderMenu();
+    renderFlavors();
+    if (token) loadOrders();
+  } catch (e) {
+    $("status").textContent = "Could not load cookies. Check your connection.";
+  }
+}
+
+function renderMenu() {
+  $("menu").innerHTML = flavors.map(f => {
+    const l = left(f), out = l <= 0;
+    return `<div class="card">
+      <img src="${f.photo || ""}" alt="">
+      <div class="info">
+        <strong>${esc(f.flavor)}</strong> — ₱${esc(f.price)}
+        <div class="muted">${esc(f.description)}</div>
+        <div>${out ? '<span class="sold">Sold out</span>' : l + " left"}</div>
+        <div style="margin-top:6px">
+          <button ${out ? "disabled" : ""} data-add="${esc(f.id)}">Add</button>
+          <span>${cart[f.id] || 0}</span>
+          <button data-rm="${esc(f.id)}">−</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("") || '<p class="muted">No cookies listed yet.</p>';
+  renderCart();
+}
+
+function renderCart() {
+  let total = 0, html = "";
+  flavors.forEach(f => {
+    const q = cart[f.id] || 0;
+    if (q > 0) {
+      total += q * Number(f.price);
+      html += `<div class="row"><span>${esc(f.flavor)} × ${q}</span><span>₱${q * Number(f.price)}</span></div>`;
+    }
+  });
+  $("cart").innerHTML = html || '<p class="muted">Nothing added yet.</p>';
+  $("total").textContent = total;
+}
+
+$("menu").addEventListener("click", e => {
+  const add = e.target.dataset.add, rm = e.target.dataset.rm;
+  const f = flavors.find(x => x.id === (add || rm));
+  if (!f) return;
+  if (add) cart[f.id] = Math.min((cart[f.id] || 0) + 1, left(f));
+  if (rm) cart[f.id] = Math.max((cart[f.id] || 0) - 1, 0);
+  renderMenu();
+});
+
+$("place").onclick = async () => {
+  const name = $("name").value.trim();
+  if (!name) return ($("msg").textContent = "Please enter your name.");
+  const items = flavors.filter(f => cart[f.id] > 0).map(f => ({ id: f.id, qty: cart[f.id] }));
+  if (!items.length) return ($("msg").textContent = "Add at least one cookie.");
+  $("msg").textContent = "Placing order…";
+  const r = await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify({ action: "order", name, items })
+  });
+  const d = await r.json();
+  if (d.error) return ($("msg").textContent = d.error);
+  cart = {};
+  $("name").value = "";
+  $("msg").textContent = "Order placed! Thank you.";
+  load();
+};
+
+// ---- Owner ----
+async function post(body) {
+  const r = await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify({ ...body, token })
+  });
+  return r.json();
+}
+
+async function loadOrders() {
+  const d = await post({ action: "listOrders" });
+  if (d.error) return;
+  orders = d.orders || [];
+  $("orders").innerHTML = orders.map(o => {
+    const items = JSON.parse(o.items || "[]").map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ");
+    return `<div class="row">
+      <span><strong>${esc(o.name)}</strong> — ${items} (₱${esc(o.total)})</span>
+      <button data-del-order="${esc(o.id)}">Delete</button>
+    </div>`;
+  }).join("") || '<p class="muted">No orders yet.</p>';
+}
+
+function renderFlavors() {
+  $("flavors").innerHTML = flavors.map(f => `<div class="row">
+    <span><strong>${esc(f.flavor)}</strong> (${esc(f.batch)}) — ₱${esc(f.price)}, ${Number(f.stock) || 0} in stock</span>
+    <button data-del-flavor="${esc(f.id)}">Delete</button>
+  </div>`).join("") || '<p class="muted">No flavors yet.</p>';
+}
+
+function readPhoto(file) {
+  return new Promise(resolve => {
+    if (!file) return resolve("");
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const s = Math.min(1, 300 / Math.max(img.width, img.height));
+        const cv = document.createElement("canvas");
+        cv.width = img.width * s; cv.height = img.height * s;
+        cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+        resolve(cv.toDataURL("image/jpeg", 0.7));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+$("unlock").onclick = async () => {
+  token = $("token").value;
+  const d = await post({ action: "listOrders" });
+  if (d.error) {
+    token = "";
+    return ($("login-msg").textContent = "Wrong password.");
+  }
+  sessionStorage.setItem("token", token);
+  $("login").classList.add("hidden");
+  $("tools").classList.remove("hidden");
+  orders = d.orders || [];
+  loadOrders();
+  load();
+};
+
+$("save").onclick = async () => {
+  const flavor = $("f-flavor").value.trim(), price = Number($("f-price").value);
+  const batch = $("f-batch").value.trim() || "current";
+  if (!flavor || !price) return ($("save-msg").textContent = "Need a flavor and price.");
+  $("save-msg").textContent = "Saving…";
+  const id = slug(flavor) + "-" + slug(batch);
+  const old = flavors.find(f => f.id === id);
+  const photo = (await readPhoto($("f-photo").files[0])) || (old && old.photo) || "";
+  const d = await post({
+    action: "saveFlavor",
+    flavor: { id, flavor, price, description: $("f-desc").value.trim(), batch,
+              stock: Number($("f-stock").value) || 0, photo }
+  });
+  $("save-msg").textContent = d.error ? d.error : "Saved.";
+  load();
+};
+
+$("admin").addEventListener("click", async e => {
+  const df = e.target.dataset.delFlavor, dof = e.target.dataset.delOrder;
+  if (dof) { await post({ action: "deleteOrder", id: dof }); return loadOrders(); }
+  if (df) {
+    if (e.target.dataset.armed) {
+      await post({ action: "deleteFlavor", id: df });
+      return load();
+    }
+    e.target.dataset.armed = "1";
+    e.target.textContent = "Confirm delete";
+  }
+});
+
+if (location.hash === "#admin") $("admin").classList.remove("hidden");
+if (token && location.hash === "#admin") {
+  $("login").classList.add("hidden");
+  $("tools").classList.remove("hidden");
+}
+load();
+setInterval(load, 15000);
+</script>
+</body>
+</html>
