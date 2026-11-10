@@ -111,11 +111,12 @@ input:focus,textarea:focus{outline:none;border-color:var(--ink);background:var(-
 /* Owner */
 .tabs,.seg{display:flex;gap:4px;background:var(--flour);border-radius:999px;padding:4px}
 .tabs{margin:4px 0 26px}
+.tabs button{flex:1 1 auto;white-space:nowrap}
 .seg{display:inline-flex;margin-top:14px}
 .tabs button,.seg button{flex:1;min-height:40px;padding:0 16px;border:0;border-radius:999px;background:transparent;color:var(--ink);font:600 15px var(--sans);cursor:pointer}
 .seg button{flex:0 0 auto;min-height:34px;padding:0 14px;font-size:14px;white-space:nowrap}
 .tabs button.on,.seg button.on{background:var(--ink);color:var(--paper)}
-.count{display:inline-block;min-width:20px;margin-left:4px;padding:0 6px;border-radius:999px;background:var(--baked);color:#fff;font-size:12px;line-height:20px}
+.count{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:999px;background:var(--baked);color:#fff;font-size:12px;line-height:20px}
 .sales{margin-bottom:18px;color:var(--muted)}
 .sales strong{display:block;font:400 2rem/1.1 var(--serif);color:var(--ink)}
 .hrow{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:14px 2px;border:0;border-bottom:1px solid var(--crumb);background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}
@@ -147,6 +148,36 @@ input:focus,textarea:focus{outline:none;border-color:var(--ink);background:var(-
 .bake .lines{margin-top:8px}
 .bake .lines li:last-child{border-bottom:0}
 .bake-total{font-weight:600;white-space:nowrap;padding-top:4px}
+.limit{color:var(--muted);font-weight:500}
+.vote-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin-top:12px}
+.btn.voted{background:var(--ink);color:var(--paper)}
+.paytag{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;font:600 12px/1.6 var(--sans);vertical-align:middle}
+.paytag.paid{background:#e7f6ec;color:#17692f}
+.paytag.unpaid{background:var(--flour);color:var(--muted)}
+.unpaid-text{color:var(--danger);font-weight:600}
+.row-split{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:14px}
+.row-split .seg{margin-top:0}
+.btn.is-paid{background:#e7f6ec;color:#17692f}
+.paybox{margin-top:16px;padding:14px;border-radius:14px;background:var(--flour);text-align:center;font-size:14.5px}
+.paybox p{margin-top:4px;white-space:pre-line}
+.qr{display:block;width:200px;max-width:100%;height:auto;margin:10px auto 0;border-radius:10px;background:#fff}
+#qr-preview .qr{margin:0 0 10px;border:1px solid var(--crumb)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{padding:12px 14px;border-radius:14px;background:var(--flour)}
+.stat span{display:block;color:var(--muted);font-size:13px;font-weight:600}
+.stat strong{display:block;margin-top:2px;font:400 1.3rem/1.2 var(--serif)}
+.stat.profit{background:#e7f6ec}
+.stat.loss{background:#fdecea}
+.stats-note{margin:10px 0 0}
+.flavor-table{width:100%;border-collapse:collapse;margin:8px 0 26px;font-size:14.5px;font-variant-numeric:tabular-nums}
+.flavor-table th{padding:6px 0;border-bottom:1px solid var(--crumb);color:var(--muted);font-size:13px;font-weight:600;text-align:right}
+.flavor-table td{padding:9px 0;border-bottom:1px dashed var(--crumb);text-align:right}
+.flavor-table th:first-child,.flavor-table td:first-child{text-align:left}
+.owe-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.owe-head strong{font:400 2rem/1.1 var(--serif)}
+.owe-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--crumb)}
+.owe-row:first-of-type{border-top:1px solid var(--crumb)}
+.owe-row .sub{display:block}
 .owner-nav{display:flex;align-items:center;gap:14px;margin:8px 0 24px;color:var(--muted)}
 
 /* Sticky order bar */
@@ -170,13 +201,18 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 .r-total{display:flex;justify-content:space-between;align-items:baseline;font:400 1.45rem var(--serif)}
 .r-note{margin-top:14px;font-size:14.5px}
 .r-thanks{margin-top:20px;text-align:center;color:var(--muted);font-size:14px}
-.dialog-actions{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.dialog-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px}
 .dialog-actions .btn{flex:1;max-width:160px}
+.dialog-actions .btn.full{flex-basis:100%;max-width:none}
 .dialog-actions .btn{background:var(--paper)}
+.dialog-actions .btn.primary{background:var(--ink);color:var(--paper)}
 
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10;width:max-content;max-width:min(360px,calc(100% - 32px));padding:12px 18px;border-radius:16px;text-align:center;background:var(--ink);color:var(--paper);font-size:14.5px;font-weight:500}
 
 @media (max-width:420px){
+  .tabs{gap:2px}
+  .tabs button{padding:0 7px;font-size:14px}
+  .count{margin-left:3px;font-size:11px;line-height:18px}
   .item{grid-template-columns:80px 1fr;gap:14px}
   .pic{width:80px;height:80px;border-radius:16px}
 }
@@ -238,6 +274,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
       <nav class="tabs" aria-label="Owner sections">
         <button data-act="tab" data-id="orders" class="on">Orders<span class="count hidden" id="count-orders"></span></button>
         <button data-act="tab" data-id="history">History</button>
+        <button data-act="tab" data-id="payments">Payments<span class="count hidden" id="count-unpaid"></span></button>
         <button data-act="tab" data-id="flavors">Flavors</button>
       </nav>
 
@@ -248,6 +285,24 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
         <div id="history"></div>
       </section>
 
+      <section id="tab-payments" class="hidden">
+        <div id="unpaid"></div>
+        <form id="pay-form" class="box" autocomplete="off" style="margin-top:28px">
+          <h2>How customers pay</h2>
+          <p class="sub">Shown on the receipt of every order that isn't paid yet.</p>
+          <label class="field"><span>Payment details</span><textarea id="pay-info" placeholder="GCash 0917 123 4567 (Juan D.)"></textarea></label>
+          <div class="field"><span>GCash QR (optional)</span>
+            <div id="qr-preview"></div>
+            <input id="pay-qr" type="file" accept="image/*">
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="pay-save" type="submit">Save payment details</button>
+            <button class="btn ghost danger hidden" id="qr-remove" type="button" data-act="qr-remove">Remove QR</button>
+          </div>
+          <p class="msg" id="pay-msg" role="status"></p>
+        </form>
+      </section>
+
       <section id="tab-flavors" class="hidden">
         <form id="flavor-form" class="box" autocomplete="off">
           <h2 id="form-title">Add a flavor</h2>
@@ -255,6 +310,10 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
           <div class="two">
             <label class="field"><span>Price (₱)</span><input id="f-price" type="number" inputmode="decimal" min="0" step="any"></label>
             <label class="field"><span>Cookies on hand</span><input id="f-stock" type="number" inputmode="numeric" min="0"></label>
+          </div>
+          <div class="two">
+            <label class="field"><span>Cost per cookie (₱)</span><input id="f-cost" type="number" inputmode="decimal" min="0" step="any" placeholder="Optional"></label>
+            <label class="field"><span>Max per order</span><input id="f-max" type="number" inputmode="numeric" min="1" placeholder="No limit"></label>
           </div>
           <label class="field"><span>Batch</span><input id="f-batch" placeholder="Nov 14 pickup"></label>
           <label class="field"><span>Description</span><textarea id="f-desc" placeholder="Toasted marshmallow, graham and chocolate"></textarea></label>
@@ -266,7 +325,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
               <button type="button" data-act="form-vis" data-id="hidden" aria-pressed="false">Hidden</button>
             </div>
           </div>
-          <p class="sub">Completed orders come out of cookies on hand automatically. Coming soon flavors show their batch under the menu, so put the date there, like Dec 20 pickup.</p>
+          <p class="sub">Cost per cookie is only for you, for profit in History. Completed orders come out of cookies on hand automatically. Coming soon flavors show their batch under the menu, so put the date there, like Dec 20 pickup.</p>
           <div class="actions">
             <button class="btn primary" id="save" type="submit">Save flavor</button>
             <button class="btn hidden" id="cancel-edit" type="button" data-act="cancel-flavor-edit">Cancel</button>
@@ -300,7 +359,10 @@ const SHOP_NAME = "Cookie Pre-Order";
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-const peso = n => "₱" + (Number(n) || 0).toLocaleString("en-PH");
+const peso = n => {
+  const v = Number(n) || 0;
+  return "₱" + v.toLocaleString("en-PH", Number.isInteger(v) ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
 const shortId = id => "#" + String(id).replace(/-/g, "").slice(0, 6).toUpperCase();
 const parseItems = s => { try { return JSON.parse(s || "[]") || []; } catch (_) { return []; } };
 const plural = (n, one, many) => n + " " + (n === 1 ? one : many);
@@ -351,12 +413,16 @@ function setLive(ok) {
 
 /* ---------------- Customer ---------------- */
 let flavors = [], soon = [], photos = {}, photosAt = 0, cart = {}, mine = [], shopOpen = true, closedMsg = "";
+let payInfoText = "", payQrData = "";
+let myVotes = (() => { try { return JSON.parse(localStorage.getItem("myVotes") || "[]"); } catch (_) { return []; } })();
 let editing = null, editQty = {}, cancelArmed = null, mineMsg = {}, openAfterPlace = null;
 let shopSeq = 0, shopApplied = 0;
 const MY_KEY = "myOrderIds";
 
 const flavorById = id => flavors.find(f => f.id === id);
 const left = f => Math.max(0, (Number(f.stock) || 0) - (Number(f.sold) || 0));
+// Most a customer can add: what's left, and no more than the flavor's max per order.
+const capOf = f => (f.max ? Math.min(left(f), f.max) : left(f));
 function myIds() { try { return JSON.parse(localStorage.getItem(MY_KEY) || "[]"); } catch (_) { return []; } }
 function setMyIds(ids) { try { localStorage.setItem(MY_KEY, JSON.stringify(ids)); } catch (_) {} }
 
@@ -377,6 +443,7 @@ async function loadShop() {
   shopOpen = !d.shop || d.shop.open !== false;
   closedMsg = (d.shop && d.shop.message) || "";
   if (!shopOpen) { cart = {}; editing = null; }
+  if (d.pay) { payInfoText = d.pay.info || ""; if (d.pay.qr !== undefined) payQrData = d.pay.qr || ""; }
   flavors.concat(soon).forEach(f => { if (f.photo !== undefined) photos[f.id] = f.photo; });
   if (wantPhotos) photosAt = Date.now();
   if (flavors.concat(soon).some(f => !(f.id in photos))) photosAt = 0; // a new flavor appeared: get its photo next time
@@ -385,7 +452,7 @@ async function loadShop() {
   Object.keys(cart).forEach(id => {
     const f = flavorById(id);
     if (!f) delete cart[id];
-    else cart[id] = Math.min(cart[id], left(f));
+    else cart[id] = Math.min(cart[id], capOf(f));
   });
 
   if (d.mine) {
@@ -424,15 +491,15 @@ function dots(f) {
 }
 
 function itemBody(f) {
-  const l = left(f), q = cart[f.id] || 0, out = l <= 0;
+  const l = left(f), q = cart[f.id] || 0, out = l <= 0, cap = capOf(f);
   return `<div class="head"><h3>${esc(f.flavor)}</h3><span class="price">${peso(f.price)}</span></div>
     ${f.description ? `<p class="desc">${esc(f.description)}</p>` : ""}
     <div class="foot">
-      <div class="stock">${dots(f)}<span>${out ? "Sold out" : l + " left"}</span></div>
+      <div class="stock">${dots(f)}<span>${out ? "Sold out" : l + " left"}</span>${f.max && !out ? `<span class="limit">Max ${f.max} per order</span>` : ""}</div>
       ${shopOpen ? `<div class="stepper">
         <button data-act="rm" data-id="${esc(f.id)}" ${q <= 0 ? "disabled" : ""} aria-label="One less ${esc(f.flavor)}">−</button>
         <span aria-live="polite">${q}</span>
-        <button data-act="add" data-id="${esc(f.id)}" ${q >= l ? "disabled" : ""} aria-label="One more ${esc(f.flavor)}">+</button>
+        <button data-act="add" data-id="${esc(f.id)}" ${q >= cap ? "disabled" : ""} aria-label="One more ${esc(f.flavor)}">+</button>
       </div>` : ""}
     </div>`;
 }
@@ -474,6 +541,10 @@ function renderSoon() {
         <div class="head"><h3>${esc(f.flavor)}</h3>${f.price ? `<span class="price">${peso(f.price)}</span>` : ""}</div>
         ${f.description ? `<p class="desc">${esc(f.description)}</p>` : ""}
         <div class="soon-foot"><span class="tag soon">Coming soon</span>${dateText}</div>
+        <div class="vote-row">
+          <button class="btn small ${myVotes.includes(f.id) ? "voted" : ""}" data-act="vote" data-id="${esc(f.id)}" aria-pressed="${myVotes.includes(f.id)}">${myVotes.includes(f.id) ? "✓ You want this" : "I want this"}</button>
+          ${f.votes ? `<span class="sub">${plural(f.votes, "person wants", "people want")} this</span>` : ""}
+        </div>
       </div>
     </article>`;
   }).join(""));
@@ -502,8 +573,9 @@ function mineCard(o) {
   return `<article class="order">
     <div class="order-top"><div><h3>Order ${shortId(o.id)}</h3><p class="sub">${when(o.createdAt)}</p></div>${badge(st)}</div>
     <p class="items">${items.map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ")}</p>
-    <p class="total-row"><span>Total</span><strong>${peso(o.total)}</strong></p>
+    <p class="total-row"><span>Total${st === "cancelled" ? "" : payTag(o)}</span><strong>${peso(o.total)}</strong></p>
     ${o.note ? `<p class="note"><strong>From the baker:</strong> ${esc(o.note)}</p>` : ""}
+    ${st !== "cancelled" && !o.paid && (payInfoText || payQrData) ? '<p class="sub" style="margin-top:8px">Tap Receipt to see how to pay.</p>' : ""}
     <div class="actions">
       <button class="btn small" data-act="receipt-mine" data-id="${id}">Receipt</button>
       ${st === "pending" && shopOpen ? `<button class="btn small" data-act="edit-mine" data-id="${id}">Edit</button>
@@ -516,7 +588,11 @@ function mineCard(o) {
 
 function editMax(o, f) {
   const orig = (parseItems(o.items).find(i => i.id === f.id) || {}).qty || 0;
-  return left(f) + Number(orig);
+  const most = left(f) + Number(orig);
+  return f.max ? Math.min(most, f.max) : most;
+}
+function payTag(o) {
+  return o.paid ? '<span class="paytag paid">Paid</span>' : '<span class="paytag unpaid">Not paid yet</span>';
 }
 
 function editCard(o) {
@@ -596,6 +672,7 @@ function showReceipt(o, owner, heading) {
       <div><dt>Ordered</dt><dd>${when(o.createdAt, true)}</dd></div>
       ${o.completedAt ? `<div><dt>Completed</dt><dd>${when(o.completedAt, true)}</dd></div>` : ""}
       <div><dt>Status</dt><dd>${badge(st)}</dd></div>
+      ${st !== "cancelled" ? `<div><dt>Payment</dt><dd>${o.paid ? '<span class="paytag paid">Paid</span>' : '<span class="paytag unpaid">Not paid yet</span>'}</dd></div>` : ""}
     </dl>
     <hr class="cut">
     <ul class="lines r-lines">${items.map(i => {
@@ -606,6 +683,8 @@ function showReceipt(o, owner, heading) {
     <p class="r-total"><span>Total</span><span>${peso(o.total)}</span></p>
     <p class="sub">${plural(cookies, "cookie", "cookies")}</p>
     ${o.note ? `<p class="r-note"><strong>Note:</strong> ${esc(o.note)}</p>` : ""}
+    ${!owner && st !== "cancelled" && !o.paid && (payInfoText || payQrData) ? `<div class="paybox"><strong>How to pay</strong>
+      ${payInfoText ? `<p>${esc(payInfoText)}</p>` : ""}${payQrData ? `<img class="qr" src="${esc(payQrData)}" alt="GCash QR code">` : ""}</div>` : ""}
     <p class="r-thanks">Thank you for ordering!</p>`;
   renderReceiptActions();
   if (!$("receipt").open) $("receipt").showModal();
@@ -613,6 +692,7 @@ function showReceipt(o, owner, heading) {
 function renderReceiptActions() {
   const o = receiptOrder, owner = receiptOwner;
   $("receipt-actions").innerHTML =
+    (owner && o.status !== "cancelled" ? `<button class="btn full ${o.paid ? "" : "primary"}" data-act="r-paid">${o.paid ? "Mark unpaid" : "Mark paid"}</button>` : "") +
     (owner && o.status === "completed" ? '<button class="btn" data-act="r-reopen">Reopen</button>' : "") +
     (owner ? `<button class="btn danger" data-act="r-delete">${receiptDelArmed ? "Tap again to delete" : "Delete"}</button>` : "") +
     '<button class="btn" data-act="r-close" autofocus>Close</button>';
@@ -630,6 +710,7 @@ function setFormVis(v) {
   });
 }
 let ownSeq = 0, ownApplied = 0, ownerShop = { open: true, message: "" }, closedDraft = null;
+let ownerPay = { info: "", hasQr: false }, payLoaded = false, qrPreview = "", paidAllArmed = false;
 const isOwnerView = () => location.hash === "#admin";
 const stamp = o => new Date(o.completedAt || o.createdAt).getTime() || 0;
 
@@ -647,6 +728,7 @@ async function loadOwner() {
   orders = d.orders || [];
   ownerFl = d.flavors || [];
   ownerShop = d.shop || ownerShop;
+  ownerPay = d.pay || ownerPay;
   setLive(true);
   renderOwner();
 }
@@ -660,9 +742,12 @@ function ownerOrderCard(o) {
     <ul class="lines" style="margin-top:8px">${parseItems(o.items).map(i =>
       `<li><span>${esc(i.flavor)} × ${i.qty}</span><span>${i.price !== undefined ? peso(i.qty * i.price) : ""}</span></li>`).join("")}</ul>
     <p class="total-row"><span>Total</span><strong>${peso(o.total)}</strong></p>
-    <div class="seg" role="group" aria-label="Status">
-      <button data-act="set-status" data-status="pending" data-id="${id}" class="${st === "pending" ? "on" : ""}" aria-pressed="${st === "pending"}">Pending</button>
-      <button data-act="set-status" data-status="delayed" data-id="${id}" class="${st === "delayed" ? "on" : ""}" aria-pressed="${st === "delayed"}">Delayed</button>
+    <div class="row-split">
+      <div class="seg" role="group" aria-label="Status">
+        <button data-act="set-status" data-status="pending" data-id="${id}" class="${st === "pending" ? "on" : ""}" aria-pressed="${st === "pending"}">Pending</button>
+        <button data-act="set-status" data-status="delayed" data-id="${id}" class="${st === "delayed" ? "on" : ""}" aria-pressed="${st === "delayed"}">Delayed</button>
+      </div>
+      <button class="btn small ${o.paid ? "is-paid" : ""}" data-act="toggle-paid" data-id="${id}" aria-pressed="${!!o.paid}">${o.paid ? "✓ Paid" : "Mark paid"}</button>
     </div>
     <div class="field"><label for="note-${id}">Note for the customer</label>
       <div class="inline"><input id="note-${id}" data-note="${id}" value="${esc(note)}" placeholder="Ready Monday after lunch">
@@ -681,6 +766,7 @@ function renderOwner() {
 
   renderShopSwitch();
   renderBakeList(active);
+  renderUnpaid();
 
   $("count-orders").textContent = active.length;
   $("count-orders").classList.toggle("hidden", !active.length);
@@ -691,12 +777,9 @@ function renderOwner() {
     paint($("orders"), active.map(ownerOrderCard).join("") || '<p class="empty">No open orders. New ones show up here right away.</p>');
   }
 
-  const comp = done.filter(o => o.status === "completed");
-  const sales = comp.reduce((s, o) => s + (Number(o.total) || 0), 0);
-  const cookies = comp.reduce((s, o) => s + parseItems(o.items).reduce((t, i) => t + (Number(i.qty) || 0), 0), 0);
-  paint($("sales"), comp.length ? `<strong>${peso(sales)}</strong>from ${plural(comp.length, "completed order", "completed orders")}, ${plural(cookies, "cookie", "cookies")}` : "");
+  paint($("sales"), salesSummary(done.filter(o => o.status === "completed")));
   paint($("history"), done.map(o => `<button class="hrow" data-act="receipt-owner" data-id="${esc(o.id)}">
-      <span><strong>${esc(o.name)}</strong><span class="sub">${when(o.completedAt || o.createdAt)}</span></span>
+      <span><strong>${esc(o.name)}</strong><span class="sub">${when(o.completedAt || o.createdAt)}${o.status === "completed" && !o.paid ? ' <span class="unpaid-text">Unpaid</span>' : ""}</span></span>
       <span class="hright"><span>${peso(o.total)}</span>${badge(o.status)}</span>
     </button>`).join("") || '<p class="empty">Completed orders show up here as receipts.</p>');
 
@@ -707,6 +790,9 @@ function renderOwner() {
       <div class="order-top"><div><h3>${esc(f.flavor)}</h3><p class="sub">${peso(f.price)}${f.batch ? ", " + esc(f.batch) : ""}</p></div>
         ${v === "hidden" ? '<span class="tag">Hidden from customers</span>' : v === "soon" ? '<span class="tag soon">Coming soon</span>' : ""}</div>
       <p class="sub" style="margin-top:6px">${f.stock} on hand, ${f.reserved} reserved by orders, ${l} left to order</p>
+      ${f.cost !== null && f.cost !== undefined ? `<p class="sub">Costs ${peso(f.cost)} each, so ${peso(+(f.price - f.cost).toFixed(2))} profit per cookie</p>` : '<p class="sub">No cost yet. Add one with Edit to see profit.</p>'}
+      ${f.max ? `<p class="sub">Max ${f.max} per order</p>` : ""}
+      ${v === "soon" ? `<p class="sub"><strong>${plural(f.votes || 0, "person wants", "people want")} this</strong>${f.votes ? ` <button class="btn small ghost" data-act="reset-votes" data-id="${id}">Reset votes</button>` : ""}</p>` : ""}
       <div class="seg" role="group" aria-label="Where customers see ${esc(f.flavor)}">${opt("menu", "On menu")}${opt("soon", "Coming soon")}${opt("hidden", "Hidden")}</div>
       <div class="actions">
         <button class="btn small" data-act="edit-flavor" data-id="${id}">Edit</button>
@@ -754,12 +840,127 @@ function renderBakeList(active) {
     </div>` : "");
 }
 
+// Sales, costs and profit for completed orders, plus a table by flavor.
+function salesSummary(comp) {
+  if (!comp.length) return "";
+  const sales = comp.reduce((s, o) => s + (Number(o.total) || 0), 0);
+  const byFlavor = new Map();
+  let costs = 0, cookies = 0;
+  const missing = new Set();
+  comp.forEach(o => parseItems(o.items).forEach(i => {
+    const key = String(i.id), now = ownerFl.find(f => f.id === key);
+    const row = byFlavor.get(key) || { name: now ? now.flavor : i.flavor, qty: 0, sales: 0, cost: 0, noCost: false };
+    const qty = Number(i.qty) || 0;
+    const price = i.price !== undefined && i.price !== "" ? Number(i.price) : (now ? now.price : 0);
+    const cost = i.cost !== undefined && i.cost !== null && i.cost !== "" ? Number(i.cost)
+      : (now && now.cost !== null && now.cost !== undefined ? Number(now.cost) : null);
+    row.qty += qty;
+    row.sales += qty * price;
+    if (cost === null) { row.noCost = true; missing.add(row.name); }
+    else { row.cost += qty * cost; costs += qty * cost; }
+    cookies += qty;
+    byFlavor.set(key, row);
+  }));
+  const money = n => peso(Math.round(n * 100) / 100);
+  const allCosts = !missing.size, profit = sales - costs;
+  const list = [...byFlavor.values()].sort((a, b) => b.qty - a.qty);
+  return `<div class="stats">
+      <div class="stat"><span>Sales</span><strong>${money(sales)}</strong></div>
+      <div class="stat"><span>Costs</span><strong>${allCosts ? money(costs) : "–"}</strong></div>
+      <div class="stat ${allCosts ? (profit >= 0 ? "profit" : "loss") : ""}"><span>Profit</span><strong>${allCosts ? money(profit) : "–"}</strong></div>
+    </div>
+    <p class="sub stats-note">From ${plural(comp.length, "completed order", "completed orders")}, ${plural(cookies, "cookie", "cookies")}.
+      ${allCosts ? "" : `Add a cost per cookie to ${[...missing].map(esc).join(", ")} in Flavors to see your full profit.`}</p>
+    <table class="flavor-table">
+      <thead><tr><th>Flavor</th><th>Sold</th><th>Sales</th><th>Profit</th></tr></thead>
+      <tbody>${list.map(r => `<tr><td>${esc(r.name)}</td><td>${r.qty}</td><td>${money(r.sales)}</td><td>${r.noCost ? "–" : money(r.sales - r.cost)}</td></tr>`).join("")}</tbody>
+    </table>`;
+}
+
+// Everyone who hasn't paid yet (pending, delayed and completed orders).
+function renderUnpaid() {
+  const unpaid = orders.filter(o => o.status !== "cancelled" && !o.paid)
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  const total = unpaid.reduce((s, o) => s + (Number(o.total) || 0), 0);
+  $("count-unpaid").textContent = unpaid.length;
+  $("count-unpaid").classList.toggle("hidden", !unpaid.length);
+  paint($("unpaid"), unpaid.length
+    ? `<div class="owe-head"><strong>${peso(total)}</strong><span class="sub">unpaid from ${plural(unpaid.length, "order", "orders")}</span></div>
+       ${unpaid.map(o => `<div class="owe-row">
+         <div><strong>${esc(o.name)}</strong><span class="sub">${LABELS[o.status] || "Pending"}, ${when(o.createdAt)}</span></div>
+         <div class="hright"><span>${peso(o.total)}</span><button class="btn small" data-act="toggle-paid" data-id="${esc(o.id)}">Mark paid</button></div>
+       </div>`).join("")}
+       <div class="actions"><button class="btn small ghost" data-act="paid-all">${paidAllArmed ? "Tap again to mark all " + unpaid.length + " paid" : "Mark all paid"}</button></div>`
+    : '<p class="empty">No unpaid orders.</p>');
+}
+
+function renderQrPreview() {
+  $("qr-preview").innerHTML = qrPreview ? `<img class="qr" src="${esc(qrPreview)}" alt="Your GCash QR">` : "";
+  $("qr-remove").classList.toggle("hidden", !qrPreview);
+}
+async function loadPayment() {
+  const d = await api({ action: "getPayment" });
+  if (d.error) { $("pay-msg").textContent = d.error === "Unknown action" ? "Update the Apps Script first." : d.error; return; }
+  $("pay-info").value = d.info || "";
+  qrPreview = d.qr || "";
+  payLoaded = true;
+  renderQrPreview();
+}
+// Shrinks a QR screenshot so it fits in one sheet cell but still scans.
+function readQr(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const draw = (size, type, q) => {
+          const s = Math.min(1, size / Math.max(img.width, img.height));
+          const cv = document.createElement("canvas");
+          cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
+          const cx = cv.getContext("2d");
+          cx.fillStyle = "#fff"; cx.fillRect(0, 0, cv.width, cv.height);
+          cx.drawImage(img, 0, 0, cv.width, cv.height);
+          return cv.toDataURL(type, q);
+        };
+        let out = draw(400, "image/png");
+        if (out.length > 45000) out = draw(400, "image/jpeg", 0.85);
+        if (out.length > 45000) out = draw(320, "image/jpeg", 0.8);
+        if (out.length > 45000) out = draw(260, "image/jpeg", 0.75);
+        resolve(out);
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+$("pay-form").onsubmit = async e => {
+  e.preventDefault();
+  $("pay-save").disabled = true;
+  $("pay-msg").textContent = "Saving…";
+  try {
+    const body = { action: "setPayment", info: $("pay-info").value.trim() };
+    const file = $("pay-qr").files[0];
+    if (file) body.qr = await readQr(file);
+    const d = await api(body);
+    if (d.error) { $("pay-msg").textContent = d.error === "Unknown action" ? "Update the Apps Script first." : d.error; return; }
+    if (body.qr !== undefined) qrPreview = body.qr;
+    $("pay-qr").value = "";
+    renderQrPreview();
+    $("pay-msg").textContent = "Saved. Customers see this on unpaid receipts.";
+  } catch (_) {
+    $("pay-msg").textContent = "Couldn't save. Check your connection and try again.";
+  } finally {
+    $("pay-save").disabled = false;
+  }
+};
+
 const visOf = f => f.visibility || (f.hidden ? "hidden" : "menu");
 const VIS_TOAST = { menu: " is on the menu.", soon: " is under Coming soon.", hidden: " is hidden from customers." };
 
 function showTab(t) {
   tab = t;
-  ["orders", "history", "flavors"].forEach(x => $("tab-" + x).classList.toggle("hidden", x !== t));
+  ["orders", "history", "payments", "flavors"].forEach(x => $("tab-" + x).classList.toggle("hidden", x !== t));
+  if (t === "payments" && !payLoaded) loadPayment().catch(() => {});
   document.querySelectorAll(".tabs button").forEach(b => b.classList.toggle("on", b.dataset.id === t));
 }
 
@@ -817,7 +1018,7 @@ function readPhoto(file) {
 
 function clearFlavorForm() {
   editingFlavor = null;
-  ["f-flavor", "f-price", "f-desc", "f-stock", "f-batch"].forEach(id => ($(id).value = ""));
+  ["f-flavor", "f-price", "f-desc", "f-stock", "f-batch", "f-cost", "f-max"].forEach(id => ($(id).value = ""));
   $("f-photo").value = "";
   setFormVis("menu");
   $("form-title").textContent = "Add a flavor";
@@ -836,7 +1037,8 @@ $("flavor-form").onsubmit = async e => {
     // Editing keeps the original id so the same row is updated.
     const id = editingFlavor || (slug(flavor) + "-" + slug(batch));
     const photo = await readPhoto($("f-photo").files[0]); // blank keeps the current photo
-    const d = await api({ action: "saveFlavor", flavor: { id, flavor, price, description: $("f-desc").value.trim(), batch, stock: Number($("f-stock").value) || 0, photo, visibility: formVis } });
+    const d = await api({ action: "saveFlavor", flavor: { id, flavor, price, description: $("f-desc").value.trim(), batch, stock: Number($("f-stock").value) || 0, photo, visibility: formVis,
+      cost: $("f-cost").value.trim(), max: $("f-max").value.trim() } });
     $("save-msg").textContent = d.error ? d.error : (editingFlavor ? "Flavor updated." : "Flavor saved.");
     if (!d.error) clearFlavorForm();
     photosAt = 0;
@@ -850,7 +1052,17 @@ $("flavor-form").onsubmit = async e => {
 
 /* ---------------- Buttons ---------------- */
 const acts = {
-  add(id) { const f = flavorById(id); if (f) { cart[id] = Math.min((cart[id] || 0) + 1, left(f)); renderMenu(); renderCart(); } },
+  add(id) { const f = flavorById(id); if (f) { cart[id] = Math.min((cart[id] || 0) + 1, capOf(f)); renderMenu(); renderCart(); } },
+  async vote(id) {
+    const undo = myVotes.includes(id);
+    const d = await api({ action: "vote", id, undo });
+    if (d.error) return toast(d.error === "Unknown action" ? "Voting isn't ready yet." : d.error);
+    myVotes = undo ? myVotes.filter(x => x !== id) : [...myVotes, id];
+    try { localStorage.setItem("myVotes", JSON.stringify(myVotes)); } catch (_) {}
+    const f = soon.find(x => x.id === id); if (f) f.votes = d.votes;
+    renderSoon();
+    if (!undo) toast("Thanks! The baker can see you want this.");
+  },
   rm(id) { cart[id] = Math.max((cart[id] || 0) - 1, 0); renderMenu(); renderCart(); },
   "go-checkout"() {
     const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -953,6 +1165,48 @@ const acts = {
     renderShopSwitch();
     toast("Message saved.");
   },
+  async "toggle-paid"(id) {
+    const o = orders.find(x => x.id === id); if (!o) return;
+    const d = await api({ action: "setPaid", id, paid: !o.paid });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    o.paid = !o.paid;
+    toast(o.name + (o.paid ? " marked paid." : " marked unpaid."));
+    renderOwner();
+    await loadOwner();
+  },
+  async "paid-all"() {
+    const ids = orders.filter(o => o.status !== "cancelled" && !o.paid).map(o => o.id);
+    if (!ids.length) return;
+    if (!paidAllArmed) { paidAllArmed = true; return renderUnpaid(); }
+    paidAllArmed = false;
+    const d = await api({ action: "setPaidMany", ids, paid: true });
+    if (d.error) { renderUnpaid(); return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error); }
+    orders.forEach(o => { if (ids.includes(o.id)) o.paid = true; });
+    toast(plural(ids.length, "order", "orders") + " marked paid.");
+    renderOwner();
+    await loadOwner();
+  },
+  async "r-paid"() {
+    const o = receiptOrder; if (!o) return;
+    const d = await api({ action: "setPaid", id: o.id, paid: !o.paid });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    o.paid = !o.paid;
+    showReceipt(o, true);
+    toast(o.name + (o.paid ? " marked paid." : " marked unpaid."));
+    await loadOwner();
+  },
+  async "qr-remove"() {
+    const d = await api({ action: "setPayment", qr: "" });
+    if (d.error) return toast(d.error);
+    qrPreview = "";
+    renderQrPreview();
+    toast("QR removed.");
+  },
+  async "reset-votes"(id) {
+    await api({ action: "resetVotes", id });
+    toast("Votes reset.");
+    await loadOwner();
+  },
   async "set-vis"(id, b) {
     const f = ownerFl.find(x => x.id === id); if (!f) return;
     const v = b.dataset.vis;
@@ -971,6 +1225,8 @@ const acts = {
     $("f-desc").value = f.description || "";
     $("f-stock").value = f.stock || 0;
     $("f-batch").value = f.batch || "";
+    $("f-cost").value = f.cost ?? "";
+    $("f-max").value = f.max || "";
     $("f-photo").value = "";
     setFormVis(visOf(f));
     $("form-title").textContent = "Edit " + f.flavor;
