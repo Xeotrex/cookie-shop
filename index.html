@@ -131,6 +131,22 @@ input:focus,textarea:focus{outline:none;border-color:var(--ink);background:var(-
 .field .seg{margin-top:0}
 .admin-link{margin-top:48px;text-align:center;font-size:14px}
 .admin-link a{color:var(--muted)}
+.closed{display:flex;flex-direction:column;gap:2px;margin-bottom:22px;padding:14px 16px;border-radius:16px;background:#f6ead9}
+.closed p{color:#5c4126;font-size:15px}
+.state-box{margin:0 0 18px;padding:14px 16px;border:1.5px solid var(--crumb);border-radius:18px}
+.state-box.closed-now{background:#f6ead9;border-color:#f6ead9}
+.state{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.state-text{display:flex;align-items:flex-start;gap:10px}
+.state .btn{white-space:nowrap;flex-shrink:0}
+.state-dot{width:10px;height:10px;margin-top:6px;border-radius:50%;background:#1b7f3a;flex-shrink:0}
+.closed-now .state-dot{background:var(--danger)}
+.state-box .field{margin:12px 0 0}
+.closed-now input{background:var(--paper)}
+.bake{margin-bottom:24px}
+.bake h2{margin:0}
+.bake .lines{margin-top:8px}
+.bake .lines li:last-child{border-bottom:0}
+.bake-total{font-weight:600;white-space:nowrap;padding-top:4px}
 .owner-nav{display:flex;align-items:center;gap:14px;margin:8px 0 24px;color:var(--muted)}
 
 /* Sticky order bar */
@@ -178,6 +194,11 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 
   <!-- Customer view -->
   <main id="shop">
+    <div id="closed" class="closed hidden" role="status">
+      <strong>Orders are closed right now</strong>
+      <p id="closed-msg"></p>
+    </div>
+
     <section id="menu" class="menu" aria-label="Flavors"></section>
 
     <section id="soon" class="block hidden">
@@ -213,13 +234,14 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
     </div>
 
     <div id="tools" class="hidden">
+      <div id="shop-state"></div>
       <nav class="tabs" aria-label="Owner sections">
         <button data-act="tab" data-id="orders" class="on">Orders<span class="count hidden" id="count-orders"></span></button>
         <button data-act="tab" data-id="history">History</button>
         <button data-act="tab" data-id="flavors">Flavors</button>
       </nav>
 
-      <section id="tab-orders"><div id="orders"></div></section>
+      <section id="tab-orders"><div id="bake"></div><div id="orders"></div></section>
 
       <section id="tab-history" class="hidden">
         <div id="sales" class="sales"></div>
@@ -328,7 +350,7 @@ function setLive(ok) {
 }
 
 /* ---------------- Customer ---------------- */
-let flavors = [], soon = [], photos = {}, photosAt = 0, cart = {}, mine = [];
+let flavors = [], soon = [], photos = {}, photosAt = 0, cart = {}, mine = [], shopOpen = true, closedMsg = "";
 let editing = null, editQty = {}, cancelArmed = null, mineMsg = {}, openAfterPlace = null;
 let shopSeq = 0, shopApplied = 0;
 const MY_KEY = "myOrderIds";
@@ -352,6 +374,9 @@ async function loadShop() {
 
   flavors = d.flavors || [];
   soon = d.soon || [];
+  shopOpen = !d.shop || d.shop.open !== false;
+  closedMsg = (d.shop && d.shop.message) || "";
+  if (!shopOpen) { cart = {}; editing = null; }
   flavors.concat(soon).forEach(f => { if (f.photo !== undefined) photos[f.id] = f.photo; });
   if (wantPhotos) photosAt = Date.now();
   if (flavors.concat(soon).some(f => !(f.id in photos))) photosAt = 0; // a new flavor appeared: get its photo next time
@@ -375,10 +400,18 @@ async function loadShop() {
   }
 
   setLive(true);
+  renderClosed();
   renderMenu();
   renderSoon();
   renderCart();
   renderMine();
+}
+
+function renderClosed() {
+  $("closed").classList.toggle("hidden", shopOpen);
+  $("closed-msg").textContent = closedMsg;
+  $("closed-msg").classList.toggle("hidden", !closedMsg);
+  $("checkout").classList.toggle("hidden", !shopOpen);
 }
 
 function dots(f) {
@@ -396,11 +429,11 @@ function itemBody(f) {
     ${f.description ? `<p class="desc">${esc(f.description)}</p>` : ""}
     <div class="foot">
       <div class="stock">${dots(f)}<span>${out ? "Sold out" : l + " left"}</span></div>
-      <div class="stepper">
+      ${shopOpen ? `<div class="stepper">
         <button data-act="rm" data-id="${esc(f.id)}" ${q <= 0 ? "disabled" : ""} aria-label="One less ${esc(f.flavor)}">−</button>
         <span aria-live="polite">${q}</span>
         <button data-act="add" data-id="${esc(f.id)}" ${q >= l ? "disabled" : ""} aria-label="One more ${esc(f.flavor)}">+</button>
-      </div>
+      </div>` : ""}
     </div>`;
 }
 
@@ -473,7 +506,7 @@ function mineCard(o) {
     ${o.note ? `<p class="note"><strong>From the baker:</strong> ${esc(o.note)}</p>` : ""}
     <div class="actions">
       <button class="btn small" data-act="receipt-mine" data-id="${id}">Receipt</button>
-      ${st === "pending" ? `<button class="btn small" data-act="edit-mine" data-id="${id}">Edit</button>
+      ${st === "pending" && shopOpen ? `<button class="btn small" data-act="edit-mine" data-id="${id}">Edit</button>
         <button class="btn small ghost danger" data-act="cancel-mine" data-id="${id}">${cancelArmed === o.id ? "Tap again to cancel" : "Cancel order"}</button>` : ""}
       ${st === "completed" || st === "cancelled" ? `<button class="btn small ghost" data-act="dismiss" data-id="${id}">Dismiss</button>` : ""}
     </div>
@@ -596,7 +629,7 @@ function setFormVis(v) {
     b.setAttribute("aria-pressed", b.dataset.id === v);
   });
 }
-let ownSeq = 0, ownApplied = 0;
+let ownSeq = 0, ownApplied = 0, ownerShop = { open: true, message: "" }, closedDraft = null;
 const isOwnerView = () => location.hash === "#admin";
 const stamp = o => new Date(o.completedAt || o.createdAt).getTime() || 0;
 
@@ -613,6 +646,7 @@ async function loadOwner() {
   }
   orders = d.orders || [];
   ownerFl = d.flavors || [];
+  ownerShop = d.shop || ownerShop;
   setLive(true);
   renderOwner();
 }
@@ -644,6 +678,9 @@ function renderOwner() {
   const active = orders.filter(o => !o.status || o.status === "pending" || o.status === "delayed")
     .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
   const done = orders.filter(o => o.status === "completed" || o.status === "cancelled").sort((a, b) => stamp(b) - stamp(a));
+
+  renderShopSwitch();
+  renderBakeList(active);
 
   $("count-orders").textContent = active.length;
   $("count-orders").classList.toggle("hidden", !active.length);
@@ -679,6 +716,44 @@ function renderOwner() {
   }).join("") || '<p class="empty">No flavors yet. Add your first one above.</p>');
 }
 
+function renderShopSwitch() {
+  const box = $("shop-state"), open = ownerShop.open !== false;
+  const ae = document.activeElement;
+  if (ae && ae.tagName === "INPUT" && box.contains(ae)) return; // don't redraw while typing the message
+  if (closedDraft === (ownerShop.message || "")) closedDraft = null;
+  const msg = closedDraft ?? ownerShop.message ?? "";
+  box.className = "state-box" + (open ? "" : " closed-now");
+  paint(box, `<div class="state">
+      <div class="state-text"><span class="state-dot"></span>
+        <div><strong>${open ? "Orders are open" : "Orders are closed"}</strong>
+        <p class="sub">${open ? "Customers can place orders." : "Customers can see the menu but can't order or change orders."}</p></div></div>
+      ${open ? '<button class="btn small" data-act="shop-toggle" data-id="close">Close orders</button>'
+             : '<button class="btn small primary" data-act="shop-toggle" data-id="open">Open orders</button>'}
+    </div>
+    ${open ? "" : `<div class="field"><label for="closed-input">Message customers see</label>
+      <div class="inline"><input id="closed-input" data-closed-msg value="${esc(msg)}" placeholder="Next batch opens Friday">
+      <button class="btn" data-act="shop-msg">Save</button></div></div>`}`);
+}
+
+// Adds up every open order (pending and delayed) by flavor.
+function renderBakeList(active) {
+  const need = new Map();
+  active.forEach(o => parseItems(o.items).forEach(i => {
+    const key = String(i.id), cur = need.get(key) || { name: i.flavor, qty: 0 };
+    const now = ownerFl.find(f => f.id === key);
+    if (now) cur.name = now.flavor;
+    cur.qty += Number(i.qty) || 0;
+    need.set(key, cur);
+  }));
+  const list = [...need.values()].filter(x => x.qty > 0).sort((a, b) => b.qty - a.qty);
+  const total = list.reduce((s, x) => s + x.qty, 0);
+  paint($("bake"), list.length ? `<div class="box bake">
+      <div class="order-top"><h2>Baking list</h2><span class="bake-total">${plural(total, "cookie", "cookies")}</span></div>
+      <p class="sub">Everything in open orders, pending and delayed.</p>
+      <ul class="lines">${list.map(x => `<li><span>${esc(x.name)}</span><strong>${x.qty}</strong></li>`).join("")}</ul>
+    </div>` : "");
+}
+
 const visOf = f => f.visibility || (f.hidden ? "hidden" : "menu");
 const VIS_TOAST = { menu: " is on the menu.", soon: " is under Coming soon.", hidden: " is hidden from customers." };
 
@@ -707,7 +782,7 @@ $("unlock").onclick = async () => {
     $("token").value = "";
     $("login-msg").textContent = "";
     route();
-    orders = d.orders || []; ownerFl = d.flavors || [];
+    orders = d.orders || []; ownerFl = d.flavors || []; ownerShop = d.shop || ownerShop;
     renderOwner();
   } catch (_) {
     token = "";
@@ -716,7 +791,10 @@ $("unlock").onclick = async () => {
 };
 $("token").addEventListener("keydown", e => { if (e.key === "Enter") $("unlock").click(); });
 
-document.addEventListener("input", e => { if (e.target.dataset.note) noteDraft[e.target.dataset.note] = e.target.value; });
+document.addEventListener("input", e => {
+  if (e.target.dataset.note) noteDraft[e.target.dataset.note] = e.target.value;
+  if (e.target.dataset.closedMsg !== undefined) closedDraft = e.target.value;
+});
 
 function readPhoto(file) {
   return new Promise(resolve => {
@@ -856,6 +934,25 @@ const acts = {
   },
   "r-close"() { $("receipt").close(); },
 
+  async "shop-toggle"(which) {
+    const open = which === "open";
+    const d = await api({ action: "setShop", open, message: closedDraft ?? ownerShop.message ?? "" });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    ownerShop = d.shop || { open, message: ownerShop.message };
+    $("shop-state")._html = null;
+    renderShopSwitch();
+    toast(open ? "Orders are open." : "Orders closed. Customers can't order until you open them.");
+  },
+  async "shop-msg"() {
+    const message = closedDraft ?? ownerShop.message ?? "";
+    const d = await api({ action: "setShop", message });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    ownerShop = d.shop || ownerShop;
+    closedDraft = null;
+    $("shop-state")._html = null;
+    renderShopSwitch();
+    toast("Message saved.");
+  },
   async "set-vis"(id, b) {
     const f = ownerFl.find(x => x.id === id); if (!f) return;
     const v = b.dataset.vis;
