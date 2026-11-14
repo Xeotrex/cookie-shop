@@ -81,6 +81,24 @@ select:disabled{opacity:.5;cursor:default}
 .variant select{padding:9px 38px 9px 14px;border-color:var(--crumb);border-radius:999px;background-color:var(--paper);font-weight:600;font-size:14.5px}
 .variant select:focus{border-color:var(--ink)}
 .also{margin-top:8px;color:var(--muted);font-size:13.5px}
+.pack{margin:20px 0 0;padding:0;border:0}
+.pack legend{margin-bottom:2px;padding:0;font-size:14px;font-weight:600}
+.pack-opt{display:flex;align-items:center;gap:12px;margin-top:8px;padding:12px 14px;border:1.5px solid var(--crumb);border-radius:14px;cursor:pointer}
+.pack-opt.on{border-color:var(--ink)}
+.pack-opt input[type=radio]{-webkit-appearance:auto;appearance:auto;flex-shrink:0;width:18px;height:18px;margin:0;padding:0;border:0;background:none;accent-color:var(--ink)}
+.pack-text{flex:1;min-width:0}
+.pack-text strong{display:block;font-weight:600}
+.pack-text small{display:block;color:var(--muted);font-size:13.5px}
+.pack-price{font-weight:600;text-align:right;white-space:nowrap}
+.pack-price small{display:block;color:var(--muted);font-size:12.5px;font-weight:500}
+.box-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--crumb)}
+.box-row:first-child{border-top:1px solid var(--crumb)}
+.box-row .sub{display:block}
+.box-row .actions{margin-top:0}
+.box-row.is-off strong{color:var(--muted)}
+#box-list{margin-top:12px}
+#box-form{margin-top:16px;padding-top:4px}
+#box-form h3{margin-top:4px}
 .frow.variant-row{margin-left:16px;padding-left:14px;border-left:3px solid var(--crumb)}
 .frow.variant-row h3{font-size:1.05rem}
 textarea{min-height:84px;resize:vertical}
@@ -262,6 +280,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
     <section id="checkout" class="block">
       <h2>Your order</h2>
       <div id="cart"></div>
+      <div id="box-choice"></div>
       <label class="field"><span>Your name</span><input id="name" autocomplete="name" placeholder="First name is fine"></label>
       <button id="place" class="btn primary wide">Place order</button>
       <p id="msg" class="msg" role="status"></p>
@@ -320,6 +339,30 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
       </section>
 
       <section id="tab-flavors" class="hidden">
+        <section id="boxes-box" class="box" style="margin-bottom:24px">
+          <div class="order-top"><h2 style="margin:0">Boxes</h2><button class="btn small" type="button" data-act="box-new">Add box</button></div>
+          <p class="sub" style="margin-top:6px">Customers can pick one at checkout. "No box" is always there too.</p>
+          <div id="box-list"></div>
+          <form id="box-form" class="hidden" autocomplete="off">
+            <h3 id="box-form-title">New box</h3>
+            <label class="field"><span>Name</span><input id="b-name" placeholder="Kraft box"></label>
+            <div class="two">
+              <label class="field"><span>Price per box (₱)</span><input id="b-price" type="number" inputmode="decimal" min="0" step="any" placeholder="15"></label>
+              <label class="field"><span>Cookies per box</span><input id="b-holds" type="number" inputmode="numeric" min="1" placeholder="Any amount"></label>
+            </div>
+            <div class="two">
+              <label class="field"><span>Your cost per box (₱)</span><input id="b-cost" type="number" inputmode="decimal" min="0" step="any" placeholder="Optional"></label>
+              <label class="field"><span>Short note</span><input id="b-desc" placeholder="With ribbon"></label>
+            </div>
+            <p class="sub">Leave cookies per box empty to charge one box for the whole order. With a number, the page works out how many boxes each order needs.</p>
+            <div class="actions">
+              <button class="btn primary" type="submit" id="box-save">Save box</button>
+              <button class="btn" type="button" data-act="box-cancel">Cancel</button>
+            </div>
+            <p class="msg" id="box-msg" role="status"></p>
+          </form>
+        </section>
+
         <form id="flavor-form" class="box" autocomplete="off">
           <h2 id="form-title">Add a flavor</h2>
           <label class="field"><span>Flavor</span><input id="f-flavor" placeholder="S'mores"></label>
@@ -376,7 +419,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 
 <script>
 // Paste your Apps Script Web app URL here.
-const API = "https://script.google.com/macros/s/AKfycbweZz0Lyq_s1W0_XG7s6232VETjt_CJ9qAIwS9WEjKrcLIP21uhcJsVWNELmMCcS4kGPw/exec";
+const API = "https://script.google.com/macros/s/AKfycbyEkfWTegkYKj0pItv4-LQQopkFUQrXK7G5VZPTg-FO2a9TxaDNQESd_ptx3r8YHkOc3A/exec";
 // Your shop name, shown at the top and on receipts.
 const SHOP_NAME = "Cookie Pre-Order";
 
@@ -438,6 +481,13 @@ function setLive(ok) {
 /* ---------------- Customer ---------------- */
 let flavors = [], soon = [], photos = {}, photosAt = 0, cart = {}, mine = [], shopOpen = true, closedMsg = "";
 let payInfoText = "", payQrData = "";
+let boxes = [], boxChoice = "", editBox = "";
+// How many boxes an order of `cookies` needs, and what they cost.
+function boxCalc(opt, cookies) {
+  const holds = Number(opt.holds) || 0, qty = holds ? Math.ceil(cookies / holds) : 1;
+  return { qty, total: Math.round(qty * Number(opt.price) * 100) / 100 };
+}
+const boxRule = b => (Number(b.holds) ? peso(b.price) + " per box, fits " + b.holds : peso(b.price) + " for the whole order");
 let myVotes = (() => { try { return JSON.parse(localStorage.getItem("myVotes") || "[]"); } catch (_) { return []; } })();
 let editing = null, editQty = {}, cancelArmed = null, mineMsg = {}, openAfterPlace = null;
 let shopSeq = 0, shopApplied = 0;
@@ -480,6 +530,8 @@ async function loadShop() {
   closedMsg = (d.shop && d.shop.message) || "";
   if (!shopOpen) { cart = {}; editing = null; }
   if (d.pay) { payInfoText = d.pay.info || ""; if (d.pay.qr !== undefined) payQrData = d.pay.qr || ""; }
+  boxes = d.boxes || [];
+  if (boxChoice && !boxes.some(b => b.id === boxChoice)) boxChoice = "";
   flavors.concat(soon).forEach(f => { if (f.photo !== undefined) photos[f.id] = f.photo; });
   if (wantPhotos) photosAt = Date.now();
   if (flavors.concat(soon).some(f => !(f.id in photos))) photosAt = 0; // a new flavor appeared: get its photo next time
@@ -607,22 +659,45 @@ function cartLines() {
 let checkoutInView = false;
 function renderCart() {
   const lines = cartLines();
-  const total = lines.reduce((s, l) => s + l.sum, 0), count = lines.reduce((s, l) => s + l.q, 0);
+  const sub = lines.reduce((s, l) => s + l.sum, 0), count = lines.reduce((s, l) => s + l.q, 0);
+  const pickedBox = boxes.find(b => b.id === boxChoice);
+  const bx = pickedBox && count ? boxCalc(pickedBox, count) : null;
+  const total = sub + (bx ? bx.total : 0);
   paint($("cart"), lines.length
-    ? `<ul class="lines">${lines.map(l => `<li><span>${esc(nameOf(l.f))} × ${l.q}</span><span>${peso(l.sum)}</span></li>`).join("")}</ul>
+    ? `<ul class="lines">${lines.map(l => `<li><span>${esc(nameOf(l.f))} × ${l.q}</span><span>${peso(l.sum)}</span></li>`).join("")}
+       ${bx ? `<li><span>${esc(pickedBox.name)} × ${bx.qty}<small>${esc(boxRule(pickedBox))}</small></span><span>${peso(bx.total)}</span></li>` : ""}</ul>
        <p class="total-row"><span>Total</span><strong>${peso(total)}</strong></p>`
     : '<p class="empty">Tap + on a flavor to add it here.</p>');
+  renderBoxChoice(count);
   $("place").disabled = !lines.length;
   $("bar-text").textContent = plural(count, "cookie", "cookies") + ", " + peso(total);
   $("bar").classList.toggle("hidden", !count || checkoutInView || isOwnerView());
 }
 new IntersectionObserver(es => { checkoutInView = es[0].isIntersecting; renderCart(); }).observe($("checkout"));
 
+function renderBoxChoice(count) {
+  const wrap = $("box-choice");
+  if (!boxes.length) { paint(wrap, ""); return; }
+  const opt = (value, name, small, price) => `<label class="pack-opt ${boxChoice === value ? "on" : ""}">
+      <input type="radio" name="box" value="${esc(value)}" ${boxChoice === value ? "checked" : ""}>
+      <span class="pack-text"><strong>${esc(name)}</strong><small>${small}</small></span>${price}</label>`;
+  const hadFocus = wrap.contains(document.activeElement);
+  paint(wrap, `<fieldset class="pack"><legend>Packaging</legend>
+      ${opt("", "No box", "Free", "")}
+      ${boxes.map(b => {
+        const c = count ? boxCalc(b, count) : null;
+        return opt(b.id, b.name, esc(boxRule(b)) + (b.desc ? ". " + esc(b.desc) : ""),
+          c ? `<span class="pack-price">+${peso(c.total)}${c.qty > 1 ? `<small>${c.qty} boxes</small>` : ""}</span>` : "");
+      }).join("")}
+    </fieldset>`);
+  if (hadFocus && !wrap.contains(document.activeElement)) { const r = wrap.querySelector("input:checked"); if (r) r.focus(); }
+}
+
 function mineCard(o) {
   const st = o.status || "pending", items = parseItems(o.items), id = esc(o.id);
   return `<article class="order">
     <div class="order-top"><div><h3>Order ${shortId(o.id)}</h3><p class="sub">${when(o.createdAt)}</p></div>${badge(st)}</div>
-    <p class="items">${items.map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ")}</p>
+    <p class="items">${items.map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ")}${o.box ? ", " + esc(o.box.name) + " × " + o.box.qty : ""}</p>
     <p class="total-row"><span>Total${st === "cancelled" ? "" : payTag(o)}</span><strong>${peso(o.total)}</strong></p>
     ${o.note ? `<p class="note"><strong>From the baker:</strong> ${esc(o.note)}</p>` : ""}
     ${st === "cancelled" || o.paid ? ""
@@ -662,9 +737,19 @@ function editCard(o) {
         <button data-act="eq-add" data-id="${esc(f.id)}" ${q >= editMax(o, f) ? "disabled" : ""} aria-label="One more ${esc(f.flavor)}">+</button>
       </span></li>`;
   }).join("");
+  const count = Object.values(editQty).reduce((s, q) => s + (q || 0), 0);
+  const keepOpt = o.box && !boxes.some(b => b.id === o.box.id);
+  const boxNow = editBox === "keep" ? o.box : boxes.find(b => b.id === editBox);
+  if (boxNow && count) total += boxCalc(boxNow, count).total;
+  const boxPicker = boxes.length || o.box ? `<label class="field"><span>Packaging</span><select data-edit-box="${esc(o.id)}">
+      <option value="" ${!editBox ? "selected" : ""}>No box</option>
+      ${keepOpt ? `<option value="keep" ${editBox === "keep" ? "selected" : ""}>${esc(o.box.name)} (your current box)</option>` : ""}
+      ${boxes.map(b => `<option value="${esc(b.id)}" ${editBox === b.id ? "selected" : ""}>${esc(b.name)}, ${esc(boxRule(b))}</option>`).join("")}
+    </select></label>` : "";
   return `<article class="order">
     <h3>Edit order ${shortId(o.id)}</h3>
     <ul class="lines" style="margin-top:8px">${rows}</ul>
+    ${boxPicker}
     <p class="total-row"><span>New total</span><strong>${peso(total)}</strong></p>
     <div class="actions">
       <button class="btn small primary" data-act="save-edit" data-id="${esc(o.id)}">Save changes</button>
@@ -695,7 +780,7 @@ $("place").onclick = async () => {
   $("place").disabled = true;
   $("msg").textContent = "Placing your order…";
   try {
-    const d = await api({ action: "order", name, items });
+    const d = await api({ action: "order", name, items, box: boxChoice });
     if (d.error) { $("msg").textContent = d.error; return; }
     try { localStorage.setItem("myName", name); } catch (_) {}
     setMyIds([...myIds(), d.id]);
@@ -733,7 +818,7 @@ function showReceipt(o, owner, heading) {
     <ul class="lines r-lines">${items.map(i => {
       const has = i.price !== undefined && i.price !== "";
       return `<li><span>${esc(i.flavor)}<small>${has ? i.qty + " × " + peso(i.price) : "Qty " + i.qty}</small></span><span>${has ? peso(i.qty * i.price) : ""}</span></li>`;
-    }).join("")}</ul>
+    }).join("")}${o.box ? `<li><span>${esc(o.box.name)}<small>${o.box.qty} × ${peso(o.box.price)}</small></span><span>${peso(o.box.total)}</span></li>` : ""}</ul>
     <hr class="cut">
     <p class="r-total"><span>Total</span><span>${peso(o.total)}</span></p>
     <p class="sub">${plural(cookies, "cookie", "cookies")}</p>
@@ -785,6 +870,7 @@ async function loadOwner() {
   }
   orders = d.orders || [];
   ownerFl = d.flavors || [];
+  if (d.boxes) ownerBoxes = d.boxes;
   ownerShop = d.shop || ownerShop;
   ownerPay = d.pay || ownerPay;
   setLive(true);
@@ -798,7 +884,8 @@ function ownerOrderCard(o) {
   return `<article class="order">
     <div class="order-top"><div><h3>${esc(o.name)}</h3><p class="sub">${when(o.createdAt)}, order ${shortId(o.id)}</p></div>${badge(st)}</div>
     <ul class="lines" style="margin-top:8px">${parseItems(o.items).map(i =>
-      `<li><span>${esc(i.flavor)} × ${i.qty}</span><span>${i.price !== undefined ? peso(i.qty * i.price) : ""}</span></li>`).join("")}</ul>
+      `<li><span>${esc(i.flavor)} × ${i.qty}</span><span>${i.price !== undefined ? peso(i.qty * i.price) : ""}</span></li>`).join("")}
+      ${o.box ? `<li><span>${esc(o.box.name)} × ${o.box.qty}</span><span>${peso(o.box.total)}</span></li>` : ""}</ul>
     <p class="total-row"><span>Total</span><strong>${peso(o.total)}</strong></p>
     ${o.proof && !o.paid ? `<div class="proof-line"><span>Payment screenshot sent</span><button class="btn small" data-act="view-proof" data-id="${id}">View</button></div>` : ""}
     <div class="row-split">
@@ -842,6 +929,7 @@ function renderOwner() {
       <span class="hright"><span>${peso(o.total)}</span>${badge(o.status)}</span>
     </button>`).join("") || '<p class="empty">Completed orders show up here as receipts.</p>');
 
+  renderBoxList();
   fillParentSelect();
   paint($("flavors"), ownerOrder().map(f => {
     const id = esc(f.id), l = Math.max(0, f.stock - f.reserved), v = visOf(f), main = ownerMain(f);
@@ -899,8 +987,75 @@ function renderBakeList(active) {
       <div class="order-top"><h2>Baking list</h2><span class="bake-total">${plural(total, "cookie", "cookies")}</span></div>
       <p class="sub">Everything in open orders, pending and delayed.</p>
       <ul class="lines">${list.map(x => `<li><span>${esc(x.name)}</span><strong>${x.qty}</strong></li>`).join("")}</ul>
+      ${boxNeed(active)}
     </div>` : "");
 }
+// "Boxes to get ready: 5 Kraft box, 1 Gift box"
+function boxNeed(active) {
+  const need = new Map();
+  active.forEach(o => { if (o.box) need.set(o.box.name, (need.get(o.box.name) || 0) + (Number(o.box.qty) || 0)); });
+  return need.size ? `<p class="sub" style="margin-top:10px"><strong>Boxes to get ready:</strong> ${[...need].map(([n, q]) => q + " " + esc(n)).join(", ")}</p>` : "";
+}
+
+// ---------- Boxes (owner) ----------
+let ownerBoxes = [], editingBox = null, boxDelArmed = null;
+function renderBoxList() {
+  paint($("box-list"), ownerBoxes.map(b => `<div class="box-row ${b.on ? "" : "is-off"}">
+      <div><strong>${esc(b.name)}</strong>
+        <span class="sub">${esc(boxRule(b))}${b.cost !== null && b.cost !== undefined ? ", costs you " + peso(b.cost) : ""}${b.desc ? ". " + esc(b.desc) : ""}</span>
+        ${b.on ? "" : '<span class="tag" style="margin-top:4px">Not offered</span>'}</div>
+      <div class="actions">
+        <button class="btn small" data-act="box-toggle" data-id="${esc(b.id)}">${b.on ? "Turn off" : "Offer"}</button>
+        <button class="btn small" data-act="box-edit" data-id="${esc(b.id)}">Edit</button>
+        <button class="btn small ghost danger" data-act="box-del" data-id="${esc(b.id)}">${boxDelArmed === b.id ? "Tap again" : "Delete"}</button>
+      </div>
+    </div>`).join("") || '<p class="empty">No boxes yet. Customers won\'t see a packaging choice until you add one.</p>');
+}
+function openBoxForm(b) {
+  editingBox = b ? b.id : null;
+  $("box-form-title").textContent = b ? "Edit " + b.name : "New box";
+  $("b-name").value = b ? b.name : "";
+  $("b-price").value = b ? b.price : "";
+  $("b-holds").value = b && b.holds ? b.holds : "";
+  $("b-cost").value = b && b.cost !== null && b.cost !== undefined ? b.cost : "";
+  $("b-desc").value = b ? b.desc || "" : "";
+  $("box-msg").textContent = "";
+  $("box-form").classList.remove("hidden");
+  $("b-name").focus();
+}
+async function saveBoxes(list, done) {
+  const d = await api({ action: "setBoxes", boxes: list });
+  if (d.error) { toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error, 3500); return false; }
+  ownerBoxes = d.boxes || list;
+  $("box-list")._html = null;
+  renderBoxList();
+  if (done) toast(done);
+  return true;
+}
+$("box-form").onsubmit = async e => {
+  e.preventDefault();
+  const name = $("b-name").value.trim(), price = $("b-price").value.trim();
+  if (!name || price === "") { $("box-msg").textContent = "Add a name and a price (0 if it's free)."; return; }
+  const entry = { name, price: Number(price), holds: Number($("b-holds").value) || 0, cost: $("b-cost").value.trim(), desc: $("b-desc").value.trim() };
+  let list;
+  if (editingBox) list = ownerBoxes.map(b => (b.id === editingBox ? { ...b, ...entry } : b));
+  else {
+    let id = slug(name) || "box";
+    for (let n = 2; ownerBoxes.some(b => b.id === id); n++) id = slug(name) + "-" + n;
+    list = [...ownerBoxes, { id, on: true, ...entry }];
+  }
+  $("box-save").disabled = true;
+  try {
+    if (await saveBoxes(list, editingBox ? "Box updated." : name + " added. Customers can pick it now.")) {
+      $("box-form").classList.add("hidden");
+      editingBox = null;
+    }
+  } catch (_) {
+    $("box-msg").textContent = "Couldn't save. Check your connection and try again.";
+  } finally {
+    $("box-save").disabled = false;
+  }
+};
 
 // Sales, costs and profit for completed orders, plus a table by flavor.
 function salesSummary(comp) {
@@ -923,16 +1078,28 @@ function salesSummary(comp) {
     cookies += qty;
     byFlavor.set(key, row);
   }));
+  comp.forEach(o => {
+    if (!o.box) return;
+    const row = byFlavor.get("__boxes") || { name: "Boxes", qty: 0, sales: 0, cost: 0, noCost: false, isBox: true };
+    const opt = ownerBoxes.find(b => b.id === o.box.id);
+    const cost = o.box.cost !== undefined && o.box.cost !== null ? Number(o.box.cost)
+      : (opt && opt.cost !== null && opt.cost !== undefined ? Number(opt.cost) : null);
+    row.qty += Number(o.box.qty) || 0;
+    row.sales += Number(o.box.total) || 0;
+    if (cost === null) { row.noCost = true; missing.add("your boxes"); }
+    else { row.cost += cost * (Number(o.box.qty) || 0); costs += cost * (Number(o.box.qty) || 0); }
+    byFlavor.set("__boxes", row);
+  });
   const money = n => peso(Math.round(n * 100) / 100);
   const allCosts = !missing.size, profit = sales - costs;
-  const list = [...byFlavor.values()].sort((a, b) => b.qty - a.qty);
+  const list = [...byFlavor.values()].sort((a, b) => (a.isBox ? 1 : 0) - (b.isBox ? 1 : 0) || b.qty - a.qty);
   return `<div class="stats">
       <div class="stat"><span>Sales</span><strong>${money(sales)}</strong></div>
       <div class="stat"><span>Costs</span><strong>${allCosts ? money(costs) : "–"}</strong></div>
       <div class="stat ${allCosts ? (profit >= 0 ? "profit" : "loss") : ""}"><span>Profit</span><strong>${allCosts ? money(profit) : "–"}</strong></div>
     </div>
     <p class="sub stats-note">From ${plural(comp.length, "completed order", "completed orders")}, ${plural(cookies, "cookie", "cookies")}.
-      ${allCosts ? "" : `Add a cost per cookie to ${[...missing].map(esc).join(", ")} in Flavors to see your full profit.`}</p>
+      ${allCosts ? "" : `Add a cost to ${[...missing].map(esc).join(", ")} in Flavors to see your full profit.`}</p>
     <table class="flavor-table">
       <thead><tr><th>Flavor</th><th>Sold</th><th>Sales</th><th>Profit</th></tr></thead>
       <tbody>${list.map(r => `<tr><td>${esc(r.name)}</td><td>${r.qty}</td><td>${money(r.sales)}</td><td>${r.noCost ? "–" : money(r.sales - r.cost)}</td></tr>`).join("")}</tbody>
@@ -1058,7 +1225,7 @@ $("unlock").onclick = async () => {
     $("token").value = "";
     $("login-msg").textContent = "";
     route();
-    orders = d.orders || []; ownerFl = d.flavors || []; ownerShop = d.shop || ownerShop;
+    orders = d.orders || []; ownerFl = d.flavors || []; ownerShop = d.shop || ownerShop; ownerBoxes = d.boxes || ownerBoxes;
     renderOwner();
   } catch (_) {
     token = "";
@@ -1068,6 +1235,8 @@ $("unlock").onclick = async () => {
 $("token").addEventListener("keydown", e => { if (e.key === "Enter") $("unlock").click(); });
 
 document.addEventListener("change", e => {
+  if (e.target.name === "box") { boxChoice = e.target.value; renderCart(); return; }
+  if (e.target.dataset && e.target.dataset.editBox) { editBox = e.target.value; renderMine(); return; }
   const top = e.target.dataset && e.target.dataset.variantFor;
   if (!top) return;
   pick[top] = e.target.value;
@@ -1252,6 +1421,7 @@ const acts = {
     editing = id; cancelArmed = null; mineMsg[id] = "";
     editQty = {};
     parseItems(o.items).forEach(i => (editQty[i.id] = Number(i.qty) || 0));
+    editBox = !o.box ? "" : boxes.some(b => b.id === o.box.id) ? o.box.id : "keep";
     renderMine();
   },
   "close-edit"() { editing = null; renderMine(); },
@@ -1264,7 +1434,7 @@ const acts = {
     const items = Object.keys(editQty).filter(k => editQty[k] > 0).map(k => ({ id: k, qty: editQty[k] }));
     if (!items.length) { mineMsg[id] = "Add at least one cookie, or cancel the order instead."; return renderMine(); }
     mineMsg[id] = "Saving…"; renderMine();
-    const d = await api({ action: "editOrder", id, items });
+    const d = await api({ action: "editOrder", id, items, box: editBox === "keep" ? undefined : editBox });
     mineMsg[id] = d.error || "";
     if (!d.error) { editing = null; toast("Order updated."); }
     await loadShop();
@@ -1418,6 +1588,19 @@ const acts = {
   },
   "form-vis"(v) { setFormVis(v); },
   "cancel-flavor-edit"() { clearFlavorForm(); $("save-msg").textContent = ""; },
+  "box-new"() { openBoxForm(null); },
+  "box-edit"(id) { const b = ownerBoxes.find(x => x.id === id); if (b) openBoxForm(b); },
+  "box-cancel"() { $("box-form").classList.add("hidden"); editingBox = null; },
+  async "box-toggle"(id) {
+    const b = ownerBoxes.find(x => x.id === id); if (!b) return;
+    await saveBoxes(ownerBoxes.map(x => (x.id === id ? { ...x, on: !x.on } : x)),
+      b.on ? b.name + " is turned off. Existing orders keep it." : b.name + " is offered again.");
+  },
+  async "box-del"(id) {
+    if (boxDelArmed !== id) { boxDelArmed = id; $("box-list")._html = null; return renderBoxList(); }
+    boxDelArmed = null;
+    await saveBoxes(ownerBoxes.filter(x => x.id !== id), "Box deleted. Existing orders keep it.");
+  },
   "add-variant"(id) {
     const main = ownerFl.find(x => x.id === id); if (!main) return;
     clearFlavorForm();
