@@ -88,6 +88,16 @@ select:disabled{opacity:.5;cursor:default}
 .chip.on{border-color:var(--ink);background:var(--ink);color:var(--paper)}
 .chip.on span{color:#d6d3cd}
 .chip.late{border-color:#efb7b1}
+.cat-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.cat-tag{padding:2px 9px;border-radius:999px;background:#f6ead9;color:var(--baked-ink);font-size:12px;font-weight:600}
+.cat-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--crumb)}
+.cat-row:first-child{border-top:1px solid var(--crumb)}
+.cat-row .sub{display:block}
+.cat-row .actions{margin-top:0}
+.btn.icon{width:36px;padding:0}
+#cat-list{margin-top:12px}
+#cat-form{margin-top:16px}
+.pick-list{display:flex;flex-wrap:wrap;gap:6px}
 .toolbar{display:flex;gap:8px;margin-bottom:12px}
 .toolbar>*{flex:1;min-width:0}
 @media (max-width:520px){ .toolbar{flex-wrap:wrap} .toolbar>*{flex-basis:100%} }
@@ -295,6 +305,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
       <p id="closed-msg"></p>
     </div>
 
+    <div id="cat-chips" class="chips hidden" role="group" aria-label="Categories"></div>
     <section id="menu" class="menu" aria-label="Flavors"></section>
 
     <section id="soon" class="block hidden">
@@ -405,10 +416,18 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
           </form>
         </section>
 
+        <section id="cats-box" class="box" style="margin-bottom:24px">
+          <div class="order-top"><h2 style="margin:0">Categories</h2><button class="btn small" type="button" data-act="cat-new">Add category</button></div>
+          <p class="sub" style="margin-top:6px">Customers filter the menu with these, like Top picks or Festive. A cookie can be in more than one.</p>
+          <div id="cat-list"></div>
+          <div id="cat-form" class="hidden"></div>
+        </section>
+
         <form id="flavor-form" class="box" autocomplete="off">
           <h2 id="form-title">Add a flavor</h2>
           <label class="field"><span>Flavor</span><input id="f-flavor" placeholder="S'mores"></label>
           <label class="field"><span>Variant of</span><select id="f-parent"><option value="">Nothing, it's its own cookie</option></select></label>
+          <div class="field hidden" id="f-cats-field"><span>Categories</span><div class="pick-list" id="f-cats"></div></div>
           <div class="two">
             <label class="field"><span>Price (₱)</span><input id="f-price" type="number" inputmode="decimal" min="0" step="any"></label>
             <label class="field"><span>Cookies on hand</span><input id="f-stock" type="number" inputmode="numeric" min="0"></label>
@@ -461,7 +480,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 
 <script>
 // Paste your Apps Script Web app URL here.
-const API = "https://script.google.com/macros/s/AKfycbyDjWNI5OL8r8q1JLGD5vSMIpYlmgBn_om6_7uOoCJS6ptquE-Y1c-6n2MhJ_JlOXvmBw/exec";
+const API = "https://script.google.com/macros/s/AKfycbyWgqX_FQwv7mavXU4dgG1i7sK9DkuLgYY_F4Rw1GpVl33MYq4Ss9F6ThTTFIBNRM9JHg/exec";
 // Your shop name, shown at the top and on receipts.
 const SHOP_NAME = "Cookie Pre-Order";
 
@@ -541,6 +560,9 @@ let flavors = [], soon = [], photos = {}, photosAt = 0, cart = {}, mine = [], sh
 let payInfoText = "", payQrData = "";
 let boxes = [], boxChoice = "", editBox = "";
 let delivery = { on: false, dates: [] }, deliverPick = "", editDeliver = "", ctab = "menu";
+let cats = [], catPick = "all";
+const catOf = id => cats.find(c => c.id === id);
+const inCat = f => catPick === "all" || ((catOf(catPick) || { flavors: [] }).flavors.includes(f.id));
 // How many boxes an order of `cookies` needs, and what they cost.
 function boxCalc(opt, cookies) {
   const holds = Number(opt.holds) || 0, qty = holds ? Math.ceil(cookies / holds) : 1;
@@ -592,6 +614,7 @@ async function loadShop() {
   boxes = d.boxes || [];
   if (boxChoice && !boxes.some(b => b.id === boxChoice)) boxChoice = "";
   delivery = d.delivery || { on: false, dates: [] };
+  cats = d.categories || [];
   if (deliverPick && !delivery.dates.includes(deliverPick)) deliverPick = "";
   flavors.concat(soon).forEach(f => { if (f.photo !== undefined) photos[f.id] = f.photo; });
   if (wantPhotos) photosAt = Date.now();
@@ -617,6 +640,7 @@ async function loadShop() {
 
   setLive(true);
   renderClosed();
+  renderCatChips();
   renderMenu();
   renderSoon();
   renderCart();
@@ -645,6 +669,7 @@ function itemBody(top) {
   const desc = f.description || (f !== top ? top.description : "");
   const others = opts.filter(o => o !== f && cart[o.id] > 0);
   return `<div class="head"><h3>${esc(top.flavor)}</h3><span class="price">${peso(f.price)}</span></div>
+    ${catTags(top)}
     ${desc ? `<p class="desc">${esc(desc)}</p>` : ""}
     ${vars.length ? `<label class="variant"><select data-variant-for="${esc(top.id)}" aria-label="Choose your ${esc(top.flavor)}">
       ${opts.map(o => `<option value="${esc(o.id)}" ${o === f ? "selected" : ""}>${esc(optionName(o, top))}, ${peso(o.price)}${left(o) <= 0 ? " (sold out)" : ""}</option>`).join("")}
@@ -661,12 +686,30 @@ function itemBody(top) {
 }
 
 // force = a main cookie id whose card must redraw now (its dropdown just changed).
+// Category chips above the menu. Only categories with something to show appear.
+function renderCatChips() {
+  const visible = cats.filter(c => c.flavors.some(id => flavors.some(f => f.id === id && !mainOf(f)) || soon.some(f => f.id === id)));
+  if (catPick !== "all" && !visible.some(c => c.id === catPick)) catPick = "all";
+  $("cat-chips").classList.toggle("hidden", !visible.length);
+  const chip = (id, name) => `<button class="chip ${catPick === id ? "on" : ""}" data-act="cat" data-id="${esc(id)}" aria-pressed="${catPick === id}">${esc(name)}</button>`;
+  paint($("cat-chips"), visible.length ? chip("all", "All") + visible.map(c => chip(c.id, c.name)).join("") : "");
+}
+const catTags = f => {
+  const mine = cats.filter(c => c.flavors.includes(f.id)).slice(0, 3);
+  return mine.length ? `<div class="cat-tags">${mine.map(c => `<span class="cat-tag">${esc(c.name)}</span>`).join("")}</div>` : "";
+};
+
 function renderMenu(force) {
   const menu = $("menu");
-  if (!flavors.length) { paint(menu, '<p class="empty">No cookies on the menu right now. Check back soon.</p>'); return; }
+  const tops = flavors.filter(f => !mainOf(f) && inCat(f));
+  if (!tops.length) {
+    paint(menu, flavors.length ? '<p class="empty">Nothing in this category on the menu right now.</p>'
+                               : '<p class="empty">No cookies on the menu right now. Check back soon.</p>');
+    return;
+  }
   menu._html = null;
   const keep = new Set();
-  flavors.filter(f => !mainOf(f)).forEach((top, i) => {
+  tops.forEach((top, i) => {
     const f = chosen(top), all = [top, ...variantsOf(top.id)];
     let el = [...menu.children].find(c => c.dataset.item === top.id);
     if (!el) {
@@ -694,8 +737,9 @@ function renderMenu(force) {
 }
 
 function renderSoon() {
-  $("soon").classList.toggle("hidden", !soon.length);
-  paint($("soon-list"), soon.map(f => {
+  const list = soon.filter(inCat);
+  $("soon").classList.toggle("hidden", !list.length);
+  paint($("soon-list"), list.map(f => {
     const src = photos[f.id] || "";
     const dateText = f.batch && f.batch !== "current" ? `<span>${esc(f.batch)}</span>` : "";
     return `<article class="item">
@@ -971,6 +1015,7 @@ async function loadOwner() {
   ownerFl = d.flavors || [];
   if (d.boxes) ownerBoxes = d.boxes;
   if (d.delivery) ownerDelivery = d.delivery;
+  if (d.categories) ownerCats = d.categories;
   ownerShop = d.shop || ownerShop;
   ownerPay = d.pay || ownerPay;
   setLive(true);
@@ -1041,6 +1086,8 @@ function renderOwner() {
     </button>`).join("") || (done.length ? "" : '<p class="empty">Completed orders show up here as receipts.</p>'));
 
   renderBoxList();
+  renderCatList();
+  renderFormCats();
   fillParentSelect();
   paint($("flavors"), ownerOrder().map(f => {
     const id = esc(f.id), l = Math.max(0, f.stock - f.reserved), v = visOf(f), main = ownerMain(f);
@@ -1204,6 +1251,51 @@ const matchesSearch = (o, q) => !q || String(o.name || "").toLowerCase().include
 // The day an order counts as a sale: its delivery date, else the day it was completed, else ordered.
 const saleDay = o => o.deliverOn || dayOfStamp(o.completedAt) || dayOfStamp(o.createdAt);
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// ---------- Categories (owner) ----------
+let ownerCats = [], catDraft = null, catDelArmed = null, formCats = new Set();
+const mainCookies = () => ownerFl.filter(f => !ownerMain(f));
+function renderCatList() {
+  paint($("cat-list"), ownerCats.map((c, i) => {
+    const names = c.flavors.map(id => ownerFl.find(f => f.id === id)).filter(Boolean).map(f => f.flavor);
+    return `<div class="cat-row">
+      <div><strong>${esc(c.name)}</strong><span class="sub">${names.length ? plural(names.length, "cookie", "cookies") + ": " + names.map(esc).join(", ") : "No cookies yet"}</span></div>
+      <div class="actions">
+        <button class="btn small icon" data-act="cat-up" data-id="${esc(c.id)}" ${i === 0 ? "disabled" : ""} aria-label="Move ${esc(c.name)} up">↑</button>
+        <button class="btn small icon" data-act="cat-down" data-id="${esc(c.id)}" ${i === ownerCats.length - 1 ? "disabled" : ""} aria-label="Move ${esc(c.name)} down">↓</button>
+        <button class="btn small" data-act="cat-edit" data-id="${esc(c.id)}">Edit</button>
+        <button class="btn small ghost danger" data-act="cat-del" data-id="${esc(c.id)}">${catDelArmed === c.id ? "Tap again" : "Delete"}</button>
+      </div>
+    </div>`;
+  }).join("") || '<p class="empty">No categories yet. The menu shows everything together until you add one.</p>');
+}
+function renderCatForm() {
+  const d = catDraft, box = $("cat-form");
+  if (!d) { box.classList.add("hidden"); box.innerHTML = ""; return; }
+  box.classList.remove("hidden");
+  box.innerHTML = `<h3>${d.id ? "Edit " + esc(d.name || "category") : "New category"}</h3>
+    <label class="field"><span>Name</span><input id="c-name" value="${esc(d.name)}" placeholder="Top picks" maxlength="30"></label>
+    <div class="field"><span>Cookies in it</span><div class="pick-list">
+      ${mainCookies().map(f => `<button type="button" class="chip ${d.flavors.includes(f.id) ? "on" : ""}" data-act="cat-pick" data-id="${esc(f.id)}" aria-pressed="${d.flavors.includes(f.id)}">${esc(f.flavor)}</button>`).join("") || '<span class="sub">Add some flavors first.</span>'}
+    </div></div>
+    <div class="actions"><button class="btn primary" type="button" data-act="cat-save">Save category</button><button class="btn" type="button" data-act="cat-cancel">Cancel</button></div>`;
+}
+// Category toggles inside the flavor form (only for main cookies, not variants).
+function renderFormCats() {
+  const show = ownerCats.length && !$("f-parent").value;
+  $("f-cats-field").classList.toggle("hidden", !show);
+  paint($("f-cats"), ownerCats.map(c => `<button type="button" class="chip ${formCats.has(c.id) ? "on" : ""}" data-act="form-cat" data-id="${esc(c.id)}" aria-pressed="${formCats.has(c.id)}">${esc(c.name)}</button>`).join(""));
+}
+async function saveCats(list, done) {
+  const d = await api({ action: "setCategories", categories: list });
+  if (d.error) { toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error, 3500); return false; }
+  ownerCats = d.categories || list;
+  $("cat-list")._html = null;
+  renderCatList();
+  renderFormCats();
+  if (done) toast(done);
+  return true;
+}
+
 async function changeDeliverOn(id, date) {
   const o = orders.find(x => x.id === id); if (!o) return;
   const d = await api({ action: "setDeliverOn", id, date });
@@ -1444,6 +1536,7 @@ $("unlock").onclick = async () => {
     route();
     orders = d.orders || []; ownerFl = d.flavors || []; ownerShop = d.shop || ownerShop; ownerBoxes = d.boxes || ownerBoxes;
     ownerDelivery = d.delivery || ownerDelivery;
+    ownerCats = d.categories || ownerCats;
     renderOwner();
   } catch (_) {
     token = "";
@@ -1454,6 +1547,7 @@ $("token").addEventListener("keydown", e => { if (e.key === "Enter") $("unlock")
 
 document.addEventListener("change", e => {
   if (e.target.dataset && e.target.dataset.deliver) { changeDeliverOn(e.target.dataset.deliver, e.target.value); return; }
+  if (e.target.id === "f-parent") { renderFormCats(); return; }
   if (e.target.name === "box") { boxChoice = e.target.value; renderCart(); return; }
   if (e.target.id === "deliver-on") { deliverPick = e.target.value; $("msg").textContent = ""; renderDeliverChoice(); return; }
   if (e.target.dataset && e.target.dataset.editDeliver) { editDeliver = e.target.value; renderMine(); return; }
@@ -1494,6 +1588,7 @@ function readPhoto(file) {
 
 function clearFlavorForm() {
   editingFlavor = null;
+  formCats = new Set();
   $("f-parent").disabled = false;
   fillParentSelect();
   $("f-parent").value = "";
@@ -1525,6 +1620,14 @@ $("flavor-form").onsubmit = async e => {
     const d = await api({ action: "saveFlavor", flavor: { id, flavor, price, description: $("f-desc").value.trim(), batch, stock: Number($("f-stock").value) || 0, photo, visibility: formVis, parent,
       cost: $("f-cost").value.trim(), max: $("f-max").value.trim() } });
     $("save-msg").textContent = d.error ? d.error : (editingFlavor ? "Flavor updated." : "Flavor saved.");
+    if (!d.error && !parent) {
+      // Put the cookie in the categories ticked in the form.
+      const next = ownerCats.map(c => {
+        const has = c.flavors.includes(id), want = formCats.has(c.id);
+        return has === want ? c : { ...c, flavors: want ? [...c.flavors, id] : c.flavors.filter(x => x !== id) };
+      });
+      if (next.some((c, i) => c !== ownerCats[i])) await saveCats(next);
+    }
     if (!d.error) clearFlavorForm();
     photosAt = 0;
     await loadOwner();
@@ -1676,6 +1779,7 @@ const acts = {
     await loadShop();
   },
   ctab(id) { showCTab(id); },
+  cat(id) { catPick = id; renderCatChips(); renderMenu(); renderSoon(); },
   "order-again"(id) {
     const o = mine.find(x => x.id === id); if (!o) return;
     if (!shopOpen) return toast("Orders are closed right now. Try again when they open.", 3500);
@@ -1820,6 +1924,9 @@ const acts = {
     fillParentSelect();
     $("f-parent").value = f.parent || "";
     $("f-parent").disabled = ownerFl.some(x => x.parent === f.id); // has its own variants
+    formCats = new Set(ownerCats.filter(c => c.flavors.includes(f.id)).map(c => c.id));
+    $("f-cats")._html = null;
+    renderFormCats();
     $("f-flavor").value = f.flavor || "";
     $("f-price").value = f.price || "";
     $("f-desc").value = f.description || "";
@@ -1873,6 +1980,51 @@ const acts = {
     renderOwner();
     toast(ownerDelivery.on ? "Delivery dates saved. Customers pick one at checkout." : "Delivery dates turned off.", 3500);
   },
+  "cat-new"() { catDraft = { id: "", name: "", flavors: [] }; renderCatForm(); $("c-name").focus(); },
+  "cat-edit"(id) {
+    const c = ownerCats.find(x => x.id === id); if (!c) return;
+    catDraft = { id: c.id, name: c.name, flavors: c.flavors.slice() };
+    renderCatForm();
+    $("cat-form").scrollIntoView({ block: "nearest" });
+  },
+  "cat-pick"(fid) {
+    catDraft.name = $("c-name").value;
+    catDraft.flavors = catDraft.flavors.includes(fid) ? catDraft.flavors.filter(x => x !== fid) : [...catDraft.flavors, fid];
+    renderCatForm();
+  },
+  "cat-cancel"() { catDraft = null; renderCatForm(); },
+  async "cat-save"() {
+    const name = $("c-name").value.trim();
+    if (!name) { toast("Give the category a name."); return $("c-name").focus(); }
+    const entry = { ...catDraft, name };
+    let list;
+    if (entry.id) list = ownerCats.map(c => (c.id === entry.id ? entry : c));
+    else {
+      let id = slug(name) || "category";
+      for (let n = 2; ownerCats.some(c => c.id === id); n++) id = slug(name) + "-" + n;
+      list = [...ownerCats, { ...entry, id }];
+    }
+    if (await saveCats(list, entry.id ? "Category saved." : name + " added. Customers can filter by it now.")) { catDraft = null; renderCatForm(); }
+  },
+  async "cat-up"(id) {
+    const i = ownerCats.findIndex(c => c.id === id); if (i < 1) return;
+    const list = ownerCats.slice(); [list[i - 1], list[i]] = [list[i], list[i - 1]];
+    await saveCats(list);
+  },
+  async "cat-down"(id) {
+    const i = ownerCats.findIndex(c => c.id === id); if (i < 0 || i >= ownerCats.length - 1) return;
+    const list = ownerCats.slice(); [list[i + 1], list[i]] = [list[i], list[i + 1]];
+    await saveCats(list);
+  },
+  async "cat-del"(id) {
+    if (catDelArmed !== id) { catDelArmed = id; $("cat-list")._html = null; return renderCatList(); }
+    catDelArmed = null;
+    await saveCats(ownerCats.filter(c => c.id !== id), "Category deleted. Its cookies are still on the menu.");
+  },
+  "form-cat"(id) {
+    formCats.has(id) ? formCats.delete(id) : formCats.add(id);
+    renderFormCats();
+  },
   "box-new"() { openBoxForm(null); },
   "box-edit"(id) { const b = ownerBoxes.find(x => x.id === id); if (b) openBoxForm(b); },
   "box-cancel"() { $("box-form").classList.add("hidden"); editingBox = null; },
@@ -1890,6 +2042,7 @@ const acts = {
     const main = ownerFl.find(x => x.id === id); if (!main) return;
     clearFlavorForm();
     $("f-parent").value = id;
+    renderFormCats();
     $("f-batch").value = main.batch && main.batch !== "current" ? main.batch : "";
     $("form-title").textContent = "Add a variant to " + main.flavor;
     $("save").textContent = "Save variant";
