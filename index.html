@@ -98,6 +98,27 @@ select:disabled{opacity:.5;cursor:default}
 #cat-list{margin-top:12px}
 #cat-form{margin-top:16px}
 .pick-list{display:flex;flex-wrap:wrap;gap:6px}
+/* Drag to reorder */
+.drag-handle{display:grid;place-items:center;flex-shrink:0;width:40px;height:40px;margin:-8px -8px -8px 0;padding:0;border:0;border-radius:12px;
+  background:transparent;color:#8b857b;cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
+.drag-handle svg{width:20px;height:20px}
+.drag-handle:focus-visible{outline:2px solid var(--ink);outline-offset:0}
+[data-sort-list],.vlist{position:relative}
+.row-end{display:flex;align-items:flex-start;gap:8px;flex-shrink:0}
+.fgroup{border-bottom:1px solid var(--crumb)}
+.fgroup:first-child{border-top:1px solid var(--crumb)}
+.fgroup .frow,.fgroup .frow:first-child{border-top:0;border-bottom:0}
+.vlist .frow{border-top:1px dashed var(--crumb)}
+.dragging{position:relative;z-index:5;margin-left:-10px;margin-right:-10px;padding-left:10px;padding-right:10px;border-radius:16px;background:var(--paper);
+  box-shadow:0 18px 40px rgba(0,0,0,.16),0 2px 8px rgba(0,0,0,.08)}
+.dragging .drag-handle{color:var(--ink);background:var(--flour)}
+.is-dragging,.is-dragging *{cursor:grabbing!important;-webkit-user-select:none;user-select:none}
+/* While dragging, rows shrink to their names so you can move past several quickly */
+.sorting>.fgroup>.frow>:not(.order-top),.sorting>.fgroup>.vlist,.vlist.sorting>.frow>:not(.order-top){display:none}
+.sorting>.fgroup>.frow,.vlist.sorting>.frow{padding-top:12px;padding-bottom:12px}
+.sorting>.cat-row .actions,.sorting>.box-row .actions,.sorting>.cat-row .sub,.sorting>.box-row .sub,.sorting>.box-row .tag{display:none}
+.cat-row,.box-row{display:block}
+.cat-row .actions,.box-row .actions{margin-top:8px}
 .toolbar{display:flex;gap:8px;margin-bottom:12px}
 .toolbar>*{flex:1;min-width:0}
 @media (max-width:520px){ .toolbar{flex-wrap:wrap} .toolbar>*{flex-basis:100%} }
@@ -272,6 +293,46 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10;width:max-content;max-width:min(360px,calc(100% - 32px));padding:12px 18px;border-radius:16px;text-align:center;background:var(--ink);color:var(--paper);font-size:14.5px;font-weight:500}
 
+/* Sliding tab indicator */
+.tabs{position:relative;isolation:isolate}
+.tabs .pill{position:absolute;top:4px;bottom:4px;left:0;z-index:-1;width:0;border-radius:999px;background:var(--ink);
+  transition:transform .32s cubic-bezier(.3,.8,.2,1),width .32s cubic-bezier(.3,.8,.2,1)}
+.tabs.has-pill button.on{background:transparent}
+.tabs button{transition:color .2s ease}
+
+/* Order bar slides in instead of popping */
+.bar{visibility:hidden;transform:translate(-50%,160%);transition:transform .32s cubic-bezier(.2,.8,.2,1),visibility 0s linear .32s}
+.bar.show{visibility:visible;transform:translate(-50%,0);transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+
+@media (hover:hover){
+  .btn:hover:not(:disabled){background:#e7e5df}
+  .btn.primary:hover:not(:disabled){background:#262626}
+  .btn.ghost:hover:not(:disabled){background:var(--flour)}
+  .dialog-actions .btn:hover:not(:disabled){background:#f4f3f0}
+  .chip:hover{border-color:var(--ink)}
+  .chip.on:hover{border-color:var(--ink)}
+  .drag-handle:hover{background:var(--flour);color:var(--ink)}
+  .pack-opt:hover{border-color:#bdb8ae}
+  .stepper button:hover:not(:disabled){background:#fbfaf8}
+}
+@media (prefers-reduced-motion:no-preference){
+  .btn,.chip,.seg button,.tabs button,.stepper button,.pack-opt,.hrow,.drag-handle,.paytag,.badge{
+    transition:transform .14s ease,background-color .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease}
+  .btn:active:not(:disabled),.chip:active,.seg button:active,.tabs button:active,.pack-opt:active,.hrow:active{transform:scale(.96)}
+  .stepper button:active:not(:disabled){transform:scale(.88)}
+  .drag-handle:active{transform:scale(.92)}
+  .toast:not(.hidden){animation:toast-in .26s cubic-bezier(.2,.8,.2,1)}
+  dialog::backdrop{animation:fade .22s ease}
+  .reveal{animation:fade-up .26s cubic-bezier(.2,.8,.2,1)}
+  .item .pic img{animation:fade .3s ease}
+}
+@keyframes toast-in{from{opacity:0;transform:translate(-50%,14px) scale(.98)}}
+@keyframes fade{from{opacity:0}}
+@keyframes fade-up{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){
+  .tabs .pill,.bar,.bar.show{transition:none}
+}
+
 @media (max-width:420px){
   .tabs{gap:2px}
   .tabs button{padding:0 7px;font-size:14px}
@@ -395,7 +456,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
         <section id="boxes-box" class="box" style="margin-bottom:24px">
           <div class="order-top"><h2 style="margin:0">Boxes</h2><button class="btn small" type="button" data-act="box-new">Add box</button></div>
           <p class="sub" style="margin-top:6px">Customers can pick one at checkout. "No box" is always there too.</p>
-          <div id="box-list"></div>
+          <div id="box-list" data-sort-list="boxes"></div>
           <form id="box-form" class="hidden" autocomplete="off">
             <h3 id="box-form-title">New box</h3>
             <label class="field"><span>Name</span><input id="b-name" placeholder="Kraft box"></label>
@@ -419,7 +480,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
         <section id="cats-box" class="box" style="margin-bottom:24px">
           <div class="order-top"><h2 style="margin:0">Categories</h2><button class="btn small" type="button" data-act="cat-new">Add category</button></div>
           <p class="sub" style="margin-top:6px">Customers filter the menu with these, like Top picks or Festive. A cookie can be in more than one.</p>
-          <div id="cat-list"></div>
+          <div id="cat-list" data-sort-list="cats"></div>
           <div id="cat-form" class="hidden"></div>
         </section>
 
@@ -453,13 +514,13 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
           </div>
           <p class="msg" id="save-msg" role="status"></p>
         </form>
-        <div id="flavors" style="margin-top:24px"></div>
+        <div id="flavors" data-sort-list="flavors" style="margin-top:24px"></div>
       </section>
     </div>
   </main>
 </div>
 
-<div id="bar" class="bar hidden" role="region" aria-label="Order summary">
+<div id="bar" class="bar" role="region" aria-label="Order summary">
   <span id="bar-text"></span>
   <button class="btn" data-act="go-checkout">Review order</button>
 </div>
@@ -480,7 +541,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 
 <script>
 // Paste your Apps Script Web app URL here.
-const API = "https://script.google.com/macros/s/AKfycbyWgqX_FQwv7mavXU4dgG1i7sK9DkuLgYY_F4Rw1GpVl33MYq4Ss9F6ThTTFIBNRM9JHg/exec";
+const API = "https://script.google.com/macros/s/AKfycbyjzwP09l_qTnaN_40weCgHm9Z_wVocjyptoUVNnqoYZU4yuKAfVD6rUYUNxsaV4thzAQ/exec";
 // Your shop name, shown at the top and on receipts.
 const SHOP_NAME = "Cookie Pre-Order";
 
@@ -757,10 +818,17 @@ function renderSoon() {
   }).join(""));
 }
 
+function popCount(id) {
+  const btn = document.querySelector('#menu [data-act="add"][data-id="' + CSS.escape(id) + '"]');
+  if (btn) pop(btn.previousElementSibling);
+}
+
 function showCTab(t) {
   ctab = t;
   ["menu", "mine", "past"].forEach(x => $("ctab-" + x).classList.toggle("hidden", x !== t));
   document.querySelectorAll("#shop-tabs button").forEach(b => b.classList.toggle("on", b.dataset.id === t));
+  placePill($("shop-tabs"));
+  reveal($("ctab-" + t));
   const top = $("shop-tabs").getBoundingClientRect().top;
   if (top < 0) $("shop-tabs").scrollIntoView({ block: "start" });
   renderCart();
@@ -786,7 +854,9 @@ function renderCart() {
   renderDeliverChoice();
   $("place").disabled = !lines.length || (delivery.on && !delivery.dates.length);
   $("bar-text").textContent = plural(count, "cookie", "cookies") + ", " + peso(total);
-  $("bar").classList.toggle("hidden", !count || checkoutInView || isOwnerView() || ctab !== "menu");
+  const showBar = !!count && !checkoutInView && !isOwnerView() && ctab === "menu";
+  $("bar").classList.toggle("show", showBar);
+  $("bar").setAttribute("aria-hidden", String(!showBar));
 }
 new IntersectionObserver(es => { checkoutInView = es[0].isIntersecting; renderCart(); }).observe($("checkout"));
 
@@ -1085,16 +1155,33 @@ function renderOwner() {
       <span class="hright"><span>${peso(o.total)}</span>${badge(o.status)}</span>
     </button>`).join("") || (done.length ? "" : '<p class="empty">Completed orders show up here as receipts.</p>'));
 
-  renderBoxList();
-  renderCatList();
+  // While a row is being dragged (or its new order is saving), leave these lists alone.
+  if (!dragLock) {
+    renderBoxList();
+    renderCatList();
+    renderFlavorList();
+  }
   renderFormCats();
   fillParentSelect();
-  paint($("flavors"), ownerOrder().map(f => {
+}
+
+// Owner flavor list: each main cookie is a group (its variants inside), so dragging a cookie
+// brings its variants along. Variants can be dragged within their cookie.
+function renderFlavorList() {
+  const mains = ownerFl.filter(f => !ownerMain(f));
+  paint($("flavors"), mains.map(t => {
+    const vars = ownerFl.filter(v => v.parent === t.id);
+    return `<div class="fgroup" data-sort-id="${esc(t.id)}">${flavorRow(t, mains.length > 1)}${vars.length
+      ? `<div class="vlist">${vars.map(v => flavorRow(v, vars.length > 1)).join("")}</div>` : ""}</div>`;
+  }).join("") || '<p class="empty">No flavors yet. Add your first one above.</p>');
+}
+function flavorRow(f, canMove) {
     const id = esc(f.id), l = Math.max(0, f.stock - f.reserved), v = visOf(f), main = ownerMain(f);
     const opt = (val, label) => `<button data-act="set-vis" data-vis="${val}" data-id="${id}" class="${v === val ? "on" : ""}" aria-pressed="${v === val}">${label}</button>`;
-    return `<div class="frow ${v === "hidden" ? "is-hidden" : ""} ${main ? "variant-row" : ""}">
+    return `<div class="frow ${v === "hidden" ? "is-hidden" : ""} ${main ? "variant-row" : ""}" ${main ? `data-sort-id="${id}"` : ""}>
       <div class="order-top"><div><h3>${esc(f.flavor)}</h3><p class="sub">${main ? "Variant of " + esc(main.flavor) + ", " : ""}${peso(f.price)}${f.batch ? ", " + esc(f.batch) : ""}</p></div>
-        ${v === "hidden" ? '<span class="tag">Hidden from customers</span>' : v === "soon" ? '<span class="tag soon">Coming soon</span>' : ""}</div>
+        <div class="row-end">${v === "hidden" ? '<span class="tag">Hidden</span>' : v === "soon" ? '<span class="tag soon">Coming soon</span>' : ""}
+        ${canMove ? dragHandle(main ? "variant-row" : "fgroup", f.id, f.flavor) : ""}</div></div>
       <p class="sub" style="margin-top:6px">${f.stock} on hand, ${f.reserved} reserved by orders, ${l} left to order</p>
       ${f.cost !== null && f.cost !== undefined ? `<p class="sub">Costs ${peso(f.cost)} each, so ${peso(+(f.price - f.cost).toFixed(2))} profit per cookie</p>` : '<p class="sub">No cost yet. Add one with Edit to see profit.</p>'}
       ${f.max ? `<p class="sub">Max ${f.max} per order</p>` : ""}
@@ -1107,7 +1194,6 @@ function renderOwner() {
         <button class="btn small ghost danger" data-act="del-flavor" data-id="${id}">${delFlavorArmed === f.id ? "Tap again to delete" : "Delete"}</button>
       </div>
     </div>`;
-  }).join("") || '<p class="empty">No flavors yet. Add your first one above.</p>');
 }
 
 function renderShopSwitch() {
@@ -1255,13 +1341,12 @@ const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 let ownerCats = [], catDraft = null, catDelArmed = null, formCats = new Set();
 const mainCookies = () => ownerFl.filter(f => !ownerMain(f));
 function renderCatList() {
-  paint($("cat-list"), ownerCats.map((c, i) => {
+  paint($("cat-list"), ownerCats.map(c => {
     const names = c.flavors.map(id => ownerFl.find(f => f.id === id)).filter(Boolean).map(f => f.flavor);
-    return `<div class="cat-row">
-      <div><strong>${esc(c.name)}</strong><span class="sub">${names.length ? plural(names.length, "cookie", "cookies") + ": " + names.map(esc).join(", ") : "No cookies yet"}</span></div>
+    return `<div class="cat-row" data-sort-id="${esc(c.id)}">
+      <div class="order-top"><div><strong>${esc(c.name)}</strong><span class="sub">${names.length ? plural(names.length, "cookie", "cookies") + ": " + names.map(esc).join(", ") : "No cookies yet"}</span></div>
+        ${ownerCats.length > 1 ? dragHandle("cat-row", c.id, c.name) : ""}</div>
       <div class="actions">
-        <button class="btn small icon" data-act="cat-up" data-id="${esc(c.id)}" ${i === 0 ? "disabled" : ""} aria-label="Move ${esc(c.name)} up">↑</button>
-        <button class="btn small icon" data-act="cat-down" data-id="${esc(c.id)}" ${i === ownerCats.length - 1 ? "disabled" : ""} aria-label="Move ${esc(c.name)} down">↓</button>
         <button class="btn small" data-act="cat-edit" data-id="${esc(c.id)}">Edit</button>
         <button class="btn small ghost danger" data-act="cat-del" data-id="${esc(c.id)}">${catDelArmed === c.id ? "Tap again" : "Delete"}</button>
       </div>
@@ -1271,7 +1356,9 @@ function renderCatList() {
 function renderCatForm() {
   const d = catDraft, box = $("cat-form");
   if (!d) { box.classList.add("hidden"); box.innerHTML = ""; return; }
+  const opening = box.classList.contains("hidden");
   box.classList.remove("hidden");
+  if (opening) reveal(box);
   box.innerHTML = `<h3>${d.id ? "Edit " + esc(d.name || "category") : "New category"}</h3>
     <label class="field"><span>Name</span><input id="c-name" value="${esc(d.name)}" placeholder="Top picks" maxlength="30"></label>
     <div class="field"><span>Cookies in it</span><div class="pick-list">
@@ -1309,10 +1396,11 @@ async function changeDeliverOn(id, date) {
 }
 
 function renderBoxList() {
-  paint($("box-list"), ownerBoxes.map(b => `<div class="box-row ${b.on ? "" : "is-off"}">
-      <div><strong>${esc(b.name)}</strong>
+  paint($("box-list"), ownerBoxes.map(b => `<div class="box-row ${b.on ? "" : "is-off"}" data-sort-id="${esc(b.id)}">
+      <div class="order-top"><div><strong>${esc(b.name)}</strong>
         <span class="sub">${esc(boxRule(b))}${b.cost !== null && b.cost !== undefined ? ", costs you " + peso(b.cost) : ""}${b.desc ? ". " + esc(b.desc) : ""}</span>
         ${b.on ? "" : '<span class="tag" style="margin-top:4px">Not offered</span>'}</div>
+        ${ownerBoxes.length > 1 ? dragHandle("box-row", b.id, b.name) : ""}</div>
       <div class="actions">
         <button class="btn small" data-act="box-toggle" data-id="${esc(b.id)}">${b.on ? "Turn off" : "Offer"}</button>
         <button class="btn small" data-act="box-edit" data-id="${esc(b.id)}">Edit</button>
@@ -1330,6 +1418,7 @@ function openBoxForm(b) {
   $("b-desc").value = b ? b.desc || "" : "";
   $("box-msg").textContent = "";
   $("box-form").classList.remove("hidden");
+  reveal($("box-form"));
   $("b-name").focus();
 }
 async function saveBoxes(list, done) {
@@ -1513,6 +1602,8 @@ function showTab(t) {
   ["orders", "history", "payments", "flavors"].forEach(x => $("tab-" + x).classList.toggle("hidden", x !== t));
   if (t === "payments" && !payLoaded) loadPayment().catch(() => {});
   document.querySelectorAll("#owner-tabs button").forEach(b => b.classList.toggle("on", b.dataset.id === t));
+  placePill($("owner-tabs"));
+  reveal($("tab-" + t));
 }
 
 function lockOwner(text) {
@@ -1694,9 +1785,183 @@ function renderProofActions() {
 }
 $("proof-dialog").addEventListener("click", e => { if (e.target === $("proof-dialog")) $("proof-dialog").close(); });
 
+/* ---------------- Motion helpers ---------------- */
+const reduceMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+// Fade a section in when it appears.
+function reveal(el) {
+  if (!el || reduceMotion()) return;
+  el.classList.remove("reveal"); void el.offsetWidth; el.classList.add("reveal");
+}
+// A quick bounce on a number that just changed.
+function pop(el) {
+  if (el && !reduceMotion() && el.animate) el.animate([{ transform: "scale(1.35)" }, { transform: "scale(1)" }], { duration: 240, easing: "cubic-bezier(.2,.8,.2,1)" });
+}
+// The black pill behind the active tab slides to whichever tab you pick.
+function placePill(nav, instant) {
+  if (!nav) return;
+  let pill = nav.querySelector(".pill");
+  if (!pill) { pill = document.createElement("span"); pill.className = "pill"; pill.setAttribute("aria-hidden", "true"); nav.prepend(pill); instant = true; }
+  const on = nav.querySelector("button.on");
+  if (!on || !on.offsetWidth) return;
+  if (instant) pill.style.transition = "none";
+  pill.style.width = on.offsetWidth + "px";
+  pill.style.transform = "translateX(" + on.offsetLeft + "px)";
+  nav.classList.add("has-pill");
+  if (instant) { void pill.offsetWidth; pill.style.transition = ""; }
+}
+const pillNavs = [$("shop-tabs"), $("owner-tabs")];
+if (window.ResizeObserver) {
+  const ro = new ResizeObserver(() => pillNavs.forEach(n => placePill(n, true)));
+  pillNavs.forEach(n => { ro.observe(n); n.querySelectorAll("button").forEach(b => ro.observe(b)); });
+}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => pillNavs.forEach(n => placePill(n, true)));
+
+/* ---------------- Drag to reorder ---------------- */
+const GRIP = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const dragHandle = (cls, id, name) => `<button type="button" class="drag-handle" data-drag="${cls}" data-for="${esc(id)}"
+  aria-label="Move ${esc(name)}. Drag it, or use the up and down arrow keys.">${GRIP}</button>`;
+let drag = null, dragLock = false, keySave = null;
+const sortItems = (container, cls) => [...container.children].filter(x => x.classList.contains(cls));
+
+// Moves rows, then slides the ones that shifted from their old spot to the new one.
+function flipMove(container, cls, mutate, skip) {
+  const items = sortItems(container, cls);
+  const first = new Map(items.map(x => [x, x.offsetTop]));
+  mutate();
+  if (reduceMotion()) return;
+  items.forEach(x => {
+    if (x === skip) return;
+    const d = first.get(x) - x.offsetTop;
+    if (d && x.animate) x.animate([{ transform: "translateY(" + d + "px)" }, { transform: "translateY(0)" }], { duration: 220, easing: "cubic-bezier(.2,.8,.2,1)" });
+  });
+}
+
+document.addEventListener("pointerdown", e => {
+  const h = e.target.closest && e.target.closest("[data-drag]");
+  if (!h || e.button > 0 || drag) return;
+  const cls = h.dataset.drag, item = h.closest("." + cls);
+  if (!item) return;
+  e.preventDefault();
+  try { h.setPointerCapture(e.pointerId); } catch (_) {}
+  const container = item.parentElement;
+  // Shrink the rows, then scroll so the row you grabbed stays under your finger.
+  const offset = e.clientY - item.getBoundingClientRect().top;
+  container.classList.add("sorting");
+  const grabIn = Math.max(8, Math.min(offset, item.offsetHeight - 8));
+  window.scrollBy(0, item.getBoundingClientRect().top - (e.clientY - grabIn));
+  drag = { h, item, container, cls, y: e.clientY, grab: e.clientY - container.getBoundingClientRect().top - item.offsetTop, ty: 0,
+           start: sortItems(container, cls).map(x => x.dataset.sortId).join() };
+  dragLock = true;
+  item.classList.add("dragging");
+  document.body.classList.add("is-dragging");
+  if (navigator.vibrate) try { navigator.vibrate(8); } catch (_) {}
+  drag.raf = requestAnimationFrame(dragFrame);
+});
+document.addEventListener("pointermove", e => { if (drag) { drag.y = e.clientY; e.preventDefault(); } }, { passive: false });
+document.addEventListener("pointerup", endDrag);
+document.addEventListener("pointercancel", endDrag);
+
+function dragFrame() {
+  if (!drag) return;
+  const { item, container, cls } = drag;
+  // Scroll the page when the row is held near the top or bottom edge.
+  const edge = 80;
+  if (drag.y < edge) window.scrollBy(0, -Math.ceil((edge - drag.y) / 6));
+  else if (drag.y > innerHeight - edge) window.scrollBy(0, Math.ceil((drag.y - innerHeight + edge) / 6));
+  // Where the dragged row's middle is, inside its list.
+  const mid = drag.y - container.getBoundingClientRect().top - drag.grab + item.offsetHeight / 2;
+  const others = sortItems(container, cls).filter(x => x !== item);
+  const idx = others.filter(x => x.offsetTop + x.offsetHeight / 2 < mid).length;
+  if (idx !== sortItems(container, cls).indexOf(item)) {
+    flipMove(container, cls, () => (idx < others.length ? container.insertBefore(item, others[idx]) : others[others.length - 1].after(item)), item);
+  }
+  // Keep the row under your finger, but inside its list.
+  const raw = drag.y - container.getBoundingClientRect().top - drag.grab - item.offsetTop;
+  drag.ty = Math.max(-item.offsetTop, Math.min(raw, container.offsetHeight - item.offsetTop - item.offsetHeight));
+  item.style.transform = "translateY(" + drag.ty + "px)";
+  drag.raf = requestAnimationFrame(dragFrame);
+}
+
+async function endDrag() {
+  if (!drag) return;
+  const d = drag;
+  drag = null;
+  cancelAnimationFrame(d.raf);
+  document.body.classList.remove("is-dragging");
+  d.item.style.transform = "";
+  if (!reduceMotion() && d.item.animate && d.ty) {
+    await d.item.animate([{ transform: "translateY(" + d.ty + "px)" }, { transform: "translateY(0)" }],
+      { duration: 200, easing: "cubic-bezier(.2,.8,.2,1)" }).finished.catch(() => {});
+  }
+  d.item.classList.remove("dragging");
+  // Grow the rows back, keeping the dropped row where it is on screen.
+  const keep = d.item.getBoundingClientRect().top;
+  d.container.classList.remove("sorting");
+  window.scrollBy(0, d.item.getBoundingClientRect().top - keep);
+  if (sortItems(d.container, d.cls).map(x => x.dataset.sortId).join() !== d.start) {
+    await saveOrder(d.container.closest("[data-sort-list]").dataset.sortList);
+  } else {
+    dragLock = false;
+  }
+}
+
+// Arrow keys move a row up or down when its handle is focused.
+document.addEventListener("keydown", e => {
+  const h = e.target.closest && e.target.closest("[data-drag]");
+  if (!h || (e.key !== "ArrowUp" && e.key !== "ArrowDown")) return;
+  e.preventDefault();
+  const cls = h.dataset.drag, item = h.closest("." + cls), container = item.parentElement;
+  const list = sortItems(container, cls), i = list.indexOf(item), j = e.key === "ArrowUp" ? i - 1 : i + 1;
+  if (j < 0 || j >= list.length) return;
+  dragLock = true;
+  flipMove(container, cls, () => (e.key === "ArrowUp" ? container.insertBefore(item, list[j]) : list[j].after(item)));
+  h.focus();
+  const kind = container.closest("[data-sort-list]").dataset.sortList, id = h.dataset.for;
+  clearTimeout(keySave);
+  keySave = setTimeout(async () => {
+    await saveOrder(kind);
+    const again = document.querySelector('[data-drag][data-for="' + CSS.escape(id) + '"]');
+    if (again) again.focus();
+  }, 700);
+});
+
+// Saves the order the rows are in now.
+async function saveOrder(kind) {
+  const ids = list => [...list.querySelectorAll("[data-sort-id]")].map(x => x.dataset.sortId);
+  try {
+    if (kind === "flavors") {
+      const order = ids($("flavors"));
+      ownerFl.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+      const d = await api({ action: "setFlavorOrder", ids: order });
+      if (d.error) throw new Error(d.error);
+      toast("Menu order saved.");
+      await loadOwner();
+    } else if (kind === "cats") {
+      const list = ids($("cat-list")).map(id => ownerCats.find(c => c.id === id)).filter(Boolean);
+      dragLock = false;
+      await saveCats(list, "Category order saved.");
+    } else if (kind === "boxes") {
+      const list = ids($("box-list")).map(id => ownerBoxes.find(b => b.id === id)).filter(Boolean);
+      dragLock = false;
+      await saveBoxes(list, "Box order saved.");
+    }
+  } catch (err) {
+    toast(err && err.message === "Unknown action" ? "Update the Apps Script first." : "Couldn't save the new order. Try again.", 3500);
+    ["flavors", "cat-list", "box-list"].forEach(x => ($(x)._html = null));
+  } finally {
+    dragLock = false;
+    renderOwner();
+  }
+}
+
 /* ---------------- Buttons ---------------- */
 const acts = {
-  add(id) { const f = flavorById(id); if (f) { cart[id] = Math.min((cart[id] || 0) + 1, capOf(f)); renderMenu(); renderCart(); } },
+  add(id) {
+    const f = flavorById(id); if (!f) return;
+    cart[id] = Math.min((cart[id] || 0) + 1, capOf(f));
+    renderMenu(); renderCart();
+    popCount(id); pop($("bar-text"));
+  },
   async vote(id) {
     const undo = myVotes.includes(id);
     const d = await api({ action: "vote", id, undo });
@@ -1707,7 +1972,7 @@ const acts = {
     renderSoon();
     if (!undo) toast("Thanks! The baker can see you want this.");
   },
-  rm(id) { cart[id] = Math.max((cart[id] || 0) - 1, 0); renderMenu(); renderCart(); },
+  rm(id) { cart[id] = Math.max((cart[id] || 0) - 1, 0); renderMenu(); renderCart(); popCount(id); },
   "go-checkout"() {
     const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
     $("checkout").scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
@@ -1954,6 +2219,7 @@ const acts = {
     dlDraft = { on: true, days: ownerDelivery.days.slice(), notice: ownerDelivery.notice, ahead: ownerDelivery.ahead, off: ownerDelivery.off.slice() };
     if (ownerDelivery.on) dlDraft.on = true;
     renderDlEditor();
+    reveal($("delivery-box"));
   },
   "dl-day"(i) {
     readDlDraft();
@@ -2005,16 +2271,6 @@ const acts = {
       list = [...ownerCats, { ...entry, id }];
     }
     if (await saveCats(list, entry.id ? "Category saved." : name + " added. Customers can filter by it now.")) { catDraft = null; renderCatForm(); }
-  },
-  async "cat-up"(id) {
-    const i = ownerCats.findIndex(c => c.id === id); if (i < 1) return;
-    const list = ownerCats.slice(); [list[i - 1], list[i]] = [list[i], list[i - 1]];
-    await saveCats(list);
-  },
-  async "cat-down"(id) {
-    const i = ownerCats.findIndex(c => c.id === id); if (i < 0 || i >= ownerCats.length - 1) return;
-    const list = ownerCats.slice(); [list[i + 1], list[i]] = [list[i], list[i + 1]];
-    await saveCats(list);
   },
   async "cat-del"(id) {
     if (catDelArmed !== id) { catDelArmed = id; $("cat-list")._html = null; return renderCatList(); }
