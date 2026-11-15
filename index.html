@@ -13,7 +13,1971 @@
   --baked:#c07a2c; --baked-ink:#85501a; --danger:#b3261e;
   --serif:"Young Serif",Georgia,serif;
   --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cookie Pre-Order</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Young+Serif&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ffffff; --ink:#000000; --flour:#f2f1ee; --crumb:#e4e1da; --muted:#5f5a52;
+  --baked:#c07a2c; --baked-ink:#85501a; --danger:#b3261e;
+  --serif:"Young Serif",Georgia,serif;
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
 }
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.5 var(--sans)}
+.wrap{max-width:600px;margin:0 auto;padding:28px 20px 120px}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;line-height:1.15}
+h1{font-size:clamp(2rem,8vw,2.6rem);letter-spacing:-.01em}
+h2{font-size:1.5rem;margin-bottom:12px}
+h3{font-size:1.15rem}
+p{margin:0}
+a{color:inherit}
+.hidden{display:none!important}
+
+/* Header */
+h1{text-wrap:balance}
+.sub-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin:10px 0 26px}
+.lede{color:var(--muted);max-width:42ch}
+.live{display:inline-flex;align-items:center;gap:7px;flex-shrink:0;padding:6px 12px;border-radius:999px;background:var(--flour);font-size:13px;font-weight:600;white-space:nowrap}
+.live i{width:8px;height:8px;border-radius:50%;background:#1b7f3a}
+.live.off i{background:var(--danger)}
+@media (prefers-reduced-motion:no-preference){.live:not(.off) i{animation:pulse 2s ease-in-out infinite}}
+@keyframes pulse{50%{opacity:.3}}
+
+/* Menu */
+.menu{border-top:1px solid var(--crumb)}
+.item{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--crumb)}
+.pic{width:96px;height:96px;border-radius:18px;overflow:hidden;background:var(--flour);display:grid;place-items:center}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{font-size:34px}
+.item.out .pic{filter:grayscale(1);opacity:.5}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.price{font-weight:600;white-space:nowrap}
+.desc{color:var(--muted);font-size:14.5px;margin-top:4px}
+.foot{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:12px}
+.stock{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:600;color:var(--baked-ink)}
+.item.out .stock{color:var(--danger)}
+.dots{display:flex;flex-wrap:wrap;gap:4px;max-width:184px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--baked)}
+.dots i.c{background:var(--ink)}
+.dots i.t{background:transparent;box-shadow:inset 0 0 0 1.5px var(--crumb)}
+.stepper{display:inline-flex;align-items:center;background:var(--flour);border-radius:999px;padding:4px;flex-shrink:0}
+.stepper button{width:36px;height:36px;border-radius:50%;border:0;background:var(--paper);color:var(--ink);font:600 19px/1 var(--sans);cursor:pointer}
+.stepper button:disabled{opacity:.35;cursor:default}
+.stepper span{min-width:32px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* Sections, lists, fields */
+section.block{margin-top:44px}
+.sub{color:var(--muted);font-size:14px}
+.lines{list-style:none;margin:0;padding:0}
+.lines li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px dashed var(--crumb)}
+.lines small{display:block;color:var(--muted);font-size:13px}
+.total-row{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0 2px}
+.total-row strong{font-size:1.2rem}
+.empty{color:var(--muted);padding:14px 0}
+.field{display:block;margin:14px 0}
+.field>span,.field>label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.inline{display:flex;gap:8px}
+.inline input{flex:1;min-width:0}
+input[type=file]::file-selector-button{margin-right:12px;padding:9px 16px;border:0;border-radius:999px;background:var(--flour);color:var(--ink);font:600 14px var(--sans);cursor:pointer}
+input,textarea{width:100%;font:inherit;color:var(--ink);background:var(--flour);border:1.5px solid transparent;border-radius:12px;padding:11px 14px}
+select{-webkit-appearance:none;appearance:none;width:100%;font:inherit;color:var(--ink);cursor:pointer;
+  background:var(--flour) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 14px center/12px;border:1.5px solid transparent;border-radius:12px;padding:11px 38px 11px 14px}
+select:focus{outline:none;border-color:var(--ink)}
+select:disabled{opacity:.5;cursor:default}
+.variant{display:block;margin-top:10px}
+.variant select{padding:9px 38px 9px 14px;border-color:var(--crumb);border-radius:999px;background-color:var(--paper);font-weight:600;font-size:14.5px}
+.variant select:focus{border-color:var(--ink)}
+.also{margin-top:8px;color:var(--muted);font-size:13.5px}
+.chips{display:flex;gap:6px;margin:0 0 16px;padding-bottom:4px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;min-height:36px;padding:0 14px;border:1.5px solid var(--crumb);border-radius:999px;background:var(--paper);color:var(--ink);font:600 14px var(--sans);white-space:nowrap;cursor:pointer}
+.chip span{margin-left:4px;color:var(--muted);font-weight:500}
+.chip.on{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.chip.on span{color:#d6d3cd}
+.chip.late{border-color:#efb7b1}
+.toolbar{display:flex;gap:8px;margin-bottom:12px}
+.toolbar>*{flex:1;min-width:0}
+@media (max-width:520px){ .toolbar{flex-wrap:wrap} .toolbar>*{flex-basis:100%} }
+.deliver{margin-top:8px;font-size:15px}
+.deliver-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-top:12px;padding:8px 8px 8px 14px;border-radius:12px;background:var(--flour);font-size:14.5px}
+.deliver-row input{width:auto;padding:7px 10px;background:var(--paper);font-size:14px}
+.check{display:flex;align-items:center;gap:10px;font-weight:600;cursor:pointer}
+.check input{-webkit-appearance:auto;appearance:auto;width:18px;height:18px;margin:0;padding:0;accent-color:var(--ink)}
+.dl-days{display:flex;flex-wrap:wrap;gap:6px}
+.dl-days .chip{min-width:52px}
+.off-chip{display:inline-flex;align-items:center;gap:6px;margin:8px 6px 0 0;padding:4px 6px 4px 12px;border-radius:999px;background:var(--flour);font-size:14px}
+.off-chip button{width:26px;height:26px;border:0;border-radius:50%;background:var(--paper);cursor:pointer;font:600 15px/1 var(--sans)}
+.pack{margin:20px 0 0;padding:0;border:0}
+.pack legend{margin-bottom:2px;padding:0;font-size:14px;font-weight:600}
+.pack-opt{display:flex;align-items:center;gap:12px;margin-top:8px;padding:12px 14px;border:1.5px solid var(--crumb);border-radius:14px;cursor:pointer}
+.pack-opt.on{border-color:var(--ink)}
+.pack-opt input[type=radio]{-webkit-appearance:auto;appearance:auto;flex-shrink:0;width:18px;height:18px;margin:0;padding:0;border:0;background:none;accent-color:var(--ink)}
+.pack-text{flex:1;min-width:0}
+.pack-text strong{display:block;font-weight:600}
+.pack-text small{display:block;color:var(--muted);font-size:13.5px}
+.pack-price{font-weight:600;text-align:right;white-space:nowrap}
+.pack-price small{display:block;color:var(--muted);font-size:12.5px;font-weight:500}
+.box-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px 12px;padding:12px 0;border-bottom:1px solid var(--crumb)}
+.box-row:first-child{border-top:1px solid var(--crumb)}
+.box-row .sub{display:block}
+.box-row .actions{margin-top:0}
+.box-row.is-off strong{color:var(--muted)}
+#box-list{margin-top:12px}
+#box-form{margin-top:16px;padding-top:4px}
+#box-form h3{margin-top:4px}
+.frow.variant-row{margin-left:16px;padding-left:14px;border-left:3px solid var(--crumb)}
+.frow.variant-row h3{font-size:1.05rem}
+textarea{min-height:84px;resize:vertical}
+input::placeholder,textarea::placeholder{color:#77716a}
+input[type=file]{background:transparent;padding:6px 0;border:0}
+input:focus,textarea:focus{outline:none;border-color:var(--ink);background:var(--paper)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two .field{margin:0}
+.box{border:1.5px solid var(--crumb);border-radius:22px;padding:20px}
+.msg{min-height:1.5em;margin-top:10px;font-size:14.5px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 18px;border-radius:999px;border:0;background:var(--flour);color:var(--ink);font:600 15px/1 var(--sans);cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.small{min-height:36px;padding:0 14px;font-size:14px}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--danger)}
+.btn.wide{width:100%;margin-top:6px}
+.btn.grow{flex:1}
+.btn:disabled{opacity:.4;cursor:default}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+
+/* Orders */
+.order{padding:18px 0;border-bottom:1px solid var(--crumb)}
+.order:first-child{border-top:1px solid var(--crumb)}
+.order-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.order-top .sub{margin-top:2px}
+.items{margin-top:10px}
+.note{margin-top:12px;padding:10px 14px;background:var(--flour);border-radius:12px;font-size:14.5px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px 4px 8px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.badge svg{width:14px;height:14px}
+.badge.pending{background:#e7f6ec;color:#17692f}
+.badge.delayed{background:#fff0dd;color:#a24a00}
+.badge.completed{background:#e6eeff;color:#1d47b8}
+.badge.cancelled{background:#efefef;color:#555}
+
+/* Owner */
+.tabs,.seg{display:flex;gap:4px;background:var(--flour);border-radius:999px;padding:4px}
+.tabs{margin:4px 0 26px}
+.tabs button{flex:1 1 auto;white-space:nowrap}
+.seg{display:inline-flex;margin-top:14px}
+.tabs button,.seg button{flex:1;min-height:40px;padding:0 16px;border:0;border-radius:999px;background:transparent;color:var(--ink);font:600 15px var(--sans);cursor:pointer}
+.seg button{flex:0 0 auto;min-height:34px;padding:0 14px;font-size:14px;white-space:nowrap}
+.tabs button.on,.seg button.on{background:var(--ink);color:var(--paper)}
+.count{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:999px;background:var(--baked);color:#fff;font-size:12px;line-height:20px}
+.sales{margin-bottom:18px;color:var(--muted)}
+.sales strong{display:block;font:400 2rem/1.1 var(--serif);color:var(--ink)}
+.hrow{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:14px 2px;border:0;border-bottom:1px solid var(--crumb);background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.hrow:first-child{border-top:1px solid var(--crumb)}
+.hrow .sub{display:block}
+.hright{display:flex;align-items:center;gap:10px}
+.frow{padding:16px 0;border-bottom:1px solid var(--crumb)}
+.frow:first-child{border-top:1px solid var(--crumb)}
+.frow.is-hidden h3{color:var(--muted)}
+.tag{display:inline-block;padding:3px 10px;border-radius:999px;background:#fdecea;color:var(--danger);font-size:12.5px;font-weight:600;white-space:nowrap}
+.tag.soon{background:#f6ead9;color:var(--baked-ink)}
+.soon-foot{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin-top:12px;font-size:14px;color:var(--muted)}
+.field .seg{margin-top:0}
+.admin-link{margin-top:48px;text-align:center;font-size:14px}
+.admin-link a{color:var(--muted)}
+.closed{display:flex;flex-direction:column;gap:2px;margin-bottom:22px;padding:14px 16px;border-radius:16px;background:#f6ead9}
+.closed p{color:#5c4126;font-size:15px}
+.state-box{margin:0 0 18px;padding:14px 16px;border:1.5px solid var(--crumb);border-radius:18px}
+.state-box.closed-now{background:#f6ead9;border-color:#f6ead9}
+.state{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.state-text{display:flex;align-items:flex-start;gap:10px}
+.state .btn{white-space:nowrap;flex-shrink:0}
+.state-dot{width:10px;height:10px;margin-top:6px;border-radius:50%;background:#1b7f3a;flex-shrink:0}
+.closed-now .state-dot{background:var(--danger)}
+.state-box .field{margin:12px 0 0}
+.closed-now input{background:var(--paper)}
+.bake{margin-bottom:24px}
+.bake h2{margin:0}
+.bake .lines{margin-top:8px}
+.bake .lines li:last-child{border-bottom:0}
+.bake-total{font-weight:600;white-space:nowrap;padding-top:4px}
+.limit{color:var(--muted);font-weight:500}
+.vote-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin-top:12px}
+.btn.voted{background:var(--ink);color:var(--paper)}
+.paytag{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;font:600 12px/1.6 var(--sans);vertical-align:middle}
+.paytag.paid{background:#e7f6ec;color:#17692f}
+.paytag.unpaid{background:var(--flour);color:var(--muted)}
+.paytag.checking{background:#e6eeff;color:#1d47b8}
+.proof-text{color:#1d47b8;font-weight:600}
+.proof-line{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;padding:6px 6px 6px 14px;border-radius:12px;background:#e6eeff;color:#1d47b8;font-size:14.5px;font-weight:600}
+.proof-line .btn{background:var(--paper);color:var(--ink)}
+.proof-box{padding:18px 16px;border-radius:16px;background:var(--paper);text-align:center}
+#proof-body img{display:block;max-width:100%;max-height:66vh;margin:12px auto 0;border-radius:10px;border:1px solid var(--crumb)}
+.unpaid-text{color:var(--danger);font-weight:600}
+.row-split{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:14px}
+.row-split .seg{margin-top:0}
+.btn.is-paid{background:#e7f6ec;color:#17692f}
+.paybox{margin-top:16px;padding:14px;border-radius:14px;background:var(--flour);text-align:center;font-size:14.5px}
+.paybox p{margin-top:4px;white-space:pre-line}
+.qr{display:block;width:200px;max-width:100%;height:auto;margin:10px auto 0;border-radius:10px;background:#fff}
+#qr-preview .qr{margin:0 0 10px;border:1px solid var(--crumb)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{padding:12px 14px;border-radius:14px;background:var(--flour)}
+.stat span{display:block;color:var(--muted);font-size:13px;font-weight:600}
+.stat strong{display:block;margin-top:2px;font:400 1.3rem/1.2 var(--serif)}
+.stat.profit{background:#e7f6ec}
+.stat.loss{background:#fdecea}
+.stats-note{margin:10px 0 0}
+.flavor-table{width:100%;border-collapse:collapse;margin:8px 0 26px;font-size:14.5px;font-variant-numeric:tabular-nums}
+.flavor-table th{padding:6px 0;border-bottom:1px solid var(--crumb);color:var(--muted);font-size:13px;font-weight:600;text-align:right}
+.flavor-table td{padding:9px 0;border-bottom:1px dashed var(--crumb);text-align:right}
+.flavor-table th:first-child,.flavor-table td:first-child{text-align:left}
+.owe-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.owe-head strong{font:400 2rem/1.1 var(--serif)}
+.owe-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--crumb)}
+.owe-row:first-of-type{border-top:1px solid var(--crumb)}
+.owe-row .sub{display:block}
+.owner-nav{display:flex;align-items:center;gap:14px;margin:8px 0 24px;color:var(--muted)}
+
+/* Sticky order bar */
+.bar{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;width:min(560px,calc(100% - 24px));display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 8px 8px 20px;border-radius:999px;background:var(--ink);color:var(--paper);box-shadow:0 10px 30px rgba(0,0,0,.2);font-weight:600}
+.bar .btn{background:var(--paper);color:var(--ink)}
+
+/* Receipt */
+dialog{border:0;padding:0;background:transparent;width:min(380px,calc(100% - 32px));max-height:calc(100% - 32px);overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+@media (prefers-reduced-motion:no-preference){dialog[open]{animation:rise .2s ease-out}}
+@keyframes rise{from{transform:translateY(14px);opacity:0}}
+.paper{--zz:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/20px 100%;background:var(--paper);padding:28px 24px 44px;border-radius:8px 8px 0 0;-webkit-mask:var(--zz);mask:var(--zz)}
+.r-head{text-align:center;margin-bottom:18px}
+.r-head h2{margin:0 0 2px;font-size:1.45rem}
+.r-meta{margin:0;display:grid;gap:7px;font-size:14.5px}
+.r-meta div{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.r-meta dt{color:var(--muted)}
+.r-meta dd{margin:0;text-align:right}
+.cut{border:0;border-top:1.5px dashed var(--crumb);margin:16px 0}
+.r-lines li{border:0;padding:6px 0}
+.r-total{display:flex;justify-content:space-between;align-items:baseline;font:400 1.45rem var(--serif)}
+.r-note{margin-top:14px;font-size:14.5px}
+.r-thanks{margin-top:20px;text-align:center;color:var(--muted);font-size:14px}
+.dialog-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px}
+.dialog-actions .btn{flex:1;max-width:160px}
+.dialog-actions .btn.full{flex-basis:100%;max-width:none}
+.dialog-actions .btn{background:var(--paper)}
+.dialog-actions .btn.primary{background:var(--ink);color:var(--paper)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:10;width:max-content;max-width:min(360px,calc(100% - 32px));padding:12px 18px;border-radius:16px;text-align:center;background:var(--ink);color:var(--paper);font-size:14.5px;font-weight:500}
+
+@media (max-width:420px){
+  .tabs{gap:2px}
+  .tabs button{padding:0 7px;font-size:14px}
+  .count{margin-left:3px;font-size:11px;line-height:18px}
+  .item{grid-template-columns:80px 1fr;gap:14px}
+  .pic{width:80px;height:80px;border-radius:16px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="shop-name">Cookie Pre-Order</h1>
+    <div class="sub-head">
+      <p class="lede" id="lede">Pick your cookies and reserve them before the next batch is baked.</p>
+      <p class="live off" id="live"><i></i><span id="live-text">Connecting…</span></p>
+    </div>
+  </header>
+
+  <!-- Customer view -->
+  <main id="shop">
+    <nav class="tabs" id="shop-tabs" aria-label="Shop sections">
+      <button data-act="ctab" data-id="menu" class="on">Menu</button>
+      <button data-act="ctab" data-id="mine">My orders<span class="count hidden" id="count-mine"></span></button>
+      <button data-act="ctab" data-id="past">History</button>
+    </nav>
+
+    <div id="ctab-menu">
+    <div id="closed" class="closed hidden" role="status">
+      <strong>Orders are closed right now</strong>
+      <p id="closed-msg"></p>
+    </div>
+
+    <section id="menu" class="menu" aria-label="Flavors"></section>
+
+    <section id="soon" class="block hidden">
+      <h2>Coming soon</h2>
+      <p class="sub">Not open for orders yet.</p>
+      <div id="soon-list" class="menu" style="margin-top:14px"></div>
+    </section>
+
+    <section id="checkout" class="block">
+      <h2>Your order</h2>
+      <div id="cart"></div>
+      <div id="box-choice"></div>
+      <div id="deliver-choice"></div>
+      <label class="field"><span>Your name</span><input id="name" autocomplete="name" placeholder="First name is fine"></label>
+      <button id="place" class="btn primary wide">Place order</button>
+      <p id="msg" class="msg" role="status"></p>
+    </section>
+
+    </div>
+
+    <section id="ctab-mine" class="hidden">
+      <p class="sub" style="margin-bottom:12px">Orders placed from this phone that are still on the way or not paid yet.</p>
+      <div id="mine-list"></div>
+    </section>
+
+    <section id="ctab-past" class="hidden">
+      <p class="sub" style="margin-bottom:12px">Finished and cancelled orders. Order again puts the same cookies back in your cart.</p>
+      <div id="past-list"></div>
+    </section>
+
+    <footer class="admin-link"><a href="#admin">Are you an admin?</a></footer>
+  </main>
+
+  <!-- Owner view (open the page with #admin at the end of the link) -->
+  <main id="admin" class="hidden">
+    <div id="login" class="box">
+      <h2>Owner sign in</h2>
+      <label class="field"><span>Password</span><input id="token" type="password" autocomplete="current-password"></label>
+      <button id="unlock" class="btn primary">Unlock</button>
+      <p id="login-msg" class="msg" role="status"></p>
+    </div>
+
+    <div id="tools" class="hidden">
+      <div id="shop-state"></div>
+      <div id="delivery-box" class="state-box"></div>
+      <nav class="tabs" id="owner-tabs" aria-label="Owner sections">
+        <button data-act="tab" data-id="orders" class="on">Orders<span class="count hidden" id="count-orders"></span></button>
+        <button data-act="tab" data-id="history">History</button>
+        <button data-act="tab" data-id="payments">Payments<span class="count hidden" id="count-unpaid"></span></button>
+        <button data-act="tab" data-id="flavors">Flavors</button>
+      </nav>
+
+      <section id="tab-orders">
+        <div class="toolbar"><input type="search" id="order-search" placeholder="Search name or order #" aria-label="Search open orders"></div>
+        <div id="day-chips" class="chips" role="group" aria-label="Delivery date"></div>
+        <div id="bake"></div><div id="orders"></div>
+      </section>
+
+      <section id="tab-history" class="hidden">
+        <div class="toolbar">
+          <select id="hist-range" aria-label="Show sales for"></select>
+          <input type="search" id="hist-search" placeholder="Search name or order #" aria-label="Search history">
+        </div>
+        <div id="sales" class="sales"></div>
+        <div id="history"></div>
+      </section>
+
+      <section id="tab-payments" class="hidden">
+        <div id="unpaid"></div>
+        <form id="pay-form" class="box" autocomplete="off" style="margin-top:28px">
+          <h2>How customers pay</h2>
+          <p class="sub">Shown on the receipt of every order that isn't paid yet.</p>
+          <label class="field"><span>Payment details</span><textarea id="pay-info" placeholder="GCash 0917 123 4567 (Juan D.)"></textarea></label>
+          <div class="field"><span>GCash QR (optional)</span>
+            <div id="qr-preview"></div>
+            <input id="pay-qr" type="file" accept="image/*">
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="pay-save" type="submit">Save payment details</button>
+            <button class="btn ghost danger hidden" id="qr-remove" type="button" data-act="qr-remove">Remove QR</button>
+          </div>
+          <p class="msg" id="pay-msg" role="status"></p>
+        </form>
+      </section>
+
+      <section id="tab-flavors" class="hidden">
+        <section id="boxes-box" class="box" style="margin-bottom:24px">
+          <div class="order-top"><h2 style="margin:0">Boxes</h2><button class="btn small" type="button" data-act="box-new">Add box</button></div>
+          <p class="sub" style="margin-top:6px">Customers can pick one at checkout. "No box" is always there too.</p>
+          <div id="box-list"></div>
+          <form id="box-form" class="hidden" autocomplete="off">
+            <h3 id="box-form-title">New box</h3>
+            <label class="field"><span>Name</span><input id="b-name" placeholder="Kraft box"></label>
+            <div class="two">
+              <label class="field"><span>Price per box (₱)</span><input id="b-price" type="number" inputmode="decimal" min="0" step="any" placeholder="15"></label>
+              <label class="field"><span>Cookies per box</span><input id="b-holds" type="number" inputmode="numeric" min="1" placeholder="Any amount"></label>
+            </div>
+            <div class="two">
+              <label class="field"><span>Your cost per box (₱)</span><input id="b-cost" type="number" inputmode="decimal" min="0" step="any" placeholder="Optional"></label>
+              <label class="field"><span>Short note</span><input id="b-desc" placeholder="With ribbon"></label>
+            </div>
+            <p class="sub">Leave cookies per box empty to charge one box for the whole order. With a number, the page works out how many boxes each order needs.</p>
+            <div class="actions">
+              <button class="btn primary" type="submit" id="box-save">Save box</button>
+              <button class="btn" type="button" data-act="box-cancel">Cancel</button>
+            </div>
+            <p class="msg" id="box-msg" role="status"></p>
+          </form>
+        </section>
+
+        <form id="flavor-form" class="box" autocomplete="off">
+          <h2 id="form-title">Add a flavor</h2>
+          <label class="field"><span>Flavor</span><input id="f-flavor" placeholder="S'mores"></label>
+          <label class="field"><span>Variant of</span><select id="f-parent"><option value="">Nothing, it's its own cookie</option></select></label>
+          <div class="two">
+            <label class="field"><span>Price (₱)</span><input id="f-price" type="number" inputmode="decimal" min="0" step="any"></label>
+            <label class="field"><span>Cookies on hand</span><input id="f-stock" type="number" inputmode="numeric" min="0"></label>
+          </div>
+          <div class="two">
+            <label class="field"><span>Cost per cookie (₱)</span><input id="f-cost" type="number" inputmode="decimal" min="0" step="any" placeholder="Optional"></label>
+            <label class="field"><span>Max per order</span><input id="f-max" type="number" inputmode="numeric" min="1" placeholder="No limit"></label>
+          </div>
+          <label class="field"><span>Batch</span><input id="f-batch" placeholder="Nov 14 pickup"></label>
+          <label class="field"><span>Description</span><textarea id="f-desc" placeholder="Toasted marshmallow, graham and chocolate"></textarea></label>
+          <label class="field"><span>Photo</span><input id="f-photo" type="file" accept="image/*"></label>
+          <div class="field"><span id="vis-label">Show this flavor</span>
+            <div class="seg" role="group" aria-labelledby="vis-label" id="f-vis">
+              <button type="button" data-act="form-vis" data-id="menu" class="on" aria-pressed="true">On menu</button>
+              <button type="button" data-act="form-vis" data-id="soon" aria-pressed="false">Coming soon</button>
+              <button type="button" data-act="form-vis" data-id="hidden" aria-pressed="false">Hidden</button>
+            </div>
+          </div>
+          <p class="sub">Cost per cookie is only for you, for profit in History. Completed orders come out of cookies on hand automatically. Coming soon flavors show their batch under the menu, so put the date there, like Dec 20 pickup.</p>
+          <div class="actions">
+            <button class="btn primary" id="save" type="submit">Save flavor</button>
+            <button class="btn hidden" id="cancel-edit" type="button" data-act="cancel-flavor-edit">Cancel</button>
+          </div>
+          <p class="msg" id="save-msg" role="status"></p>
+        </form>
+        <div id="flavors" style="margin-top:24px"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div id="bar" class="bar hidden" role="region" aria-label="Order summary">
+  <span id="bar-text"></span>
+  <button class="btn" data-act="go-checkout">Review order</button>
+</div>
+
+<dialog id="receipt" aria-label="Receipt">
+  <div class="paper" id="receipt-body"></div>
+  <div class="dialog-actions" id="receipt-actions"></div>
+</dialog>
+
+<dialog id="proof-dialog" aria-label="Payment screenshot">
+  <div class="proof-box"><h2 style="font-size:1.3rem;margin:0">Payment screenshot</h2><p class="sub" id="proof-title"></p><div id="proof-body"></div></div>
+  <div class="dialog-actions" id="proof-actions"></div>
+</dialog>
+
+<input type="file" id="proof-input" accept="image/*" hidden>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<script>
+// Paste your Apps Script Web app URL here.
+const API = "https://script.google.com/macros/s/AKfycbz4FV4AACJpKXsdPKexGajvemZ5D36AueRstMDLlTC3S0tXus1pyTitKDuSp4LeBkSvdQ/exec";
+// Your shop name, shown at the top and on receipts.
+const SHOP_NAME = "Cookie Pre-Order";
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const peso = n => {
+  const v = Number(n) || 0;
+  return "₱" + v.toLocaleString("en-PH", Number.isInteger(v) ? {} : { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+};
+const shortId = id => "#" + String(id).replace(/-/g, "").slice(0, 6).toUpperCase();
+const parseItems = s => { try { return JSON.parse(s || "[]") || []; } catch (_) { return []; } };
+const plural = (n, one, many) => n + " " + (n === 1 ? one : many);
+function when(d, long) {
+  if (!d) return "";
+  const t = new Date(d);
+  if (isNaN(t)) return "";
+  return t.toLocaleString("en-PH", long
+    ? { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" }
+    : { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+}
+// Dates are kept as "2026-11-17" text.
+const pad2 = n => String(n).padStart(2, "0");
+const ymdOf = d => d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate());
+const todayYmd = () => ymdOf(new Date());
+const addDaysYmd = (ymd, n) => { const [y, m, d] = ymd.split("-").map(Number); return ymdOf(new Date(y, m - 1, d + n)); };
+const dayOfStamp = v => { const t = new Date(v); return v && !isNaN(t) ? ymdOf(t) : ""; };
+// "Mon, Nov 17", with Today / Tomorrow in front when it fits.
+function dayLabel(ymd, long) {
+  if (!ymd) return "";
+  const [y, m, d] = ymd.split("-").map(Number), dt = new Date(y, m - 1, d);
+  const base = dt.toLocaleDateString("en-PH", long ? { weekday: "long", month: "long", day: "numeric", year: "numeric" }
+                                                   : { weekday: "short", month: "short", day: "numeric" });
+  const t = todayYmd();
+  return ymd === t ? "Today, " + base : ymd === addDaysYmd(t, 1) ? "Tomorrow, " + base : base;
+}
+
+// Only touch the page when something actually changed, so nothing flickers.
+function paint(el, html) { if (el._html !== html) { el._html = html; el.innerHTML = html; } }
+
+document.title = SHOP_NAME;
+$("shop-name").textContent = SHOP_NAME;
+
+const ICONS = {
+  pending: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2"/><path d="M8 4.8V8l2.2 1.4"/></svg>',
+  delayed: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.2 14.4 13.4H1.6Z"/><path d="M8 6.6v3"/><path d="M8 11.7v.1"/></svg>',
+  completed: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.2"/><path d="m5.3 8.2 1.9 1.9 3.6-3.8"/></svg>',
+  cancelled: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="8" cy="8" r="6.2"/><path d="m5.9 5.9 4.2 4.2m0-4.2-4.2 4.2"/></svg>'
+};
+const LABELS = { pending: "Pending", delayed: "Delayed", completed: "Completed", cancelled: "Cancelled" };
+function badge(st) {
+  st = LABELS[st] ? st : "pending";
+  return `<span class="badge ${st}">${ICONS[st]}${LABELS[st]}</span>`;
+}
+
+async function api(body) {
+  const r = await fetch(API, { method: "POST", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ ...body, token }) });
+  return r.json();
+}
+
+let toastTimer;
+function toast(text, ms) {
+  const t = $("toast");
+  t.textContent = text;
+  t.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.add("hidden"), ms || 2600);
+}
+
+function setLive(ok) {
+  $("live").classList.toggle("off", !ok);
+  $("live-text").textContent = ok ? (isOwnerView() ? "Live" : "Live stock") : "Reconnecting…";
+}
+
+/* ---------------- Customer ---------------- */
+let flavors = [], soon = [], photos = {}, photosAt = 0, cart = {}, mine = [], shopOpen = true, closedMsg = "";
+let payInfoText = "", payQrData = "";
+let boxes = [], boxChoice = "", editBox = "";
+let delivery = { on: false, dates: [] }, deliverPick = "", editDeliver = "", ctab = "menu";
+// How many boxes an order of `cookies` needs, and what they cost.
+function boxCalc(opt, cookies) {
+  const holds = Number(opt.holds) || 0, qty = holds ? Math.ceil(cookies / holds) : 1;
+  return { qty, total: Math.round(qty * Number(opt.price) * 100) / 100 };
+}
+const boxRule = b => (Number(b.holds) ? peso(b.price) + " per box, fits " + b.holds : peso(b.price) + " for the whole order");
+let myVotes = (() => { try { return JSON.parse(localStorage.getItem("myVotes") || "[]"); } catch (_) { return []; } })();
+let editing = null, editQty = {}, cancelArmed = null, mineMsg = {}, openAfterPlace = null;
+let shopSeq = 0, shopApplied = 0;
+const MY_KEY = "myOrderIds";
+
+const flavorById = id => flavors.find(f => f.id === id);
+// Variants: a flavor with "parent" set shows inside its main cookie's dropdown.
+const variantsOf = id => flavors.filter(v => v.parent === id);
+const mainOf = f => (f.parent && flavorById(f.parent)) || null;
+const nameOf = f => (mainOf(f) ? mainOf(f).flavor + " – " + f.flavor : f.flavor);
+const optionName = (f, top) => (f === top ? "Classic" : f.flavor);
+// Main cookies first, each followed by its variants.
+const menuOrder = () => flavors.filter(f => !mainOf(f)).flatMap(t => [t, ...variantsOf(t.id)]);
+let pick = {}; // main cookie id -> the option the customer picked
+function chosen(top) {
+  const opts = [top, ...variantsOf(top.id)];
+  return opts.find(o => o.id === pick[top.id]) || opts.find(o => left(o) > 0) || top;
+}
+const left = f => Math.max(0, (Number(f.stock) || 0) - (Number(f.sold) || 0));
+// Most a customer can add: what's left, and no more than the flavor's max per order.
+const capOf = f => (f.max ? Math.min(left(f), f.max) : left(f));
+function myIds() { try { return JSON.parse(localStorage.getItem(MY_KEY) || "[]"); } catch (_) { return []; } }
+function setMyIds(ids) { try { localStorage.setItem(MY_KEY, JSON.stringify(ids)); } catch (_) {} }
+
+async function loadShop() {
+  const my = ++shopSeq;
+  const ids = myIds();
+  // Photos are big, so they're fetched now and then instead of every second.
+  const wantPhotos = Date.now() - photosAt > 30000;
+  const q = [];
+  if (wantPhotos) q.push("photos=1");
+  if (ids.length) q.push("mine=" + encodeURIComponent(ids.join(",")));
+  const d = await (await fetch(API + (q.length ? "?" + q.join("&") : ""))).json();
+  if (my < shopApplied) return;
+  shopApplied = my;
+
+  flavors = d.flavors || [];
+  soon = d.soon || [];
+  shopOpen = !d.shop || d.shop.open !== false;
+  closedMsg = (d.shop && d.shop.message) || "";
+  if (!shopOpen) { cart = {}; editing = null; }
+  if (d.pay) { payInfoText = d.pay.info || ""; if (d.pay.qr !== undefined) payQrData = d.pay.qr || ""; }
+  boxes = d.boxes || [];
+  if (boxChoice && !boxes.some(b => b.id === boxChoice)) boxChoice = "";
+  delivery = d.delivery || { on: false, dates: [] };
+  if (deliverPick && !delivery.dates.includes(deliverPick)) deliverPick = "";
+  flavors.concat(soon).forEach(f => { if (f.photo !== undefined) photos[f.id] = f.photo; });
+  if (wantPhotos) photosAt = Date.now();
+  if (flavors.concat(soon).some(f => !(f.id in photos))) photosAt = 0; // a new flavor appeared: get its photo next time
+
+  // Keep the cart within what's left.
+  Object.keys(cart).forEach(id => {
+    const f = flavorById(id);
+    if (!f) delete cart[id];
+    else cart[id] = Math.min(cart[id], capOf(f));
+  });
+
+  if (d.mine) {
+    mine = d.mine;
+    const found = new Set(mine.map(o => o.id));
+    if (ids.some(id => !found.has(id))) setMyIds(ids.filter(id => found.has(id))); // deleted by the seller
+  } else if (ids.length) {
+    const m = await api({ action: "myOrders", ids }); // older Apps Script version
+    mine = m.orders || [];
+  } else {
+    mine = [];
+  }
+
+  setLive(true);
+  renderClosed();
+  renderMenu();
+  renderSoon();
+  renderCart();
+  renderMine();
+}
+
+function renderClosed() {
+  $("closed").classList.toggle("hidden", shopOpen);
+  $("closed-msg").textContent = closedMsg;
+  $("closed-msg").classList.toggle("hidden", !closedMsg);
+  $("checkout").classList.toggle("hidden", !shopOpen);
+}
+
+function dots(f) {
+  const total = Math.max(0, Number(f.stock) || 0);
+  if (!total || total > 24) return "";
+  const l = left(f), mineQ = Math.min(cart[f.id] || 0, l);
+  return '<span class="dots" aria-hidden="true">' +
+    '<i class="c"></i>'.repeat(mineQ) + "<i></i>".repeat(l - mineQ) + '<i class="t"></i>'.repeat(Math.max(0, total - l)) +
+    "</span>";
+}
+
+function itemBody(top) {
+  const vars = variantsOf(top.id), f = chosen(top), opts = [top, ...vars];
+  const l = left(f), q = cart[f.id] || 0, out = l <= 0, cap = capOf(f);
+  const desc = f.description || (f !== top ? top.description : "");
+  const others = opts.filter(o => o !== f && cart[o.id] > 0);
+  return `<div class="head"><h3>${esc(top.flavor)}</h3><span class="price">${peso(f.price)}</span></div>
+    ${desc ? `<p class="desc">${esc(desc)}</p>` : ""}
+    ${vars.length ? `<label class="variant"><select data-variant-for="${esc(top.id)}" aria-label="Choose your ${esc(top.flavor)}">
+      ${opts.map(o => `<option value="${esc(o.id)}" ${o === f ? "selected" : ""}>${esc(optionName(o, top))}, ${peso(o.price)}${left(o) <= 0 ? " (sold out)" : ""}</option>`).join("")}
+    </select></label>` : ""}
+    <div class="foot">
+      <div class="stock">${dots(f)}<span>${out ? "Sold out" : l + " left"}</span>${f.max && !out ? `<span class="limit">Max ${f.max} per order</span>` : ""}</div>
+      ${shopOpen ? `<div class="stepper">
+        <button data-act="rm" data-id="${esc(f.id)}" ${q <= 0 ? "disabled" : ""} aria-label="One less ${esc(nameOf(f))}">−</button>
+        <span aria-live="polite">${q}</span>
+        <button data-act="add" data-id="${esc(f.id)}" ${q >= cap ? "disabled" : ""} aria-label="One more ${esc(nameOf(f))}">+</button>
+      </div>` : ""}
+    </div>
+    ${others.length ? `<p class="also">Also in your order: ${others.map(o => cart[o.id] + " " + esc(optionName(o, top))).join(", ")}</p>` : ""}`;
+}
+
+// force = a main cookie id whose card must redraw now (its dropdown just changed).
+function renderMenu(force) {
+  const menu = $("menu");
+  if (!flavors.length) { paint(menu, '<p class="empty">No cookies on the menu right now. Check back soon.</p>'); return; }
+  menu._html = null;
+  const keep = new Set();
+  flavors.filter(f => !mainOf(f)).forEach((top, i) => {
+    const f = chosen(top), all = [top, ...variantsOf(top.id)];
+    let el = [...menu.children].find(c => c.dataset.item === top.id);
+    if (!el) {
+      el = document.createElement("article");
+      el.className = "item";
+      el.dataset.item = top.id;
+      el.innerHTML = '<div class="pic"></div><div class="body"></div>';
+    }
+    if (menu.children[i] !== el) menu.insertBefore(el, menu.children[i] || null);
+    el.classList.toggle("out", all.every(o => left(o) <= 0));
+    const pic = el.firstElementChild, src = photos[f.id] || photos[top.id] || "";
+    if (pic._src !== src) {
+      pic._src = src;
+      pic.innerHTML = src ? `<img src="${esc(src)}" alt="">` : '<span class="ph" aria-hidden="true">🍪</span>';
+    }
+    // Don't redraw a card while its dropdown is open, or the dropdown would close.
+    const ae = document.activeElement, busySelect = ae && ae.tagName === "SELECT" && el.contains(ae);
+    if (!busySelect || force === top.id) {
+      paint(el.lastElementChild, itemBody(top));
+      if (force === top.id) { const sel = el.querySelector("select"); if (sel) sel.focus({ preventScroll: true }); }
+    }
+    keep.add(el);
+  });
+  [...menu.children].forEach(c => { if (!keep.has(c)) c.remove(); });
+}
+
+function renderSoon() {
+  $("soon").classList.toggle("hidden", !soon.length);
+  paint($("soon-list"), soon.map(f => {
+    const src = photos[f.id] || "";
+    const dateText = f.batch && f.batch !== "current" ? `<span>${esc(f.batch)}</span>` : "";
+    return `<article class="item">
+      <div class="pic">${src ? `<img src="${esc(src)}" alt="">` : '<span class="ph" aria-hidden="true">🍪</span>'}</div>
+      <div class="body">
+        <div class="head"><h3>${esc(f.flavor)}</h3>${f.price ? `<span class="price">${peso(f.price)}</span>` : ""}</div>
+        ${f.description ? `<p class="desc">${esc(f.description)}</p>` : ""}
+        <div class="soon-foot"><span class="tag soon">Coming soon</span>${dateText}</div>
+        <div class="vote-row">
+          <button class="btn small ${myVotes.includes(f.id) ? "voted" : ""}" data-act="vote" data-id="${esc(f.id)}" aria-pressed="${myVotes.includes(f.id)}">${myVotes.includes(f.id) ? "✓ You want this" : "I want this"}</button>
+          ${f.votes ? `<span class="sub">${plural(f.votes, "person wants", "people want")} this</span>` : ""}
+        </div>
+      </div>
+    </article>`;
+  }).join(""));
+}
+
+function showCTab(t) {
+  ctab = t;
+  ["menu", "mine", "past"].forEach(x => $("ctab-" + x).classList.toggle("hidden", x !== t));
+  document.querySelectorAll("#shop-tabs button").forEach(b => b.classList.toggle("on", b.dataset.id === t));
+  const top = $("shop-tabs").getBoundingClientRect().top;
+  if (top < 0) $("shop-tabs").scrollIntoView({ block: "start" });
+  renderCart();
+}
+
+function cartLines() {
+  return menuOrder().filter(f => cart[f.id] > 0).map(f => ({ f, q: cart[f.id], sum: cart[f.id] * Number(f.price) }));
+}
+
+let checkoutInView = false;
+function renderCart() {
+  const lines = cartLines();
+  const sub = lines.reduce((s, l) => s + l.sum, 0), count = lines.reduce((s, l) => s + l.q, 0);
+  const pickedBox = boxes.find(b => b.id === boxChoice);
+  const bx = pickedBox && count ? boxCalc(pickedBox, count) : null;
+  const total = sub + (bx ? bx.total : 0);
+  paint($("cart"), lines.length
+    ? `<ul class="lines">${lines.map(l => `<li><span>${esc(nameOf(l.f))} × ${l.q}</span><span>${peso(l.sum)}</span></li>`).join("")}
+       ${bx ? `<li><span>${esc(pickedBox.name)} × ${bx.qty}<small>${esc(boxRule(pickedBox))}</small></span><span>${peso(bx.total)}</span></li>` : ""}</ul>
+       <p class="total-row"><span>Total</span><strong>${peso(total)}</strong></p>`
+    : '<p class="empty">Tap + on a flavor to add it here.</p>');
+  renderBoxChoice(count);
+  renderDeliverChoice();
+  $("place").disabled = !lines.length || (delivery.on && !delivery.dates.length);
+  $("bar-text").textContent = plural(count, "cookie", "cookies") + ", " + peso(total);
+  $("bar").classList.toggle("hidden", !count || checkoutInView || isOwnerView() || ctab !== "menu");
+}
+new IntersectionObserver(es => { checkoutInView = es[0].isIntersecting; renderCart(); }).observe($("checkout"));
+
+function renderDeliverChoice() {
+  const wrap = $("deliver-choice");
+  if (!delivery.on) { paint(wrap, ""); return; }
+  if (!delivery.dates.length) { paint(wrap, '<p class="note" style="margin-top:18px">No delivery dates are open right now. Check back soon.</p>'); return; }
+  paint(wrap, `<label class="field" style="margin-top:20px"><span>Delivery date</span><select id="deliver-on">
+      <option value="" ${!deliverPick ? "selected" : ""}>Pick a date</option>
+      ${delivery.dates.map(d => `<option value="${d}" ${d === deliverPick ? "selected" : ""}>${esc(dayLabel(d))}</option>`).join("")}
+    </select></label>`);
+}
+
+function renderBoxChoice(count) {
+  const wrap = $("box-choice");
+  if (!boxes.length) { paint(wrap, ""); return; }
+  const opt = (value, name, small, price) => `<label class="pack-opt ${boxChoice === value ? "on" : ""}">
+      <input type="radio" name="box" value="${esc(value)}" ${boxChoice === value ? "checked" : ""}>
+      <span class="pack-text"><strong>${esc(name)}</strong><small>${small}</small></span>${price}</label>`;
+  const hadFocus = wrap.contains(document.activeElement);
+  paint(wrap, `<fieldset class="pack"><legend>Packaging</legend>
+      ${opt("", "No box", "Free", "")}
+      ${boxes.map(b => {
+        const c = count ? boxCalc(b, count) : null;
+        return opt(b.id, b.name, esc(boxRule(b)) + (b.desc ? ". " + esc(b.desc) : ""),
+          c ? `<span class="pack-price">+${peso(c.total)}${c.qty > 1 ? `<small>${c.qty} boxes</small>` : ""}</span>` : "");
+      }).join("")}
+    </fieldset>`);
+  if (hadFocus && !wrap.contains(document.activeElement)) { const r = wrap.querySelector("input:checked"); if (r) r.focus(); }
+}
+
+function mineCard(o) {
+  const st = o.status || "pending", items = parseItems(o.items), id = esc(o.id);
+  return `<article class="order">
+    <div class="order-top"><div><h3>Order ${shortId(o.id)}</h3><p class="sub">${when(o.createdAt)}</p></div>${badge(st)}</div>
+    ${o.deliverOn && st !== "cancelled" ? `<p class="deliver">Delivery: <strong>${esc(dayLabel(o.deliverOn))}</strong></p>` : ""}
+    <p class="items">${items.map(i => `${esc(i.flavor)} × ${i.qty}`).join(", ")}${o.box ? ", " + esc(o.box.name) + " × " + o.box.qty : ""}</p>
+    <p class="total-row"><span>Total${st === "cancelled" ? "" : payTag(o)}</span><strong>${peso(o.total)}</strong></p>
+    ${o.note ? `<p class="note"><strong>From the baker:</strong> ${esc(o.note)}</p>` : ""}
+    ${st === "cancelled" || o.paid ? ""
+      : o.proof ? '<p class="sub" style="margin-top:8px">Screenshot sent. The baker will check it and mark your order paid.</p>'
+      : `<p class="sub" style="margin-top:8px">${payInfoText || payQrData ? "Tap Receipt to see how to pay, then send" : "After you pay, send"} a screenshot of your payment.</p>`}
+    <div class="actions">
+      <button class="btn small" data-act="receipt-mine" data-id="${id}">Receipt</button>
+      ${st !== "cancelled" && !o.paid ? `<button class="btn small" data-act="send-proof" data-id="${id}">${o.proof ? "Replace screenshot" : "Send payment screenshot"}</button>` : ""}
+      ${st === "pending" && shopOpen ? `<button class="btn small" data-act="edit-mine" data-id="${id}">Edit</button>
+        <button class="btn small ghost danger" data-act="cancel-mine" data-id="${id}">${cancelArmed === o.id ? "Tap again to cancel" : "Cancel order"}</button>` : ""}
+      ${st === "completed" || st === "cancelled" ? `<button class="btn small" data-act="order-again" data-id="${id}">Order again</button>
+        <button class="btn small ghost" data-act="dismiss" data-id="${id}">Dismiss</button>` : ""}
+    </div>
+    ${mineMsg[o.id] ? `<p class="msg">${esc(mineMsg[o.id])}</p>` : ""}
+  </article>`;
+}
+
+function editMax(o, f) {
+  const orig = (parseItems(o.items).find(i => i.id === f.id) || {}).qty || 0;
+  const most = left(f) + Number(orig);
+  return f.max ? Math.min(most, f.max) : most;
+}
+function payTag(o) {
+  return o.paid ? '<span class="paytag paid">Paid</span>'
+    : o.proof ? '<span class="paytag checking">Checking payment</span>'
+    : '<span class="paytag unpaid">Not paid yet</span>';
+}
+
+function editCard(o) {
+  let total = 0;
+  const rows = menuOrder().map(f => {
+    const q = editQty[f.id] || 0;
+    total += q * Number(f.price);
+    return `<li><span>${esc(nameOf(f))}<small>${peso(f.price)} each</small></span>
+      <span class="stepper">
+        <button data-act="eq-rm" data-id="${esc(f.id)}" ${q <= 0 ? "disabled" : ""} aria-label="One less ${esc(f.flavor)}">−</button>
+        <span>${q}</span>
+        <button data-act="eq-add" data-id="${esc(f.id)}" ${q >= editMax(o, f) ? "disabled" : ""} aria-label="One more ${esc(f.flavor)}">+</button>
+      </span></li>`;
+  }).join("");
+  const count = Object.values(editQty).reduce((s, q) => s + (q || 0), 0);
+  const keepOpt = o.box && !boxes.some(b => b.id === o.box.id);
+  const boxNow = editBox === "keep" ? o.box : boxes.find(b => b.id === editBox);
+  if (boxNow && count) total += boxCalc(boxNow, count).total;
+  const boxPicker = boxes.length || o.box ? `<label class="field"><span>Packaging</span><select data-edit-box="${esc(o.id)}">
+      <option value="" ${!editBox ? "selected" : ""}>No box</option>
+      ${keepOpt ? `<option value="keep" ${editBox === "keep" ? "selected" : ""}>${esc(o.box.name)} (your current box)</option>` : ""}
+      ${boxes.map(b => `<option value="${esc(b.id)}" ${editBox === b.id ? "selected" : ""}>${esc(b.name)}, ${esc(boxRule(b))}</option>`).join("")}
+    </select></label>` : "";
+  const datePicker = delivery.on ? `<label class="field"><span>Delivery date</span><select data-edit-deliver="${esc(o.id)}">
+      ${o.deliverOn && !delivery.dates.includes(o.deliverOn) ? `<option value="${o.deliverOn}" ${editDeliver === o.deliverOn ? "selected" : ""}>${esc(dayLabel(o.deliverOn))} (your current date)</option>` : ""}
+      ${!o.deliverOn ? `<option value="" ${!editDeliver ? "selected" : ""}>Pick a date</option>` : ""}
+      ${delivery.dates.map(d => `<option value="${d}" ${d === editDeliver ? "selected" : ""}>${esc(dayLabel(d))}</option>`).join("")}
+    </select></label>` : "";
+  return `<article class="order">
+    <h3>Edit order ${shortId(o.id)}</h3>
+    <ul class="lines" style="margin-top:8px">${rows}</ul>
+    ${boxPicker}
+    ${datePicker}
+    <p class="total-row"><span>New total</span><strong>${peso(total)}</strong></p>
+    <div class="actions">
+      <button class="btn small primary" data-act="save-edit" data-id="${esc(o.id)}">Save changes</button>
+      <button class="btn small" data-act="close-edit">Close</button>
+    </div>
+    ${mineMsg[o.id] ? `<p class="msg">${esc(mineMsg[o.id])}</p>` : ""}
+  </article>`;
+}
+
+// My orders = still on the way, or done but not paid yet. History = finished and paid, or cancelled.
+const isPast = o => o.status === "cancelled" || (o.status === "completed" && o.paid);
+function renderMine() {
+  const list = mine.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const now = list.filter(o => !isPast(o)), past = list.filter(isPast);
+  $("count-mine").textContent = now.length;
+  $("count-mine").classList.toggle("hidden", !now.length);
+  if (editing && !list.some(o => o.id === editing && (o.status || "pending") === "pending")) editing = null;
+  paint($("mine-list"), now.map(o => (editing === o.id ? editCard(o) : mineCard(o))).join("")
+    || '<p class="empty">Nothing on the way right now.</p><button class="btn small" data-act="ctab" data-id="menu">Browse the menu</button>');
+  paint($("past-list"), past.map(mineCard).join("") || '<p class="empty">Finished orders show up here.</p>');
+  if (openAfterPlace) {
+    const o = mine.find(x => x.id === openAfterPlace);
+    if (o) { openAfterPlace = null; showReceipt(o, false, "Order placed"); }
+  }
+}
+
+$("name").value = localStorage.getItem("myName") || "";
+
+$("place").onclick = async () => {
+  const name = $("name").value.trim();
+  if (!name) { $("msg").textContent = "Enter your name so the baker knows whose order it is."; $("name").focus(); return; }
+  const items = cartLines().map(l => ({ id: l.f.id, qty: l.q }));
+  if (!items.length) { $("msg").textContent = "Add at least one cookie."; return; }
+  $("place").disabled = true;
+  $("msg").textContent = "Placing your order…";
+  try {
+    if (delivery.on && !deliverPick) { $("msg").textContent = "Pick a delivery date."; $("deliver-on") && $("deliver-on").focus(); return; }
+    const d = await api({ action: "order", name, items, box: boxChoice, deliverOn: deliverPick });
+    if (d.error) { $("msg").textContent = d.error; return; }
+    try { localStorage.setItem("myName", name); } catch (_) {}
+    setMyIds([...myIds(), d.id]);
+    cart = {};
+    openAfterPlace = d.id;
+    deliverPick = "";
+    $("msg").textContent = "";
+    await loadShop();
+    showCTab("mine");
+  } catch (_) {
+    $("msg").textContent = "Couldn't place the order. Check your connection and try again.";
+  } finally {
+    $("place").disabled = !cartLines().length;
+  }
+};
+
+/* ---------------- Receipt ---------------- */
+let receiptOrder = null, receiptOwner = false, receiptDelArmed = false;
+function showReceipt(o, owner, heading) {
+  receiptOrder = o; receiptOwner = owner; receiptDelArmed = false;
+  const st = o.status || "pending", items = parseItems(o.items);
+  const cookies = items.reduce((s, i) => s + (Number(i.qty) || 0), 0);
+  $("receipt-body").innerHTML = `
+    <div class="r-head">
+      <p class="sub">${esc(heading || "Receipt")}</p>
+      <h2>${esc(SHOP_NAME)}</h2>
+      <p class="sub">Order ${shortId(o.id)}</p>
+    </div>
+    <dl class="r-meta">
+      ${o.name ? `<div><dt>Name</dt><dd>${esc(o.name)}</dd></div>` : ""}
+      <div><dt>Ordered</dt><dd>${when(o.createdAt, true)}</dd></div>
+      ${o.deliverOn ? `<div><dt>Delivery</dt><dd>${esc(dayLabel(o.deliverOn))}</dd></div>` : ""}
+      ${o.completedAt ? `<div><dt>Completed</dt><dd>${when(o.completedAt, true)}</dd></div>` : ""}
+      <div><dt>Status</dt><dd>${badge(st)}</dd></div>
+      ${st !== "cancelled" ? `<div><dt>Payment</dt><dd>${payTag(o)}</dd></div>` : ""}
+    </dl>
+    <hr class="cut">
+    <ul class="lines r-lines">${items.map(i => {
+      const has = i.price !== undefined && i.price !== "";
+      return `<li><span>${esc(i.flavor)}<small>${has ? i.qty + " × " + peso(i.price) : "Qty " + i.qty}</small></span><span>${has ? peso(i.qty * i.price) : ""}</span></li>`;
+    }).join("")}${o.box ? `<li><span>${esc(o.box.name)}<small>${o.box.qty} × ${peso(o.box.price)}</small></span><span>${peso(o.box.total)}</span></li>` : ""}</ul>
+    <hr class="cut">
+    <p class="r-total"><span>Total</span><span>${peso(o.total)}</span></p>
+    <p class="sub">${plural(cookies, "cookie", "cookies")}</p>
+    ${o.note ? `<p class="r-note"><strong>Note:</strong> ${esc(o.note)}</p>` : ""}
+    ${!owner && st !== "cancelled" && !o.paid && !o.proof && (payInfoText || payQrData) ? `<div class="paybox"><strong>How to pay</strong>
+      ${payInfoText ? `<p>${esc(payInfoText)}</p>` : ""}${payQrData ? `<img class="qr" src="${esc(payQrData)}" alt="GCash QR code">` : ""}</div>` : ""}
+    <p class="r-thanks">Thank you for ordering!</p>`;
+  renderReceiptActions();
+  if (!$("receipt").open) $("receipt").showModal();
+}
+function renderReceiptActions() {
+  const o = receiptOrder, owner = receiptOwner;
+  $("receipt-actions").innerHTML =
+    (!owner && o.status !== "cancelled" && !o.paid
+      ? `<button class="btn full primary" data-act="send-proof" data-id="${esc(o.id)}">${o.proof ? "Replace payment screenshot" : "Send payment screenshot"}</button>` : "") +
+    (owner && o.proof ? `<button class="btn full" data-act="view-proof" data-id="${esc(o.id)}">View payment screenshot</button>` : "") +
+    (owner && o.status !== "cancelled" ? `<button class="btn full ${o.paid ? "" : "primary"}" data-act="r-paid">${o.paid ? "Mark unpaid" : "Mark paid"}</button>` : "") +
+    (owner && o.status === "completed" ? '<button class="btn" data-act="r-reopen">Reopen</button>' : "") +
+    (owner ? `<button class="btn danger" data-act="r-delete">${receiptDelArmed ? "Tap again to delete" : "Delete"}</button>` : "") +
+    '<button class="btn" data-act="r-close" autofocus>Close</button>';
+}
+$("receipt").addEventListener("click", e => { if (e.target === $("receipt")) $("receipt").close(); });
+
+/* ---------------- Owner ---------------- */
+let token = sessionStorage.getItem("token") || "";
+let orders = [], ownerFl = [], noteDraft = {}, delArmed = null, delFlavorArmed = null, tab = "orders", editingFlavor = null, formVis = "menu";
+function setFormVis(v) {
+  formVis = v;
+  document.querySelectorAll("#f-vis button").forEach(b => {
+    b.classList.toggle("on", b.dataset.id === v);
+    b.setAttribute("aria-pressed", b.dataset.id === v);
+  });
+}
+let ownSeq = 0, ownApplied = 0, ownerShop = { open: true, message: "" }, closedDraft = null;
+let ownerPay = { info: "", hasQr: false }, payLoaded = false, qrPreview = "", paidAllArmed = false;
+const isOwnerView = () => location.hash === "#admin";
+const stamp = o => new Date(o.completedAt || o.createdAt).getTime() || 0;
+
+async function loadOwner() {
+  const my = ++ownSeq;
+  const d = await api({ action: "ownerData" });
+  if (my < ownApplied) return;
+  ownApplied = my;
+  if (d.error) {
+    if (d.error === "Wrong password") return lockOwner("Please sign in again.");
+    setLive(false);
+    $("live-text").textContent = "Update the Apps Script";
+    return;
+  }
+  orders = d.orders || [];
+  ownerFl = d.flavors || [];
+  if (d.boxes) ownerBoxes = d.boxes;
+  if (d.delivery) ownerDelivery = d.delivery;
+  ownerShop = d.shop || ownerShop;
+  ownerPay = d.pay || ownerPay;
+  setLive(true);
+  renderOwner();
+}
+
+function ownerOrderCard(o) {
+  const st = o.status || "pending", id = esc(o.id);
+  if (noteDraft[o.id] === (o.note || "")) delete noteDraft[o.id];
+  const note = noteDraft[o.id] ?? o.note ?? "";
+  return `<article class="order">
+    <div class="order-top"><div><h3>${esc(o.name)}</h3><p class="sub">${when(o.createdAt)}, order ${shortId(o.id)}</p></div>${badge(st)}</div>
+    ${o.deliverOn || ownerDelivery.on ? `<div class="deliver-row"><span>Delivery <strong>${o.deliverOn ? esc(dayLabel(o.deliverOn)) : "not picked"}</strong></span>
+      <input type="date" data-deliver="${id}" value="${esc(o.deliverOn || "")}" aria-label="Change delivery date for ${esc(o.name)}"></div>` : ""}
+    <ul class="lines" style="margin-top:8px">${parseItems(o.items).map(i =>
+      `<li><span>${esc(i.flavor)} × ${i.qty}</span><span>${i.price !== undefined ? peso(i.qty * i.price) : ""}</span></li>`).join("")}
+      ${o.box ? `<li><span>${esc(o.box.name)} × ${o.box.qty}</span><span>${peso(o.box.total)}</span></li>` : ""}</ul>
+    <p class="total-row"><span>Total</span><strong>${peso(o.total)}</strong></p>
+    ${o.proof && !o.paid ? `<div class="proof-line"><span>Payment screenshot sent</span><button class="btn small" data-act="view-proof" data-id="${id}">View</button></div>` : ""}
+    <div class="row-split">
+      <div class="seg" role="group" aria-label="Status">
+        <button data-act="set-status" data-status="pending" data-id="${id}" class="${st === "pending" ? "on" : ""}" aria-pressed="${st === "pending"}">Pending</button>
+        <button data-act="set-status" data-status="delayed" data-id="${id}" class="${st === "delayed" ? "on" : ""}" aria-pressed="${st === "delayed"}">Delayed</button>
+      </div>
+      <button class="btn small ${o.paid ? "is-paid" : ""}" data-act="toggle-paid" data-id="${id}" aria-pressed="${!!o.paid}">${o.paid ? "✓ Paid" : "Mark paid"}</button>
+    </div>
+    <div class="field"><label for="note-${id}">Note for the customer</label>
+      <div class="inline"><input id="note-${id}" data-note="${id}" value="${esc(note)}" placeholder="Ready Monday after lunch">
+        <button class="btn" data-act="save-note" data-id="${id}">Save</button></div></div>
+    <div class="actions">
+      <button class="btn primary grow" data-act="complete" data-id="${id}">Mark completed</button>
+      <button class="btn ghost danger" data-act="del-order" data-id="${id}">${delArmed === o.id ? "Tap again to delete" : "Delete"}</button>
+    </div>
+  </article>`;
+}
+
+function renderOwner() {
+  // Open orders: earliest delivery first, orders with no date last.
+  const active = orders.filter(o => !o.status || o.status === "pending" || o.status === "delayed")
+    .sort((a, b) => (a.deliverOn || "9999").localeCompare(b.deliverOn || "9999") || new Date(a.createdAt) - new Date(b.createdAt));
+  const done = orders.filter(o => o.status === "completed" || o.status === "cancelled").sort((a, b) => stamp(b) - stamp(a));
+
+  renderShopSwitch();
+  renderDeliveryBox();
+  renderDayChips(active);
+  const shown = active.filter(o => matchesSearch(o, orderSearch) &&
+    (orderDay === "all" || (orderDay === "none" ? !o.deliverOn : o.deliverOn === orderDay)));
+  renderBakeList(shown);
+  renderUnpaid();
+
+  $("count-orders").textContent = active.length;
+  $("count-orders").classList.toggle("hidden", !active.length);
+
+  // Don't redraw orders while the owner is typing a note.
+  const ae = document.activeElement;
+  if (!(ae && ae.tagName === "INPUT" && $("orders").contains(ae))) {
+    paint($("orders"), shown.map(ownerOrderCard).join("")
+      || (active.length ? '<p class="empty">No open orders match.</p>' : '<p class="empty">No open orders. New ones show up here right away.</p>'));
+  }
+
+  renderHistRange(done);
+  const inRange = done.filter(o => inHistRange(o) && matchesSearch(o, histSearch));
+  paint($("sales"), salesSummary(inRange.filter(o => o.status === "completed")) ||
+    (done.length ? '<p class="empty">No completed orders for this time.</p>' : ""));
+  paint($("history"), inRange.map(o => `<button class="hrow" data-act="receipt-owner" data-id="${esc(o.id)}">
+      <span><strong>${esc(o.name)}</strong><span class="sub">${o.deliverOn ? "Delivered " + esc(dayLabel(o.deliverOn)) : when(o.completedAt || o.createdAt)}${o.status === "completed" && !o.paid ? (o.proof ? ' <span class="proof-text">Screenshot sent</span>' : ' <span class="unpaid-text">Unpaid</span>') : ""}</span></span>
+      <span class="hright"><span>${peso(o.total)}</span>${badge(o.status)}</span>
+    </button>`).join("") || (done.length ? "" : '<p class="empty">Completed orders show up here as receipts.</p>'));
+
+  renderBoxList();
+  fillParentSelect();
+  paint($("flavors"), ownerOrder().map(f => {
+    const id = esc(f.id), l = Math.max(0, f.stock - f.reserved), v = visOf(f), main = ownerMain(f);
+    const opt = (val, label) => `<button data-act="set-vis" data-vis="${val}" data-id="${id}" class="${v === val ? "on" : ""}" aria-pressed="${v === val}">${label}</button>`;
+    return `<div class="frow ${v === "hidden" ? "is-hidden" : ""} ${main ? "variant-row" : ""}">
+      <div class="order-top"><div><h3>${esc(f.flavor)}</h3><p class="sub">${main ? "Variant of " + esc(main.flavor) + ", " : ""}${peso(f.price)}${f.batch ? ", " + esc(f.batch) : ""}</p></div>
+        ${v === "hidden" ? '<span class="tag">Hidden from customers</span>' : v === "soon" ? '<span class="tag soon">Coming soon</span>' : ""}</div>
+      <p class="sub" style="margin-top:6px">${f.stock} on hand, ${f.reserved} reserved by orders, ${l} left to order</p>
+      ${f.cost !== null && f.cost !== undefined ? `<p class="sub">Costs ${peso(f.cost)} each, so ${peso(+(f.price - f.cost).toFixed(2))} profit per cookie</p>` : '<p class="sub">No cost yet. Add one with Edit to see profit.</p>'}
+      ${f.max ? `<p class="sub">Max ${f.max} per order</p>` : ""}
+      ${v === "soon" ? `<p class="sub"><strong>${plural(f.votes || 0, "person wants", "people want")} this</strong>${f.votes ? ` <button class="btn small ghost" data-act="reset-votes" data-id="${id}">Reset votes</button>` : ""}</p>` : ""}
+      <div class="seg" role="group" aria-label="Where customers see ${esc(f.flavor)}">${opt("menu", "On menu")}${opt("soon", "Coming soon")}${opt("hidden", "Hidden")}</div>
+      ${main && visOf(main) !== "menu" ? `<p class="sub">Not orderable while ${esc(main.flavor)} isn't on the menu.</p>` : ""}
+      <div class="actions">
+        <button class="btn small" data-act="edit-flavor" data-id="${id}">Edit</button>
+        ${main ? "" : `<button class="btn small" data-act="add-variant" data-id="${id}">Add variant</button>`}
+        <button class="btn small ghost danger" data-act="del-flavor" data-id="${id}">${delFlavorArmed === f.id ? "Tap again to delete" : "Delete"}</button>
+      </div>
+    </div>`;
+  }).join("") || '<p class="empty">No flavors yet. Add your first one above.</p>');
+}
+
+function renderShopSwitch() {
+  const box = $("shop-state"), open = ownerShop.open !== false;
+  const ae = document.activeElement;
+  if (ae && ae.tagName === "INPUT" && box.contains(ae)) return; // don't redraw while typing the message
+  if (closedDraft === (ownerShop.message || "")) closedDraft = null;
+  const msg = closedDraft ?? ownerShop.message ?? "";
+  box.className = "state-box" + (open ? "" : " closed-now");
+  paint(box, `<div class="state">
+      <div class="state-text"><span class="state-dot"></span>
+        <div><strong>${open ? "Orders are open" : "Orders are closed"}</strong>
+        <p class="sub">${open ? "Customers can place orders." : "Customers can see the menu but can't order or change orders."}</p></div></div>
+      ${open ? '<button class="btn small" data-act="shop-toggle" data-id="close">Close orders</button>'
+             : '<button class="btn small primary" data-act="shop-toggle" data-id="open">Open orders</button>'}
+    </div>
+    ${open ? "" : `<div class="field"><label for="closed-input">Message customers see</label>
+      <div class="inline"><input id="closed-input" data-closed-msg value="${esc(msg)}" placeholder="Next batch opens Friday">
+      <button class="btn" data-act="shop-msg">Save</button></div></div>`}`);
+}
+
+// Adds up every open order (pending and delayed) by flavor.
+function renderBakeList(active) {
+  const need = new Map();
+  active.forEach(o => parseItems(o.items).forEach(i => {
+    const key = String(i.id), cur = need.get(key) || { name: i.flavor, qty: 0 };
+    const now = ownerFl.find(f => f.id === key);
+    if (now) cur.name = ownerName(now);
+    cur.qty += Number(i.qty) || 0;
+    need.set(key, cur);
+  }));
+  const list = [...need.values()].filter(x => x.qty > 0).sort((a, b) => b.qty - a.qty);
+  const total = list.reduce((s, x) => s + x.qty, 0);
+  const forWhat = orderDay === "all" ? "Everything in open orders, pending and delayed."
+    : orderDay === "none" ? "Open orders without a delivery date." : "Orders for " + dayLabel(orderDay) + ".";
+  paint($("bake"), list.length ? `<div class="box bake">
+      <div class="order-top"><h2>Baking list</h2><span class="bake-total">${plural(total, "cookie", "cookies")}
+        <button class="btn small" data-act="copy-bake" style="min-height:30px;margin-left:6px;padding:0 12px">Copy</button></span></div>
+      <p class="sub">${esc(forWhat)}</p>
+      <ul class="lines">${list.map(x => `<li><span>${esc(x.name)}</span><strong>${x.qty}</strong></li>`).join("")}</ul>
+      ${boxNeed(active)}
+    </div>` : "");
+}
+function bakeText() {
+  const head = "Baking list" + (orderDay !== "all" && orderDay !== "none" ? " for " + dayLabel(orderDay) : "");
+  const lines = [...$("bake").querySelectorAll("li")].map(li => li.querySelector("strong").textContent + " " + li.querySelector("span").textContent);
+  const boxes = $("bake").querySelector("p:last-child strong") ? $("bake").querySelector("p:last-child").textContent : "";
+  return [head, ...lines, boxes].filter(Boolean).join("\n");
+}
+
+// Delivery-date chips above open orders: All, then each date with its count.
+function renderDayChips(active) {
+  const counts = new Map();
+  active.forEach(o => counts.set(o.deliverOn || "none", (counts.get(o.deliverOn || "none") || 0) + 1));
+  const days = [...counts.keys()].filter(k => k !== "none").sort();
+  if (orderDay !== "all" && !counts.has(orderDay)) orderDay = "all";
+  if (!days.length) { paint($("day-chips"), ""); $("day-chips").classList.add("hidden"); return; }
+  $("day-chips").classList.remove("hidden");
+  const t = todayYmd();
+  const chip = (v, label, n, late) => `<button class="chip ${orderDay === v ? "on" : ""} ${late ? "late" : ""}" data-act="day" data-id="${v}" aria-pressed="${orderDay === v}">${esc(label)}<span>${n}</span></button>`;
+  paint($("day-chips"), chip("all", "All", active.length) +
+    days.map(d => chip(d, (d < t ? "Late: " : "") + dayLabel(d), counts.get(d), d < t)).join("") +
+    (counts.has("none") ? chip("none", "No date", counts.get("none")) : ""));
+}
+
+// History range picker: quick ranges, then every day that had sales.
+function renderHistRange(done) {
+  const sel = $("hist-range"), byDay = new Map();
+  done.filter(o => o.status === "completed").forEach(o => {
+    const d = saleDay(o), cur = byDay.get(d) || { n: 0, total: 0 };
+    cur.n++; cur.total += Number(o.total) || 0; byDay.set(d, cur);
+  });
+  const days = [...byDay.keys()].sort().reverse();
+  if (histRange.startsWith("d:") && !byDay.has(histRange.slice(2))) histRange = "all";
+  const html = `<option value="all">All time</option><option value="today">Today</option>
+    <option value="week">Last 7 days</option><option value="month">This month</option>
+    ${days.length ? `<optgroup label="Pick a day">${days.map(d => `<option value="d:${d}">${esc(dayLabel(d))} (${plural(byDay.get(d).n, "order", "orders")}, ${peso(byDay.get(d).total)})</option>`).join("")}</optgroup>` : ""}`;
+  if (sel._html !== html && document.activeElement !== sel) { sel._html = html; sel.innerHTML = html; }
+  sel.value = histRange;
+}
+function inHistRange(o) {
+  const d = saleDay(o), t = todayYmd();
+  if (histRange === "all") return true;
+  if (histRange === "today") return d === t;
+  if (histRange === "week") return d >= addDaysYmd(t, -6) && d <= t;
+  if (histRange === "month") return d.slice(0, 7) === t.slice(0, 7);
+  return d === histRange.slice(2);
+}
+
+// Delivery settings: a one-line summary, or the editor while you change them.
+function deliverySummary(d) {
+  if (!d.on) return "Off. Customers don't pick a date.";
+  const days = d.days.length === 7 ? "Every day" : d.days.map(i => DAY_NAMES[i]).join(", ");
+  const notice = d.notice === 0 ? "same-day OK" : plural(d.notice, "day", "days") + " notice";
+  const next = d.dates && d.dates.length ? " Next: " + dayLabel(d.dates[0]) + "." : " No dates open right now.";
+  return days + ", " + notice + ", up to " + plural(d.ahead, "day", "days") + " ahead." + (d.off.length ? " " + plural(d.off.length, "day off", "days off") + "." : "") + next;
+}
+function renderDeliveryBox() {
+  const box = $("delivery-box");
+  if (dlDraft) return; // editing: don't overwrite what you're changing
+  paint(box, `<div class="state"><div><strong>Delivery dates</strong><p class="sub">${esc(deliverySummary(ownerDelivery))}</p></div>
+    <button class="btn small" data-act="dl-edit">${ownerDelivery.on ? "Edit" : "Set up"}</button></div>`);
+}
+function readDlDraft() {
+  if (!dlDraft) return;
+  dlDraft.on = $("dl-on").checked;
+  dlDraft.notice = Number($("dl-notice").value) || 0;
+  dlDraft.ahead = Number($("dl-ahead").value) || 1;
+}
+function renderDlEditor() {
+  const d = dlDraft;
+  paint($("delivery-box"), `<div class="order-top"><strong>Delivery dates</strong></div>
+    <label class="check" style="margin-top:12px"><input type="checkbox" id="dl-on" ${d.on ? "checked" : ""}> Customers pick a delivery date</label>
+    <div class="field"><span>Days you deliver</span><div class="dl-days">
+      ${DAY_NAMES.map((n, i) => `<button type="button" class="chip ${d.days.includes(i) ? "on" : ""}" data-act="dl-day" data-id="${i}" aria-pressed="${d.days.includes(i)}">${n}</button>`).join("")}
+    </div></div>
+    <div class="two">
+      <label class="field"><span>Notice (days)</span><input type="number" id="dl-notice" min="0" inputmode="numeric" value="${d.notice}"></label>
+      <label class="field"><span>Book ahead (days)</span><input type="number" id="dl-ahead" min="1" inputmode="numeric" value="${d.ahead}"></label>
+    </div>
+    <p class="sub">Notice 0 allows same-day delivery. Book ahead is how many days into the future customers can pick.</p>
+    <div class="field"><span>Days off</span>
+      <div class="inline"><input type="date" id="dl-off-input" aria-label="Add a day off"><button type="button" class="btn" data-act="dl-off-add">Add</button></div>
+      <div>${d.off.map(x => `<span class="off-chip">${esc(dayLabel(x))}<button type="button" data-act="dl-off-rm" data-id="${x}" aria-label="Remove ${esc(dayLabel(x))}">×</button></span>`).join("")}</div>
+    </div>
+    <div class="actions"><button class="btn primary" data-act="dl-save">Save delivery dates</button><button class="btn" data-act="dl-cancel">Cancel</button></div>`);
+}
+
+// "Boxes to get ready: 5 Kraft box, 1 Gift box"
+function boxNeed(active) {
+  const need = new Map();
+  active.forEach(o => { if (o.box) need.set(o.box.name, (need.get(o.box.name) || 0) + (Number(o.box.qty) || 0)); });
+  return need.size ? `<p class="sub" style="margin-top:10px"><strong>Boxes to get ready:</strong> ${[...need].map(([n, q]) => q + " " + esc(n)).join(", ")}</p>` : "";
+}
+
+// ---------- Boxes (owner) ----------
+let ownerBoxes = [], editingBox = null, boxDelArmed = null;
+let orderDay = "all", orderSearch = "", histRange = "all", histSearch = "";
+let ownerDelivery = { on: false, days: [1, 2, 3, 4, 5], notice: 1, ahead: 14, off: [], dates: [] }, dlDraft = null;
+const matchesSearch = (o, q) => !q || String(o.name || "").toLowerCase().includes(q) || shortId(o.id).toLowerCase().includes(q);
+// The day an order counts as a sale: its delivery date, else the day it was completed, else ordered.
+const saleDay = o => o.deliverOn || dayOfStamp(o.completedAt) || dayOfStamp(o.createdAt);
+const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+async function changeDeliverOn(id, date) {
+  const o = orders.find(x => x.id === id); if (!o) return;
+  const d = await api({ action: "setDeliverOn", id, date });
+  if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+  o.deliverOn = date;
+  document.activeElement && document.activeElement.blur();
+  toast(o.name + (date ? " moved to " + dayLabel(date) + "." : "'s delivery date cleared."));
+  $("orders")._html = null;
+  renderOwner();
+  await loadOwner();
+}
+
+function renderBoxList() {
+  paint($("box-list"), ownerBoxes.map(b => `<div class="box-row ${b.on ? "" : "is-off"}">
+      <div><strong>${esc(b.name)}</strong>
+        <span class="sub">${esc(boxRule(b))}${b.cost !== null && b.cost !== undefined ? ", costs you " + peso(b.cost) : ""}${b.desc ? ". " + esc(b.desc) : ""}</span>
+        ${b.on ? "" : '<span class="tag" style="margin-top:4px">Not offered</span>'}</div>
+      <div class="actions">
+        <button class="btn small" data-act="box-toggle" data-id="${esc(b.id)}">${b.on ? "Turn off" : "Offer"}</button>
+        <button class="btn small" data-act="box-edit" data-id="${esc(b.id)}">Edit</button>
+        <button class="btn small ghost danger" data-act="box-del" data-id="${esc(b.id)}">${boxDelArmed === b.id ? "Tap again" : "Delete"}</button>
+      </div>
+    </div>`).join("") || '<p class="empty">No boxes yet. Customers won\'t see a packaging choice until you add one.</p>');
+}
+function openBoxForm(b) {
+  editingBox = b ? b.id : null;
+  $("box-form-title").textContent = b ? "Edit " + b.name : "New box";
+  $("b-name").value = b ? b.name : "";
+  $("b-price").value = b ? b.price : "";
+  $("b-holds").value = b && b.holds ? b.holds : "";
+  $("b-cost").value = b && b.cost !== null && b.cost !== undefined ? b.cost : "";
+  $("b-desc").value = b ? b.desc || "" : "";
+  $("box-msg").textContent = "";
+  $("box-form").classList.remove("hidden");
+  $("b-name").focus();
+}
+async function saveBoxes(list, done) {
+  const d = await api({ action: "setBoxes", boxes: list });
+  if (d.error) { toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error, 3500); return false; }
+  ownerBoxes = d.boxes || list;
+  $("box-list")._html = null;
+  renderBoxList();
+  if (done) toast(done);
+  return true;
+}
+$("box-form").onsubmit = async e => {
+  e.preventDefault();
+  const name = $("b-name").value.trim(), price = $("b-price").value.trim();
+  if (!name || price === "") { $("box-msg").textContent = "Add a name and a price (0 if it's free)."; return; }
+  const entry = { name, price: Number(price), holds: Number($("b-holds").value) || 0, cost: $("b-cost").value.trim(), desc: $("b-desc").value.trim() };
+  let list;
+  if (editingBox) list = ownerBoxes.map(b => (b.id === editingBox ? { ...b, ...entry } : b));
+  else {
+    let id = slug(name) || "box";
+    for (let n = 2; ownerBoxes.some(b => b.id === id); n++) id = slug(name) + "-" + n;
+    list = [...ownerBoxes, { id, on: true, ...entry }];
+  }
+  $("box-save").disabled = true;
+  try {
+    if (await saveBoxes(list, editingBox ? "Box updated." : name + " added. Customers can pick it now.")) {
+      $("box-form").classList.add("hidden");
+      editingBox = null;
+    }
+  } catch (_) {
+    $("box-msg").textContent = "Couldn't save. Check your connection and try again.";
+  } finally {
+    $("box-save").disabled = false;
+  }
+};
+
+// Sales, costs and profit for completed orders, plus a table by flavor.
+function salesSummary(comp) {
+  if (!comp.length) return "";
+  const sales = comp.reduce((s, o) => s + (Number(o.total) || 0), 0);
+  const byFlavor = new Map();
+  let costs = 0, cookies = 0;
+  const missing = new Set();
+  comp.forEach(o => parseItems(o.items).forEach(i => {
+    const key = String(i.id), now = ownerFl.find(f => f.id === key);
+    const row = byFlavor.get(key) || { name: now ? ownerName(now) : i.flavor, qty: 0, sales: 0, cost: 0, noCost: false };
+    const qty = Number(i.qty) || 0;
+    const price = i.price !== undefined && i.price !== "" ? Number(i.price) : (now ? now.price : 0);
+    const cost = i.cost !== undefined && i.cost !== null && i.cost !== "" ? Number(i.cost)
+      : (now && now.cost !== null && now.cost !== undefined ? Number(now.cost) : null);
+    row.qty += qty;
+    row.sales += qty * price;
+    if (cost === null) { row.noCost = true; missing.add(row.name); }
+    else { row.cost += qty * cost; costs += qty * cost; }
+    cookies += qty;
+    byFlavor.set(key, row);
+  }));
+  comp.forEach(o => {
+    if (!o.box) return;
+    const row = byFlavor.get("__boxes") || { name: "Boxes", qty: 0, sales: 0, cost: 0, noCost: false, isBox: true };
+    const opt = ownerBoxes.find(b => b.id === o.box.id);
+    const cost = o.box.cost !== undefined && o.box.cost !== null ? Number(o.box.cost)
+      : (opt && opt.cost !== null && opt.cost !== undefined ? Number(opt.cost) : null);
+    row.qty += Number(o.box.qty) || 0;
+    row.sales += Number(o.box.total) || 0;
+    if (cost === null) { row.noCost = true; missing.add("your boxes"); }
+    else { row.cost += cost * (Number(o.box.qty) || 0); costs += cost * (Number(o.box.qty) || 0); }
+    byFlavor.set("__boxes", row);
+  });
+  const money = n => peso(Math.round(n * 100) / 100);
+  const allCosts = !missing.size, profit = sales - costs;
+  const list = [...byFlavor.values()].sort((a, b) => (a.isBox ? 1 : 0) - (b.isBox ? 1 : 0) || b.qty - a.qty);
+  return `<div class="stats">
+      <div class="stat"><span>Sales</span><strong>${money(sales)}</strong></div>
+      <div class="stat"><span>Costs</span><strong>${allCosts ? money(costs) : "–"}</strong></div>
+      <div class="stat ${allCosts ? (profit >= 0 ? "profit" : "loss") : ""}"><span>Profit</span><strong>${allCosts ? money(profit) : "–"}</strong></div>
+    </div>
+    <p class="sub stats-note">From ${plural(comp.length, "completed order", "completed orders")}, ${plural(cookies, "cookie", "cookies")}.
+      ${allCosts ? "" : `Add a cost to ${[...missing].map(esc).join(", ")} in Flavors to see your full profit.`}</p>
+    <table class="flavor-table">
+      <thead><tr><th>Flavor</th><th>Sold</th><th>Sales</th><th>Profit</th></tr></thead>
+      <tbody>${list.map(r => `<tr><td>${esc(r.name)}</td><td>${r.qty}</td><td>${money(r.sales)}</td><td>${r.noCost ? "–" : money(r.sales - r.cost)}</td></tr>`).join("")}</tbody>
+    </table>`;
+}
+
+// Everyone who hasn't paid yet (pending, delayed and completed orders).
+function renderUnpaid() {
+  // Orders with a screenshot to check come first.
+  const unpaid = orders.filter(o => o.status !== "cancelled" && !o.paid)
+    .sort((a, b) => (b.proof ? 1 : 0) - (a.proof ? 1 : 0) || new Date(a.createdAt) - new Date(b.createdAt));
+  const total = unpaid.reduce((s, o) => s + (Number(o.total) || 0), 0);
+  $("count-unpaid").textContent = unpaid.length;
+  $("count-unpaid").classList.toggle("hidden", !unpaid.length);
+  paint($("unpaid"), unpaid.length
+    ? `<div class="owe-head"><strong>${peso(total)}</strong><span class="sub">unpaid from ${plural(unpaid.length, "order", "orders")}</span></div>
+       ${unpaid.map(o => `<div class="owe-row">
+         <div><strong>${esc(o.name)}</strong><span class="sub">${o.proof ? '<span class="proof-text">Screenshot sent</span>, ' : ""}${LABELS[o.status] || "Pending"}, ${when(o.createdAt)}</span></div>
+         <div class="hright"><span>${peso(o.total)}</span>${o.proof ? `<button class="btn small" data-act="view-proof" data-id="${esc(o.id)}">View</button>` : ""}<button class="btn small" data-act="toggle-paid" data-id="${esc(o.id)}">Mark paid</button></div>
+       </div>`).join("")}
+       <div class="actions"><button class="btn small ghost" data-act="paid-all">${paidAllArmed ? "Tap again to mark all " + unpaid.length + " paid" : "Mark all paid"}</button></div>`
+    : '<p class="empty">No unpaid orders.</p>');
+}
+
+function renderQrPreview() {
+  $("qr-preview").innerHTML = qrPreview ? `<img class="qr" src="${esc(qrPreview)}" alt="Your GCash QR">` : "";
+  $("qr-remove").classList.toggle("hidden", !qrPreview);
+}
+async function loadPayment() {
+  const d = await api({ action: "getPayment" });
+  if (d.error) { $("pay-msg").textContent = d.error === "Unknown action" ? "Update the Apps Script first." : d.error; return; }
+  $("pay-info").value = d.info || "";
+  qrPreview = d.qr || "";
+  payLoaded = true;
+  renderQrPreview();
+}
+// Shrinks a QR screenshot so it fits in one sheet cell but still scans.
+function readQr(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const draw = (size, type, q) => {
+          const s = Math.min(1, size / Math.max(img.width, img.height));
+          const cv = document.createElement("canvas");
+          cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
+          const cx = cv.getContext("2d");
+          cx.fillStyle = "#fff"; cx.fillRect(0, 0, cv.width, cv.height);
+          cx.drawImage(img, 0, 0, cv.width, cv.height);
+          return cv.toDataURL(type, q);
+        };
+        let out = draw(400, "image/png");
+        if (out.length > 45000) out = draw(400, "image/jpeg", 0.85);
+        if (out.length > 45000) out = draw(320, "image/jpeg", 0.8);
+        if (out.length > 45000) out = draw(260, "image/jpeg", 0.75);
+        resolve(out);
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+$("pay-form").onsubmit = async e => {
+  e.preventDefault();
+  $("pay-save").disabled = true;
+  $("pay-msg").textContent = "Saving…";
+  try {
+    const body = { action: "setPayment", info: $("pay-info").value.trim() };
+    const file = $("pay-qr").files[0];
+    if (file) body.qr = await readQr(file);
+    const d = await api(body);
+    if (d.error) { $("pay-msg").textContent = d.error === "Unknown action" ? "Update the Apps Script first." : d.error; return; }
+    if (body.qr !== undefined) qrPreview = body.qr;
+    $("pay-qr").value = "";
+    renderQrPreview();
+    $("pay-msg").textContent = "Saved. Customers see this on unpaid receipts.";
+  } catch (_) {
+    $("pay-msg").textContent = "Couldn't save. Check your connection and try again.";
+  } finally {
+    $("pay-save").disabled = false;
+  }
+};
+
+const visOf = f => f.visibility || (f.hidden ? "hidden" : "menu");
+const ownerMain = f => (f && f.parent && ownerFl.find(x => x.id === f.parent)) || null;
+const ownerName = f => (ownerMain(f) ? ownerMain(f).flavor + " – " + f.flavor : f.flavor);
+// Main cookies in sheet order, each followed by its variants.
+const ownerOrder = () => ownerFl.filter(f => !ownerMain(f)).flatMap(t => [t, ...ownerFl.filter(v => v.parent === t.id)]);
+
+function fillParentSelect() {
+  const sel = $("f-parent"), keep = sel.value;
+  const mains = ownerFl.filter(f => !ownerMain(f) && f.id !== editingFlavor);
+  const html = '<option value="">Nothing, it\'s its own cookie</option>' +
+    mains.map(f => `<option value="${esc(f.id)}">${esc(f.flavor)}</option>`).join("");
+  if (sel._html !== html) { sel._html = html; sel.innerHTML = html; sel.value = mains.some(f => f.id === keep) ? keep : ""; }
+}
+const VIS_TOAST = { menu: " is on the menu.", soon: " is under Coming soon.", hidden: " is hidden from customers." };
+
+function showTab(t) {
+  tab = t;
+  ["orders", "history", "payments", "flavors"].forEach(x => $("tab-" + x).classList.toggle("hidden", x !== t));
+  if (t === "payments" && !payLoaded) loadPayment().catch(() => {});
+  document.querySelectorAll("#owner-tabs button").forEach(b => b.classList.toggle("on", b.dataset.id === t));
+}
+
+function lockOwner(text) {
+  token = "";
+  sessionStorage.removeItem("token");
+  $("tools").classList.add("hidden");
+  $("login").classList.remove("hidden");
+  $("login-msg").textContent = text || "";
+  route();
+}
+
+$("unlock").onclick = async () => {
+  token = $("token").value;
+  $("login-msg").textContent = "Checking…";
+  try {
+    const d = await api({ action: "ownerData" });
+    if (d.error) { token = ""; $("login-msg").textContent = d.error === "Wrong password" ? "That password didn't work." : d.error; return; }
+    sessionStorage.setItem("token", token);
+    $("token").value = "";
+    $("login-msg").textContent = "";
+    route();
+    orders = d.orders || []; ownerFl = d.flavors || []; ownerShop = d.shop || ownerShop; ownerBoxes = d.boxes || ownerBoxes;
+    ownerDelivery = d.delivery || ownerDelivery;
+    renderOwner();
+  } catch (_) {
+    token = "";
+    $("login-msg").textContent = "Couldn't reach the shop. Check your connection.";
+  }
+};
+$("token").addEventListener("keydown", e => { if (e.key === "Enter") $("unlock").click(); });
+
+document.addEventListener("change", e => {
+  if (e.target.dataset && e.target.dataset.deliver) { changeDeliverOn(e.target.dataset.deliver, e.target.value); return; }
+  if (e.target.name === "box") { boxChoice = e.target.value; renderCart(); return; }
+  if (e.target.id === "deliver-on") { deliverPick = e.target.value; $("msg").textContent = ""; renderDeliverChoice(); return; }
+  if (e.target.dataset && e.target.dataset.editDeliver) { editDeliver = e.target.value; renderMine(); return; }
+  if (e.target.dataset && e.target.dataset.editBox) { editBox = e.target.value; renderMine(); return; }
+  const top = e.target.dataset && e.target.dataset.variantFor;
+  if (!top) return;
+  pick[top] = e.target.value;
+  renderMenu(top);
+});
+
+$("order-search").addEventListener("input", e => { orderSearch = e.target.value.trim().toLowerCase(); renderOwner(); });
+$("hist-search").addEventListener("input", e => { histSearch = e.target.value.trim().toLowerCase(); renderOwner(); });
+$("hist-range").addEventListener("change", e => { histRange = e.target.value; renderOwner(); });
+
+document.addEventListener("input", e => {
+  if (e.target.dataset.note) noteDraft[e.target.dataset.note] = e.target.value;
+  if (e.target.dataset.closedMsg !== undefined) closedDraft = e.target.value;
+});
+
+function readPhoto(file) {
+  return new Promise(resolve => {
+    if (!file) return resolve("");
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const s = Math.min(1, 300 / Math.max(img.width, img.height));
+        const cv = document.createElement("canvas");
+        cv.width = img.width * s; cv.height = img.height * s;
+        cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
+        resolve(cv.toDataURL("image/jpeg", 0.7));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function clearFlavorForm() {
+  editingFlavor = null;
+  $("f-parent").disabled = false;
+  fillParentSelect();
+  $("f-parent").value = "";
+  ["f-flavor", "f-price", "f-desc", "f-stock", "f-batch", "f-cost", "f-max"].forEach(id => ($(id).value = ""));
+  $("f-photo").value = "";
+  setFormVis("menu");
+  $("form-title").textContent = "Add a flavor";
+  $("save").textContent = "Save flavor";
+  $("cancel-edit").classList.add("hidden");
+}
+
+$("flavor-form").onsubmit = async e => {
+  e.preventDefault();
+  const flavor = $("f-flavor").value.trim(), price = Number($("f-price").value);
+  const batch = $("f-batch").value.trim() || "current";
+  if (!flavor || !price) { $("save-msg").textContent = "Add a flavor name and a price."; return; }
+  $("save").disabled = true;
+  $("save-msg").textContent = "Saving…";
+  try {
+    // Editing keeps the original id so the same row is updated.
+    const parent = $("f-parent").value;
+    let id = editingFlavor;
+    if (!id) { // a new id that can't overwrite an existing flavor
+      const base = parent ? parent + "--" + slug(flavor) : slug(flavor) + "-" + slug(batch);
+      id = base;
+      for (let n = 2; ownerFl.some(x => x.id === id); n++) id = base + "-" + n;
+    }
+    const photo = await readPhoto($("f-photo").files[0]); // blank keeps the current photo
+    const d = await api({ action: "saveFlavor", flavor: { id, flavor, price, description: $("f-desc").value.trim(), batch, stock: Number($("f-stock").value) || 0, photo, visibility: formVis, parent,
+      cost: $("f-cost").value.trim(), max: $("f-max").value.trim() } });
+    $("save-msg").textContent = d.error ? d.error : (editingFlavor ? "Flavor updated." : "Flavor saved.");
+    if (!d.error) clearFlavorForm();
+    photosAt = 0;
+    await loadOwner();
+  } catch (_) {
+    $("save-msg").textContent = "Couldn't save. Check your connection and try again.";
+  } finally {
+    $("save").disabled = false;
+  }
+};
+
+/* ---------------- Payment screenshots ---------------- */
+let proofFor = null, proofOrder = null;
+
+// Shrinks a payment screenshot so it uploads quickly but stays readable.
+function readProof(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = reject;
+      img.onload = () => {
+        const draw = (size, q) => {
+          const s = Math.min(1, size / Math.max(img.width, img.height));
+          const cv = document.createElement("canvas");
+          cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
+          const cx = cv.getContext("2d");
+          cx.fillStyle = "#fff"; cx.fillRect(0, 0, cv.width, cv.height);
+          cx.drawImage(img, 0, 0, cv.width, cv.height);
+          return cv.toDataURL("image/jpeg", q);
+        };
+        let out = draw(1600, 0.8);
+        if (out.length > 2500000) out = draw(1200, 0.7);
+        resolve(out);
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+$("proof-input").addEventListener("change", async () => {
+  const file = $("proof-input").files[0], id = proofFor;
+  if (!file || !id) return;
+  toast("Sending your screenshot…", 20000);
+  try {
+    const d = await api({ action: "uploadProof", id, image: await readProof(file) });
+    if (d.error) return toast(d.error === "Unknown action" ? "Screenshot upload isn't ready yet. Message the baker instead." : d.error, 4000);
+    if ($("receipt").open) $("receipt").close();
+    toast("Screenshot sent. The baker will check it soon.", 3500);
+    await loadShop();
+  } catch (_) {
+    toast("Couldn't send the screenshot. Check your connection and try again.", 4000);
+  } finally {
+    $("proof-input").value = "";
+  }
+});
+
+function renderProofActions() {
+  const o = proofOrder;
+  $("proof-actions").innerHTML =
+    (o && !o.paid ? '<button class="btn full primary" data-act="proof-paid">Looks right, mark paid</button>' : "") +
+    '<button class="btn" data-act="proof-close" autofocus>Close</button>';
+}
+$("proof-dialog").addEventListener("click", e => { if (e.target === $("proof-dialog")) $("proof-dialog").close(); });
+
+/* ---------------- Buttons ---------------- */
+const acts = {
+  add(id) { const f = flavorById(id); if (f) { cart[id] = Math.min((cart[id] || 0) + 1, capOf(f)); renderMenu(); renderCart(); } },
+  async vote(id) {
+    const undo = myVotes.includes(id);
+    const d = await api({ action: "vote", id, undo });
+    if (d.error) return toast(d.error === "Unknown action" ? "Voting isn't ready yet." : d.error);
+    myVotes = undo ? myVotes.filter(x => x !== id) : [...myVotes, id];
+    try { localStorage.setItem("myVotes", JSON.stringify(myVotes)); } catch (_) {}
+    const f = soon.find(x => x.id === id); if (f) f.votes = d.votes;
+    renderSoon();
+    if (!undo) toast("Thanks! The baker can see you want this.");
+  },
+  rm(id) { cart[id] = Math.max((cart[id] || 0) - 1, 0); renderMenu(); renderCart(); },
+  "go-checkout"() {
+    const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+    $("checkout").scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+  },
+
+  "receipt-mine"(id) { const o = mine.find(x => x.id === id); if (o) showReceipt(o, false); },
+  "send-proof"(id) {
+    proofFor = id;
+    if ($("receipt").open) $("receipt").close(); // the file picker can't open from behind an open receipt
+    $("proof-input").value = "";
+    $("proof-input").click();
+  },
+  async "view-proof"(id) {
+    const o = orders.find(x => x.id === id); if (!o) return;
+    if ($("receipt").open) $("receipt").close();
+    proofOrder = o;
+    $("proof-title").textContent = o.name + ", " + peso(o.total) + ", order " + shortId(o.id);
+    $("proof-body").innerHTML = '<p class="empty">Loading screenshot…</p>';
+    renderProofActions();
+    if (!$("proof-dialog").open) $("proof-dialog").showModal();
+    const d = await api({ action: "getProof", id });
+    if (proofOrder !== o) return;
+    $("proof-body").innerHTML = d.error ? `<p class="empty">${esc(d.error)}</p>`
+      : `<img src="${esc(d.image)}" alt="Payment screenshot from ${esc(o.name)}">`;
+  },
+  async "proof-paid"() {
+    const o = proofOrder; if (!o) return;
+    const d = await api({ action: "setPaid", id: o.id, paid: true });
+    if (d.error) return toast(d.error);
+    o.paid = true;
+    $("proof-dialog").close();
+    toast(o.name + " marked paid.");
+    renderOwner();
+    await loadOwner();
+  },
+  "proof-close"() { $("proof-dialog").close(); },
+  "edit-mine"(id) {
+    const o = mine.find(x => x.id === id); if (!o) return;
+    editing = id; cancelArmed = null; mineMsg[id] = "";
+    editQty = {};
+    parseItems(o.items).forEach(i => (editQty[i.id] = Number(i.qty) || 0));
+    editBox = !o.box ? "" : boxes.some(b => b.id === o.box.id) ? o.box.id : "keep";
+    editDeliver = o.deliverOn || "";
+    renderMine();
+  },
+  "close-edit"() { editing = null; renderMine(); },
+  "eq-add"(id) {
+    const o = mine.find(x => x.id === editing), f = flavorById(id); if (!o || !f) return;
+    editQty[id] = Math.min((editQty[id] || 0) + 1, editMax(o, f)); renderMine();
+  },
+  "eq-rm"(id) { editQty[id] = Math.max((editQty[id] || 0) - 1, 0); renderMine(); },
+  async "save-edit"(id) {
+    const items = Object.keys(editQty).filter(k => editQty[k] > 0).map(k => ({ id: k, qty: editQty[k] }));
+    if (!items.length) { mineMsg[id] = "Add at least one cookie, or cancel the order instead."; return renderMine(); }
+    mineMsg[id] = "Saving…"; renderMine();
+    if (delivery.on && !editDeliver) { mineMsg[id] = "Pick a delivery date."; return renderMine(); }
+    const d = await api({ action: "editOrder", id, items, box: editBox === "keep" ? undefined : editBox,
+                          deliverOn: delivery.on ? editDeliver : undefined });
+    mineMsg[id] = d.error || "";
+    if (!d.error) { editing = null; toast("Order updated."); }
+    await loadShop();
+  },
+  async "cancel-mine"(id) {
+    if (cancelArmed !== id) { cancelArmed = id; return renderMine(); }
+    cancelArmed = null;
+    const d = await api({ action: "editOrder", id, cancel: true });
+    mineMsg[id] = d.error || "";
+    if (!d.error) toast("Order cancelled.");
+    await loadShop();
+  },
+  ctab(id) { showCTab(id); },
+  "order-again"(id) {
+    const o = mine.find(x => x.id === id); if (!o) return;
+    if (!shopOpen) return toast("Orders are closed right now. Try again when they open.", 3500);
+    const missing = []; let lowered = false, added = 0;
+    parseItems(o.items).forEach(i => {
+      const f = flavorById(i.id), want = Number(i.qty) || 0;
+      if (!f || capOf(f) <= 0) { missing.push(i.flavor); return; }
+      const q = Math.min(want, capOf(f));
+      if (q < want) lowered = true;
+      cart[f.id] = q; added += q;
+    });
+    if (o.box && boxes.some(b => b.id === o.box.id)) boxChoice = o.box.id;
+    showCTab("menu");
+    renderMenu();
+    renderCart();
+    if (added) acts["go-checkout"]();
+    toast(!added ? "None of those cookies are available right now."
+      : missing.length ? "Added what's available. " + missing.join(", ") + " isn't on the menu right now."
+      : lowered ? "Added to your order. Some amounts were lowered to what's left."
+      : "Added to your order." + (delivery.on ? " Pick a delivery date and place it." : ""), 4000);
+  },
+  dismiss(id) { setMyIds(myIds().filter(x => x !== id)); mine = mine.filter(o => o.id !== id); renderMine(); },
+
+  tab(id) { showTab(id); },
+  async "set-status"(id, b) {
+    const o = orders.find(x => x.id === id); if (!o) return;
+    await api({ action: "updateOrder", id, status: b.dataset.status, note: noteDraft[id] ?? o.note ?? "" });
+    await loadOwner();
+  },
+  async "save-note"(id) {
+    const o = orders.find(x => x.id === id); if (!o) return;
+    const d = await api({ action: "updateOrder", id, status: o.status || "pending", note: noteDraft[id] ?? o.note ?? "" });
+    if (!d.error) toast("Note saved.");
+    await loadOwner();
+  },
+  async complete(id) {
+    const o = orders.find(x => x.id === id); if (!o) return;
+    const d = await api({ action: "updateOrder", id, status: "completed", note: noteDraft[id] ?? o.note ?? "" });
+    if (d.error) return toast(d.error);
+    delete noteDraft[id];
+    toast("Completed. Moved to History.");
+    await loadOwner();
+  },
+  async "del-order"(id) {
+    if (delArmed !== id) { delArmed = id; $("orders")._html = null; return renderOwner(); }
+    delArmed = null;
+    await api({ action: "deleteOrder", id });
+    toast("Order deleted.");
+    await loadOwner();
+  },
+  "receipt-owner"(id) { const o = orders.find(x => x.id === id); if (o) showReceipt(o, true); },
+  async "r-reopen"() {
+    const o = receiptOrder; if (!o) return;
+    await api({ action: "updateOrder", id: o.id, status: "pending", note: o.note || "" });
+    $("receipt").close();
+    toast("Reopened. Its cookies are back in stock.");
+    await loadOwner();
+  },
+  async "r-delete"() {
+    if (!receiptDelArmed) { receiptDelArmed = true; return renderReceiptActions(); }
+    await api({ action: "deleteOrder", id: receiptOrder.id });
+    $("receipt").close();
+    toast("Order deleted.");
+    await loadOwner();
+  },
+  "r-close"() { $("receipt").close(); },
+
+  async "shop-toggle"(which) {
+    const open = which === "open";
+    const d = await api({ action: "setShop", open, message: closedDraft ?? ownerShop.message ?? "" });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    ownerShop = d.shop || { open, message: ownerShop.message };
+    $("shop-state")._html = null;
+    renderShopSwitch();
+    toast(open ? "Orders are open." : "Orders closed. Customers can't order until you open them.");
+  },
+  async "shop-msg"() {
+    const message = closedDraft ?? ownerShop.message ?? "";
+    const d = await api({ action: "setShop", message });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    ownerShop = d.shop || ownerShop;
+    closedDraft = null;
+    $("shop-state")._html = null;
+    renderShopSwitch();
+    toast("Message saved.");
+  },
+  async "toggle-paid"(id) {
+    const o = orders.find(x => x.id === id); if (!o) return;
+    const d = await api({ action: "setPaid", id, paid: !o.paid });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    o.paid = !o.paid;
+    toast(o.name + (o.paid ? " marked paid." : " marked unpaid."));
+    renderOwner();
+    await loadOwner();
+  },
+  async "paid-all"() {
+    const ids = orders.filter(o => o.status !== "cancelled" && !o.paid).map(o => o.id);
+    if (!ids.length) return;
+    if (!paidAllArmed) { paidAllArmed = true; return renderUnpaid(); }
+    paidAllArmed = false;
+    const d = await api({ action: "setPaidMany", ids, paid: true });
+    if (d.error) { renderUnpaid(); return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error); }
+    orders.forEach(o => { if (ids.includes(o.id)) o.paid = true; });
+    toast(plural(ids.length, "order", "orders") + " marked paid.");
+    renderOwner();
+    await loadOwner();
+  },
+  async "r-paid"() {
+    const o = receiptOrder; if (!o) return;
+    const d = await api({ action: "setPaid", id: o.id, paid: !o.paid });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    o.paid = !o.paid;
+    showReceipt(o, true);
+    toast(o.name + (o.paid ? " marked paid." : " marked unpaid."));
+    await loadOwner();
+  },
+  async "qr-remove"() {
+    const d = await api({ action: "setPayment", qr: "" });
+    if (d.error) return toast(d.error);
+    qrPreview = "";
+    renderQrPreview();
+    toast("QR removed.");
+  },
+  async "reset-votes"(id) {
+    await api({ action: "resetVotes", id });
+    toast("Votes reset.");
+    await loadOwner();
+  },
+  async "set-vis"(id, b) {
+    const f = ownerFl.find(x => x.id === id); if (!f) return;
+    const v = b.dataset.vis;
+    if (visOf(f) === v) return;
+    const d = await api({ action: "setVisibility", id, visibility: v });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    toast(f.flavor + VIS_TOAST[v]);
+    photosAt = 0;
+    await loadOwner();
+  },
+  "edit-flavor"(id) {
+    const f = ownerFl.find(x => x.id === id); if (!f) return;
+    editingFlavor = f.id;
+    fillParentSelect();
+    $("f-parent").value = f.parent || "";
+    $("f-parent").disabled = ownerFl.some(x => x.parent === f.id); // has its own variants
+    $("f-flavor").value = f.flavor || "";
+    $("f-price").value = f.price || "";
+    $("f-desc").value = f.description || "";
+    $("f-stock").value = f.stock || 0;
+    $("f-batch").value = f.batch || "";
+    $("f-cost").value = f.cost ?? "";
+    $("f-max").value = f.max || "";
+    $("f-photo").value = "";
+    setFormVis(visOf(f));
+    $("form-title").textContent = "Edit " + f.flavor;
+    $("save").textContent = "Update flavor";
+    $("cancel-edit").classList.remove("hidden");
+    $("save-msg").textContent = f.hasPhoto ? "Leave the photo empty to keep the current one." : "";
+    $("flavor-form").scrollIntoView({ block: "start" });
+    $("f-flavor").focus({ preventScroll: true });
+  },
+  "form-vis"(v) { setFormVis(v); },
+  "cancel-flavor-edit"() { clearFlavorForm(); $("save-msg").textContent = ""; },
+  day(id) { orderDay = id; $("orders")._html = null; renderOwner(); },
+  async "copy-bake"() {
+    try { await navigator.clipboard.writeText(bakeText()); toast("Baking list copied."); }
+    catch (_) { toast("Couldn't copy on this browser."); }
+  },
+  "dl-edit"() {
+    dlDraft = { on: true, days: ownerDelivery.days.slice(), notice: ownerDelivery.notice, ahead: ownerDelivery.ahead, off: ownerDelivery.off.slice() };
+    if (ownerDelivery.on) dlDraft.on = true;
+    renderDlEditor();
+  },
+  "dl-day"(i) {
+    readDlDraft();
+    const n = Number(i);
+    dlDraft.days = dlDraft.days.includes(n) ? dlDraft.days.filter(x => x !== n) : [...dlDraft.days, n].sort();
+    renderDlEditor();
+  },
+  "dl-off-add"() {
+    readDlDraft();
+    const v = $("dl-off-input").value;
+    if (!v) return toast("Pick a date first.");
+    if (!dlDraft.off.includes(v)) dlDraft.off = [...dlDraft.off, v].sort();
+    renderDlEditor();
+  },
+  "dl-off-rm"(v) { readDlDraft(); dlDraft.off = dlDraft.off.filter(x => x !== v); renderDlEditor(); },
+  "dl-cancel"() { dlDraft = null; $("delivery-box")._html = null; renderDeliveryBox(); },
+  async "dl-save"() {
+    readDlDraft();
+    const d = await api({ action: "setDelivery", ...dlDraft });
+    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error, 3500);
+    ownerDelivery = Object.assign({}, d.delivery, { dates: d.dates || [] });
+    dlDraft = null;
+    $("delivery-box")._html = null;
+    renderOwner();
+    toast(ownerDelivery.on ? "Delivery dates saved. Customers pick one at checkout." : "Delivery dates turned off.", 3500);
+  },
+  "box-new"() { openBoxForm(null); },
+  "box-edit"(id) { const b = ownerBoxes.find(x => x.id === id); if (b) openBoxForm(b); },
+  "box-cancel"() { $("box-form").classList.add("hidden"); editingBox = null; },
+  async "box-toggle"(id) {
+    const b = ownerBoxes.find(x => x.id === id); if (!b) return;
+    await saveBoxes(ownerBoxes.map(x => (x.id === id ? { ...x, on: !x.on } : x)),
+      b.on ? b.name + " is turned off. Existing orders keep it." : b.name + " is offered again.");
+  },
+  async "box-del"(id) {
+    if (boxDelArmed !== id) { boxDelArmed = id; $("box-list")._html = null; return renderBoxList(); }
+    boxDelArmed = null;
+    await saveBoxes(ownerBoxes.filter(x => x.id !== id), "Box deleted. Existing orders keep it.");
+  },
+  "add-variant"(id) {
+    const main = ownerFl.find(x => x.id === id); if (!main) return;
+    clearFlavorForm();
+    $("f-parent").value = id;
+    $("f-batch").value = main.batch && main.batch !== "current" ? main.batch : "";
+    $("form-title").textContent = "Add a variant to " + main.flavor;
+    $("save").textContent = "Save variant";
+    $("cancel-edit").classList.remove("hidden");
+    $("save-msg").textContent = "It gets its own price, stock and photo. No photo uses " + main.flavor + "'s.";
+    $("flavor-form").scrollIntoView({ block: "start" });
+    $("f-flavor").focus({ preventScroll: true });
+  },
+  async "del-flavor"(id) {
+    if (delFlavorArmed !== id) { delFlavorArmed = id; return renderOwner(); }
+    delFlavorArmed = null;
+    const hadVariants = ownerFl.some(x => x.parent === id);
+    await api({ action: "deleteFlavor", id });
+    toast(hadVariants ? "Flavor deleted. Its variants are now their own cookies." : "Flavor deleted.");
+    await loadOwner();
+  }
+};
+
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-act]");
+  if (!b || !acts[b.dataset.act]) return;
+  e.preventDefault();
+  b.disabled = true;
+  try { await acts[b.dataset.act](b.dataset.id, b); }
+  catch (_) { toast("Couldn't reach the shop. Try again."); }
+  finally { if (b.isConnected) b.disabled = false; }
+});
+
+/* ---------------- Start ---------------- */
+function route() {
+  const owner = isOwnerView();
+  $("shop").classList.toggle("hidden", owner);
+  $("admin").classList.toggle("hidden", !owner);
+  $("lede").innerHTML = !owner
+    ? "Pick your cookies and reserve them before the next batch is baked."
+    : token
+      ? 'Owner view. <a href="#">Open the shop</a> or <a href="#admin" data-act="sign-out">sign out</a>.'
+      : 'Owner view. <a href="#">Open the shop</a>';
+  $("live").classList.toggle("hidden", owner && !token);
+  if (owner) {
+    $("login").classList.toggle("hidden", !!token);
+    $("tools").classList.toggle("hidden", !token);
+  }
+  renderCart();
+}
+acts["sign-out"] = () => { lockOwner("Signed out."); };
+window.addEventListener("hashchange", () => {
+  route();
+  window.scrollTo(0, 0);
+  if (isOwnerView() && !token) $("token").focus({ preventScroll: true });
+  tick();
+});
+
+let busy = false;
+async function tick() {
+  if (busy) return;
+  busy = true;
+  try {
+    if (!isOwnerView()) await loadShop();
+    else if (token) await loadOwner();
+  } catch (_) {
+    setLive(false);
+  } finally {
+    busy = false;
+  }
+}
+
+route();
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.5 var(--sans)}
@@ -419,7 +2383,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 
 <script>
 // Paste your Apps Script Web app URL here.
-const API = "https://script.google.com/macros/s/AKfycbyEkfWTegkYKj0pItv4-LQQopkFUQrXK7G5VZPTg-FO2a9TxaDNQESd_ptx3r8YHkOc3A/exec";
+const API = "https://script.google.com/macros/s/AKfycbyDjWNI5OL8r8q1JLGD5vSMIpYlmgBn_om6_7uOoCJS6ptquE-Y1c-6n2MhJ_JlOXvmBw/exec";
 // Your shop name, shown at the top and on receipts.
 const SHOP_NAME = "Cookie Pre-Order";
 
