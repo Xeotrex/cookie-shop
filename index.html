@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Cookie Pre-Order</title>
+<link rel="preconnect" href="https://script.google.com">
+<link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Young+Serif&display=swap" rel="stylesheet">
@@ -98,6 +100,161 @@ select:disabled{opacity:.5;cursor:default}
 #cat-list{margin-top:12px}
 #cat-form{margin-top:16px}
 .pick-list{display:flex;flex-wrap:wrap;gap:6px}
+/* Drop banner */
+.hero{position:relative;overflow:hidden;margin:0 0 24px;padding:20px 20px 18px;border-radius:26px;background:var(--ink);color:var(--paper)}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#cfc8bc;font-size:13.5px;font-weight:600}
+.hero-live{display:inline-flex;align-items:center;gap:6px;color:#a6e6b8}
+.hero-live i{width:7px;height:7px;border-radius:50%;background:#4cc775}
+.hero h2{margin:10px 0 0;color:var(--paper);font-size:1.7rem}
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 10px}
+.countdown div{padding:11px 0 9px;border-radius:16px;background:#1d1b18;text-align:center}
+.countdown b{display:block;font:400 2.05rem/1 var(--serif);font-variant-numeric:tabular-nums}
+.countdown span{display:block;margin-top:5px;color:#a9a294;font-size:12px}
+.hero-sub{color:#cfc8bc;font-size:14px}
+.next-row{display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:14px;border-top:1px solid #2c2a26}
+.avatars{display:flex;flex-shrink:0}
+.avatars span{display:grid;place-items:center;width:40px;height:40px;margin-left:-10px;overflow:hidden;border:2px solid var(--ink);border-radius:50%;background:#2c2a26;font-size:18px}
+.avatars span:first-child{margin-left:0}
+.avatars img{width:100%;height:100%;object-fit:cover}
+.next-row p{color:#e8e3da;font-size:14px}
+.next-row strong{color:var(--paper)}
+
+/* Menu cards */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 14px}
+@media (max-width:330px){.grid{grid-template-columns:1fr}}
+.grid-empty{grid-column:1/-1}
+.card{position:relative;display:flex;flex-direction:column;min-width:0}
+.card .pic{width:100%;height:auto;aspect-ratio:1/1;border-radius:20px}
+.card .ph{font-size:46px}
+.card.out .pic{filter:grayscale(1);opacity:.55}
+.card .badges{position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:6px;pointer-events:none}
+.stock-badge{padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.95);color:var(--baked-ink);font-size:12px;font-weight:600;white-space:nowrap}
+.stock-badge.low{color:var(--danger)}
+.stock-badge.out{background:var(--ink);color:var(--paper)}
+.card .badges .cat-tag{background:rgba(246,234,217,.95)}
+.card .body{display:flex;flex:1;flex-direction:column;padding-top:10px}
+.card h3{font-size:1.06rem}
+.card .price{margin-top:2px;font-weight:600}
+.card .limit{display:block;margin-top:2px;font-size:12.5px}
+.card .desc{display:-webkit-box;margin-top:4px;overflow:hidden;font-size:13.5px;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card .variant{margin-top:8px}
+.card .variant select{padding:7px 30px 7px 12px;background-position:right 11px center;font-size:13.5px}
+.buy{margin-top:auto;padding-top:12px}
+.btn.add{width:100%;min-height:42px}
+.card .stepper{display:flex;justify-content:space-between;width:100%}
+.card .also{font-size:12.5px}
+.scroller{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,44%);gap:14px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.scroller::-webkit-scrollbar{display:none}
+.scroller>.card{scroll-snap-align:start}
+.skel-card .skel{border-radius:20px;background:linear-gradient(100deg,#f2f1ee 30%,#faf9f7 50%,#f2f1ee 70%) 0 0/300% 100%}
+.skel-card .skel.pic{width:100%;aspect-ratio:1/1}
+.skel-card .line{height:12px;margin-top:12px;border-radius:6px}
+@media (prefers-reduced-motion:no-preference){.skel-card .skel{animation:shimmer 1.3s linear infinite}}
+@keyframes shimmer{to{background-position:-150% 0}}
+
+/* Owner: tabs fit five */
+.tabs{overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{padding:0 9px;font-size:14.5px}
+.owner-mode .toast{bottom:calc(92px + env(safe-area-inset-bottom))}
+.owner-mode #admin{padding-bottom:84px}
+
+/* Drops (owner) */
+.state-box.on-now{background:#eef8f1;border-color:#cfe9d7}
+.state-dot.off{background:#b9b4aa}
+.how{margin:0 0 18px;padding:16px;border-radius:18px;background:var(--flour)}
+.how ol{margin:8px 0 0;padding-left:20px}
+.how li{margin:4px 0}
+.drop-card{margin:0 0 12px;padding:16px;border:1.5px solid var(--crumb);border-radius:18px;background:var(--paper)}
+.drop-card.is-live{border-color:var(--ink)}
+.drop-card.is-ended{background:var(--flour);border-color:var(--flour)}
+.drop-card.is-ended h3,.drop-card.is-ended .mini-chips{opacity:.6}
+.drop-card h3{font-size:1.1rem}
+.mini-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.mini-chips span{padding:4px 10px;border-radius:999px;background:var(--flour);font-size:13px;font-weight:500}
+.drop-card.is-ended .mini-chips span{background:var(--paper)}
+.mini-chips span.off{color:var(--muted);text-decoration:line-through}
+.tag.t-live{background:#e7f6ec;color:#17692f}
+.tag.t-next{background:var(--ink);color:var(--paper)}
+.tag.t-later,.tag.t-ended{background:var(--flour);color:var(--muted)}
+.drop-form{margin:0 0 22px}
+.drop-form h2{margin:0 0 4px}
+.pick-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pick-grid .chip small{margin-left:5px;color:var(--muted);font-weight:500}
+.pick-grid .chip.on small{color:#d6d3cd}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.quick .btn{min-height:32px;padding:0 12px;font-size:13.5px}
+.section-label{margin:22px 0 10px;color:var(--muted);font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.rot-note{margin:0 0 18px;padding:12px 14px;border-radius:14px;background:#eef8f1;color:#17692f;font-size:14px}
+
+/* Baking clipboard */
+.bake-fab{position:fixed;left:calc(16px + env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));z-index:6;display:grid;place-items:center;width:58px;height:58px;border:0;border-radius:50%;background:var(--ink);color:var(--paper);box-shadow:0 10px 28px rgba(0,0,0,.25);cursor:pointer}
+.bake-fab svg{width:26px;height:26px}
+.fab-badge{position:absolute;top:-5px;right:-5px;min-width:25px;height:25px;padding:0 6px;border:2px solid var(--paper);border-radius:999px;background:var(--baked);color:#fff;font:700 12px/21px var(--sans);text-align:center}
+.fab-badge.done{background:#1b7f3a}
+#bake-sheet{width:min(560px,100%);max-width:100%;max-height:88%;margin:auto auto 0;border-radius:26px 26px 0 0;background:var(--paper)}
+.sheet-in{padding:10px 18px calc(20px + env(safe-area-inset-bottom))}
+.grip{width:40px;height:5px;margin:0 auto 10px;border-radius:9px;background:var(--crumb)}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sheet-head h2{margin:0}
+.icon-btn{display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:var(--flour);color:var(--ink);font-size:18px;cursor:pointer}
+.date-pick{display:flex;align-items:center;gap:10px;margin:-6px 0 16px;color:var(--muted);font-size:14px}
+.date-pick input{width:auto;min-height:36px;padding:4px 10px}
+.bake-sum{margin-bottom:6px;padding:16px;border-radius:20px;background:var(--ink);color:var(--paper)}
+.bake-big{display:flex;align-items:baseline;gap:8px}
+.bake-big b{font:400 2.3rem/1 var(--serif)}
+.bake-big span{color:#cfc8bc;font-weight:600}
+.bake-sum .sub{margin-top:6px;color:#cfc8bc}
+.meter{height:8px;margin-top:12px;overflow:hidden;border-radius:9px;background:#3a3732}
+.meter i{display:block;height:100%;width:0;border-radius:9px;background:var(--baked)}
+.meter.done i{background:#4cc775}
+.meter.small{height:5px;margin-top:7px;background:var(--flour)}
+.bake-rows{margin:0;padding:0;list-style:none}
+.brow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--crumb)}
+.brow:last-child{border-bottom:0}
+.bcheck{display:grid;place-items:center;flex-shrink:0;width:34px;height:34px;border:2px solid var(--crumb);border-radius:50%;background:var(--paper);color:transparent;cursor:pointer}
+.bcheck svg{width:18px;height:18px}
+.brow.done .bcheck{border-color:#1b7f3a;background:#1b7f3a;color:#fff}
+.bname{flex:1;min-width:0}
+.bname strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bname .sub{font-size:13px}
+.brow.done .bname strong{color:var(--muted);text-decoration:line-through}
+.brow.done .meter.small i{background:#1b7f3a}
+.stepper.sm{gap:2px}
+.stepper.sm button{width:34px;height:34px}
+.stepper.sm span{min-width:26px;text-align:center;font-variant-numeric:tabular-nums}
+.stepper button[aria-disabled="true"]{opacity:.35}
+@media (prefers-reduced-motion:no-preference){
+  .meter i{transition:width .4s cubic-bezier(.2,.8,.2,1),background-color .3s}
+  .bcheck{transition:background-color .2s,border-color .2s,color .2s,transform .15s}
+  .bcheck:active{transform:scale(.88)}
+  .brow.done .bcheck svg{animation:pop-in .3s cubic-bezier(.2,.9,.3,1.3)}
+  .bake-fab{transition:transform .15s}
+  .bake-fab:active{transform:scale(.92)}
+  #bake-sheet[open]{animation:sheet-up .32s cubic-bezier(.2,.8,.2,1)}
+}
+@keyframes sheet-up{from{transform:translateY(100%)}}
+
+/* Confirming your order */
+#confirm{width:min(340px,calc(100% - 40px))}
+.confirm-box{padding:28px 22px 24px;border-radius:26px;background:var(--paper);text-align:center}
+.confirm-art{width:104px;height:104px;margin:0 auto 14px}
+.confirm-art svg{display:block;width:100%;height:100%}
+.confirm-box h2{margin:0 0 6px;font-size:1.45rem}
+#confirm-step{min-height:1.5em}
+#confirm-actions .btn{margin-top:18px}
+@media (prefers-reduced-motion:no-preference){
+  .ring{transform-origin:50px 50px;animation:spin 1.1s linear infinite}
+  .bob{transform-origin:50px 50px;animation:bob 1.4s ease-in-out infinite}
+  .tick{stroke-dasharray:64;stroke-dashoffset:64;animation:draw .5s .12s cubic-bezier(.2,.8,.2,1) forwards}
+  .pop-in{transform-origin:50px 50px;animation:pop-in .38s cubic-bezier(.2,.9,.3,1.3)}
+  #confirm-step{animation:fade .3s ease}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bob{50%{transform:rotate(-8deg) scale(.97)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop-in{from{transform:scale(.6);opacity:0}}
+
 /* Drag to reorder */
 .drag-handle{display:grid;place-items:center;flex-shrink:0;width:40px;height:40px;margin:-8px -8px -8px 0;padding:0;border:0;border-radius:12px;
   background:transparent;color:#8b857b;cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
@@ -324,7 +481,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
   .toast:not(.hidden){animation:toast-in .26s cubic-bezier(.2,.8,.2,1)}
   dialog::backdrop{animation:fade .22s ease}
   .reveal{animation:fade-up .26s cubic-bezier(.2,.8,.2,1)}
-  .item .pic img{animation:fade .3s ease}
+  .card .pic img{animation:fade .35s ease}
 }
 @keyframes toast-in{from{opacity:0;transform:translate(-50%,14px) scale(.98)}}
 @keyframes fade{from{opacity:0}}
@@ -335,11 +492,12 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 
 @media (max-width:420px){
   .tabs{gap:2px}
-  .tabs button{padding:0 7px;font-size:14px}
+  .tabs button{padding:0 5px;font-size:14px}
   .count{margin-left:3px;font-size:11px;line-height:18px}
   .item{grid-template-columns:80px 1fr;gap:14px}
   .pic{width:80px;height:80px;border-radius:16px}
 }
+@media (max-width:370px){.tabs button{font-size:13px}.countdown b{font-size:1.7rem}}
 </style>
 </head>
 <body>
@@ -361,18 +519,19 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
     </nav>
 
     <div id="ctab-menu">
+    <section id="drop-hero" class="hero hidden" aria-label="Weekly drop"></section>
     <div id="closed" class="closed hidden" role="status">
       <strong>Orders are closed right now</strong>
       <p id="closed-msg"></p>
     </div>
 
     <div id="cat-chips" class="chips hidden" role="group" aria-label="Categories"></div>
-    <section id="menu" class="menu" aria-label="Flavors"></section>
+    <section id="menu" class="grid" aria-label="Flavors"></section>
 
     <section id="soon" class="block hidden">
       <h2>Coming soon</h2>
-      <p class="sub">Not open for orders yet.</p>
-      <div id="soon-list" class="menu" style="margin-top:14px"></div>
+      <p class="sub">Not open for orders yet. Tap I want this so the baker knows what to make next.</p>
+      <div id="soon-list" class="scroller" style="margin-top:14px"></div>
     </section>
 
     <section id="checkout" class="block">
@@ -414,15 +573,22 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
       <div id="delivery-box" class="state-box"></div>
       <nav class="tabs" id="owner-tabs" aria-label="Owner sections">
         <button data-act="tab" data-id="orders" class="on">Orders<span class="count hidden" id="count-orders"></span></button>
-        <button data-act="tab" data-id="history">History</button>
-        <button data-act="tab" data-id="payments">Payments<span class="count hidden" id="count-unpaid"></span></button>
+        <button data-act="tab" data-id="drops">Drops</button>
         <button data-act="tab" data-id="flavors">Flavors</button>
+        <button data-act="tab" data-id="history">Sales</button>
+        <button data-act="tab" data-id="payments">Payments<span class="count hidden" id="count-unpaid"></span></button>
       </nav>
 
       <section id="tab-orders">
         <div class="toolbar"><input type="search" id="order-search" placeholder="Search name or order #" aria-label="Search open orders"></div>
         <div id="day-chips" class="chips" role="group" aria-label="Delivery date"></div>
-        <div id="bake"></div><div id="orders"></div>
+        <div id="orders"></div>
+      </section>
+
+      <section id="tab-drops" class="hidden">
+        <div id="rot-box" class="state-box"></div>
+        <div id="drop-form"></div>
+        <div id="drop-list"></div>
       </section>
 
       <section id="tab-history" class="hidden">
@@ -453,6 +619,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
       </section>
 
       <section id="tab-flavors" class="hidden">
+        <p id="rot-note" class="rot-note hidden">Weekly drops are on, so the live drop decides which cookies customers can order. Hidden still hides a cookie.</p>
         <section id="boxes-box" class="box" style="margin-bottom:24px">
           <div class="order-top"><h2 style="margin:0">Boxes</h2><button class="btn small" type="button" data-act="box-new">Add box</button></div>
           <p class="sub" style="margin-top:6px">Customers can pick one at checkout. "No box" is always there too.</p>
@@ -507,7 +674,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
               <button type="button" data-act="form-vis" data-id="hidden" aria-pressed="false">Hidden</button>
             </div>
           </div>
-          <p class="sub">Cost per cookie is only for you, for profit in History. Completed orders come out of cookies on hand automatically. Coming soon flavors show their batch under the menu, so put the date there, like Dec 20 pickup.</p>
+          <p class="sub">Cost per cookie is only for you, for profit in Sales. Completed orders come out of cookies on hand automatically. Coming soon flavors show their batch under the menu, so put the date there, like Dec 20 pickup.</p>
           <div class="actions">
             <button class="btn primary" id="save" type="submit">Save flavor</button>
             <button class="btn hidden" id="cancel-edit" type="button" data-act="cancel-flavor-edit">Cancel</button>
@@ -537,11 +704,35 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 
 <input type="file" id="proof-input" accept="image/*" hidden>
 
+<button id="bake-fab" class="bake-fab hidden" data-act="bake-open" aria-label="Baking list">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17.5" rx="2.5"/><path d="M9 4.6v-.8a1.3 1.3 0 0 1 1.3-1.3h3.4A1.3 1.3 0 0 1 15 3.8v.8"/><path d="m8.7 12 2 2 4-4.2"/><path d="M8.8 17.3h6.4"/></svg>
+  <span id="bake-badge" class="fab-badge hidden"></span>
+</button>
+
+<dialog id="bake-sheet" aria-label="Baking list">
+  <div class="sheet-in">
+    <div class="grip" aria-hidden="true"></div>
+    <div class="sheet-head"><h2>Baking list</h2><button class="icon-btn" data-act="bake-close" aria-label="Close">✕</button></div>
+    <div id="bake-days" class="chips" role="group" aria-label="Which day to bake for"></div>
+    <label class="date-pick">Or pick a date <input type="date" id="bake-date"></label>
+    <div id="bake-body"></div>
+  </div>
+</dialog>
+
+<dialog id="confirm" aria-label="Confirming your order">
+  <div class="confirm-box">
+    <div class="confirm-art" id="confirm-art"></div>
+    <h2 id="confirm-title">Confirming your order</h2>
+    <p class="sub" id="confirm-step"></p>
+    <div id="confirm-actions"></div>
+  </div>
+</dialog>
+
 <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
 <script>
 // Paste your Apps Script Web app URL here.
-const API = "https://script.google.com/macros/s/AKfycbyjzwP09l_qTnaN_40weCgHm9Z_wVocjyptoUVNnqoYZU4yuKAfVD6rUYUNxsaV4thzAQ/exec";
+const API = "https://script.google.com/macros/s/AKfycbye1k7sxyn7U0gMwLqyMQI-9PUyKey7PLnb-uxsxBj8pEe9CV-kvgifj7LyvT-DaM1SmQ/exec";
 // Your shop name, shown at the top and on receipts.
 const SHOP_NAME = "Cookie Pre-Order";
 
@@ -622,6 +813,9 @@ let payInfoText = "", payQrData = "";
 let boxes = [], boxChoice = "", editBox = "";
 let delivery = { on: false, dates: [] }, deliverPick = "", editDeliver = "", ctab = "menu";
 let cats = [], catPick = "all";
+let drop = { on: false, current: null, next: null, nextFlavors: [] }, clockOffset = 0, dropFlip = false, cdSeen = "", loaded = false;
+const serverNow = () => Date.now() + clockOffset;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 const catOf = id => cats.find(c => c.id === id);
 const inCat = f => catPick === "all" || ((catOf(catPick) || { flavors: [] }).flavors.includes(f.id));
 // How many boxes an order of `cookies` needs, and what they cost.
@@ -657,17 +851,33 @@ function setMyIds(ids) { try { localStorage.setItem(MY_KEY, JSON.stringify(ids))
 async function loadShop() {
   const my = ++shopSeq;
   const ids = myIds();
-  // Photos are big, so they're fetched now and then instead of every second.
-  const wantPhotos = Date.now() - photosAt > 30000;
+  // Photos are big, so they're fetched now and then instead of every second,
+  // and never on the very first load (the menu shows first, photos a moment later).
+  const wantPhotos = loaded && Date.now() - photosAt > 30000;
   const q = [];
   if (wantPhotos) q.push("photos=1");
   if (ids.length) q.push("mine=" + encodeURIComponent(ids.join(",")));
   const d = await (await fetch(API + (q.length ? "?" + q.join("&") : ""))).json();
   if (my < shopApplied) return;
   shopApplied = my;
+  if (d.photos) { Object.assign(photos, d.photos); photosAt = Date.now(); savePhotos(); }
+  else if (wantPhotos) photosAt = Date.now();
+  (d.flavors || []).concat(d.soon || []).forEach(f => { if (f.photo !== undefined) photos[f.id] = f.photo; }); // older script
+  if (typeof d.now === "number") clockOffset = d.now - Date.now();
+  if (d.mine === undefined && ids.length) {
+    const m = await api({ action: "myOrders", ids }); // older Apps Script version
+    d.mine = m.orders || [];
+  }
+  applyShop(d, ids);
+  saveShopCache(d);
+  setLive(true);
+}
 
+// Puts a menu (fresh, or saved from last visit) on the page.
+function applyShop(d, ids) {
   flavors = d.flavors || [];
   soon = d.soon || [];
+  drop = d.drop || { on: false, current: null, next: null, nextFlavors: [] };
   shopOpen = !d.shop || d.shop.open !== false;
   closedMsg = (d.shop && d.shop.message) || "";
   if (!shopOpen) { cart = {}; editing = null; }
@@ -677,9 +887,7 @@ async function loadShop() {
   delivery = d.delivery || { on: false, dates: [] };
   cats = d.categories || [];
   if (deliverPick && !delivery.dates.includes(deliverPick)) deliverPick = "";
-  flavors.concat(soon).forEach(f => { if (f.photo !== undefined) photos[f.id] = f.photo; });
-  if (wantPhotos) photosAt = Date.now();
-  if (flavors.concat(soon).some(f => !(f.id in photos))) photosAt = 0; // a new flavor appeared: get its photo next time
+  if (flavors.concat(soon, drop.nextFlavors || []).some(f => !(f.id in photos))) photosAt = 0; // a new cookie: get its photo next time
 
   // Keep the cart within what's left.
   Object.keys(cart).forEach(id => {
@@ -690,23 +898,81 @@ async function loadShop() {
 
   if (d.mine) {
     mine = d.mine;
-    const found = new Set(mine.map(o => o.id));
-    if (ids.some(id => !found.has(id))) setMyIds(ids.filter(id => found.has(id))); // deleted by the seller
-  } else if (ids.length) {
-    const m = await api({ action: "myOrders", ids }); // older Apps Script version
-    mine = m.orders || [];
-  } else {
+    if (ids) {
+      const found = new Set(mine.map(o => o.id));
+      if (ids.some(id => !found.has(id))) setMyIds(ids.filter(id => found.has(id))); // deleted by the seller
+    }
+  } else if (!ids || !ids.length) {
     mine = [];
   }
 
-  setLive(true);
+  loaded = true;
   renderClosed();
+  renderDropHero();
   renderCatChips();
   renderMenu();
   renderSoon();
   renderCart();
   renderMine();
 }
+
+// Remember the last menu so the page shows it instantly next time, before the fresh one arrives.
+let cacheStr = "";
+function saveShopCache(d) {
+  try {
+    const copy = Object.assign({}, d);
+    delete copy.photos;
+    if (copy.pay) copy.pay = { info: copy.pay.info };
+    const str = JSON.stringify(copy);
+    if (str !== cacheStr) { cacheStr = str; localStorage.setItem("shopCache:v1", str); }
+  } catch (_) {}
+}
+function savePhotos() { try { localStorage.setItem("shopPhotos:v1", JSON.stringify(photos)); } catch (_) {} }
+
+// ---------- Weekly drop banner ----------
+const dropWhen = ms => new Date(ms).toLocaleString("en-PH", { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+function renderDropHero() {
+  const box = $("drop-hero");
+  box.classList.toggle("hidden", !drop.on);
+  if (!drop.on) { paint(box, ""); return; }
+  const cur = drop.current, nxt = drop.next, list = drop.nextFlavors || [];
+  const names = list.map(f => f.flavor);
+  const who = names.length <= 2 ? names.join(" and ") : names.slice(0, 2).join(", ") + " and " + (names.length - 2) + " more";
+  paint(box, `<div class="hero-top"><span>${esc(cur ? cur.name || "This week's drop" : "Weekly drops")}</span>${cur ? '<span class="hero-live"><i></i>Live now</span>' : ""}</div>
+    <h2>${cur ? "This week's cookies are out" : "The menu opens soon"}</h2>
+    ${nxt ? `<div class="countdown" role="timer" aria-label="Time until the next drop">
+        <div><b data-cd="d">0</b><span data-cl="d">days</span></div><div><b data-cd="h">00</b><span data-cl="h">hours</span></div>
+        <div><b data-cd="m">00</b><span data-cl="m">mins</span></div><div><b data-cd="s">00</b><span data-cl="s">secs</span></div></div>
+      <p class="hero-sub">until ${esc(nxt.name || "the next drop")}, ${esc(dropWhen(nxt.at))}.${cur ? " Order this week's cookies before then." : ""}</p>`
+    : `<p class="hero-sub" style="margin-top:8px">${cur ? "The next drop will be announced soon." : "Check back soon for the first drop."}</p>`}
+    ${list.length ? `<div class="next-row"><div class="avatars">${list.slice(0, 4).map(f => `<span>${photos[f.id] ? `<img src="${esc(photos[f.id])}" alt="">` : "🍪"}</span>`).join("")}</div>
+      <p><strong>Up next:</strong> ${esc(who)}</p></div>` : ""}`);
+  tickCountdown();
+}
+function tickCountdown() {
+  if (!drop.on || !drop.next) return;
+  let ms = drop.next.at - serverNow();
+  if (ms > 0) cdSeen = drop.next.id;
+  else {
+    ms = 0;
+    // Only celebrate a countdown the customer actually watched run out (not an old saved menu).
+    if (cdSeen === drop.next.id && !dropFlip && !isOwnerView()) {
+      dropFlip = true;
+      toast("The new drop is live!", 3500);
+      loadShop().catch(() => {}).finally(() => setTimeout(() => (dropFlip = false), 5000));
+    }
+  }
+  const t = Math.floor(ms / 1000);
+  const parts = { d: String(Math.floor(t / 86400)), h: String(Math.floor((t % 86400) / 3600)).padStart(2, "0"),
+                  m: String(Math.floor((t % 3600) / 60)).padStart(2, "0"), s: String(t % 60).padStart(2, "0") };
+  const unit = { d: ["day", "days"], h: ["hour", "hours"], m: ["min", "mins"], s: ["sec", "secs"] };
+  document.querySelectorAll("#drop-hero [data-cd]").forEach(el => { if (el.textContent !== parts[el.dataset.cd]) el.textContent = parts[el.dataset.cd]; });
+  document.querySelectorAll("#drop-hero [data-cl]").forEach(el => {
+    const k = el.dataset.cl, w = unit[k][+parts[k] === 1 ? 0 : 1];
+    if (el.textContent !== w) el.textContent = w;
+  });
+}
+setInterval(tickCountdown, 1000);
 
 function renderClosed() {
   $("closed").classList.toggle("hidden", shopOpen);
@@ -729,22 +995,32 @@ function itemBody(top) {
   const l = left(f), q = cart[f.id] || 0, out = l <= 0, cap = capOf(f);
   const desc = f.description || (f !== top ? top.description : "");
   const others = opts.filter(o => o !== f && cart[o.id] > 0);
-  return `<div class="head"><h3>${esc(top.flavor)}</h3><span class="price">${peso(f.price)}</span></div>
-    ${catTags(top)}
+  const buy = !shopOpen ? '<p class="sub">Orders are closed</p>'
+    : q > 0 ? `<div class="stepper">
+        <button data-act="rm" data-id="${esc(f.id)}" aria-label="One less ${esc(nameOf(f))}">−</button>
+        <span aria-live="polite">${q}</span>
+        <button data-act="add" data-id="${esc(f.id)}" ${q >= cap ? "disabled" : ""} aria-label="One more ${esc(nameOf(f))}">+</button></div>`
+    : `<button class="btn primary add" data-act="add" data-id="${esc(f.id)}" ${out ? "disabled" : ""} aria-label="Add ${esc(nameOf(f))}">${out ? "Sold out" : "Add"}</button>`;
+  return `<h3>${esc(top.flavor)}</h3>
+    <p class="price">${peso(f.price)}${f.max && !out ? `<span class="limit">Max ${f.max} per order</span>` : ""}</p>
     ${desc ? `<p class="desc">${esc(desc)}</p>` : ""}
     ${vars.length ? `<label class="variant"><select data-variant-for="${esc(top.id)}" aria-label="Choose your ${esc(top.flavor)}">
       ${opts.map(o => `<option value="${esc(o.id)}" ${o === f ? "selected" : ""}>${esc(optionName(o, top))}, ${peso(o.price)}${left(o) <= 0 ? " (sold out)" : ""}</option>`).join("")}
     </select></label>` : ""}
-    <div class="foot">
-      <div class="stock">${dots(f)}<span>${out ? "Sold out" : l + " left"}</span>${f.max && !out ? `<span class="limit">Max ${f.max} per order</span>` : ""}</div>
-      ${shopOpen ? `<div class="stepper">
-        <button data-act="rm" data-id="${esc(f.id)}" ${q <= 0 ? "disabled" : ""} aria-label="One less ${esc(nameOf(f))}">−</button>
-        <span aria-live="polite">${q}</span>
-        <button data-act="add" data-id="${esc(f.id)}" ${q >= cap ? "disabled" : ""} aria-label="One more ${esc(nameOf(f))}">+</button>
-      </div>` : ""}
-    </div>
+    <div class="buy">${buy}</div>
     ${others.length ? `<p class="also">Also in your order: ${others.map(o => cart[o.id] + " " + esc(optionName(o, top))).join(", ")}</p>` : ""}`;
 }
+// Stock and category labels on the photo.
+function cardBadges(top, f) {
+  const all = [top, ...variantsOf(top.id)], l = left(f), cat = cats.find(c => c.flavors.includes(top.id));
+  const stock = all.every(o => left(o) <= 0) ? '<span class="stock-badge out">Sold out</span>'
+    : l <= 0 ? '<span class="stock-badge out">This one is sold out</span>'
+    : `<span class="stock-badge ${l <= 3 ? "low" : ""}">${l <= 3 ? "Only " + l + " left" : l + " left"}</span>`;
+  return stock + (cat ? `<span class="cat-tag">${esc(cat.name)}</span>` : "");
+}
+const SKELETON = Array.from({ length: 4 }, () => `<div class="card skel-card" aria-hidden="true"><div class="skel pic"></div>
+  <div class="skel line" style="width:72%"></div><div class="skel line" style="width:38%"></div>
+  <div class="skel" style="height:42px;margin-top:14px;border-radius:999px"></div></div>`).join("");
 
 // force = a main cookie id whose card must redraw now (its dropdown just changed).
 // Category chips above the menu. Only categories with something to show appear.
@@ -762,10 +1038,11 @@ const catTags = f => {
 
 function renderMenu(force) {
   const menu = $("menu");
+  if (!loaded) { paint(menu, SKELETON); return; }
   const tops = flavors.filter(f => !mainOf(f) && inCat(f));
   if (!tops.length) {
-    paint(menu, flavors.length ? '<p class="empty">Nothing in this category on the menu right now.</p>'
-                               : '<p class="empty">No cookies on the menu right now. Check back soon.</p>');
+    paint(menu, `<p class="empty grid-empty">${drop.on && !drop.current ? "The menu opens when the first drop starts."
+      : flavors.length ? "Nothing in this category on the menu right now." : "No cookies on the menu right now. Check back soon."}</p>`);
     return;
   }
   menu._html = null;
@@ -775,21 +1052,22 @@ function renderMenu(force) {
     let el = [...menu.children].find(c => c.dataset.item === top.id);
     if (!el) {
       el = document.createElement("article");
-      el.className = "item";
+      el.className = "card";
       el.dataset.item = top.id;
-      el.innerHTML = '<div class="pic"></div><div class="body"></div>';
+      el.innerHTML = '<div class="pic"></div><div class="badges"></div><div class="body"></div>';
     }
     if (menu.children[i] !== el) menu.insertBefore(el, menu.children[i] || null);
     el.classList.toggle("out", all.every(o => left(o) <= 0));
-    const pic = el.firstElementChild, src = photos[f.id] || photos[top.id] || "";
+    const pic = el.children[0], src = photos[f.id] || photos[top.id] || "";
     if (pic._src !== src) {
       pic._src = src;
       pic.innerHTML = src ? `<img src="${esc(src)}" alt="">` : '<span class="ph" aria-hidden="true">🍪</span>';
     }
     // Don't redraw a card while its dropdown is open, or the dropdown would close.
     const ae = document.activeElement, busySelect = ae && ae.tagName === "SELECT" && el.contains(ae);
+    paint(el.children[1], cardBadges(top, f));
     if (!busySelect || force === top.id) {
-      paint(el.lastElementChild, itemBody(top));
+      paint(el.children[2], itemBody(top));
       if (force === top.id) { const sel = el.querySelector("select"); if (sel) sel.focus({ preventScroll: true }); }
     }
     keep.add(el);
@@ -801,17 +1079,17 @@ function renderSoon() {
   const list = soon.filter(inCat);
   $("soon").classList.toggle("hidden", !list.length);
   paint($("soon-list"), list.map(f => {
-    const src = photos[f.id] || "";
-    const dateText = f.batch && f.batch !== "current" ? `<span>${esc(f.batch)}</span>` : "";
-    return `<article class="item">
+    const src = photos[f.id] || "", voted = myVotes.includes(f.id);
+    return `<article class="card">
       <div class="pic">${src ? `<img src="${esc(src)}" alt="">` : '<span class="ph" aria-hidden="true">🍪</span>'}</div>
+      <div class="badges"><span class="stock-badge">Coming soon</span></div>
       <div class="body">
-        <div class="head"><h3>${esc(f.flavor)}</h3>${f.price ? `<span class="price">${peso(f.price)}</span>` : ""}</div>
-        ${f.description ? `<p class="desc">${esc(f.description)}</p>` : ""}
-        <div class="soon-foot"><span class="tag soon">Coming soon</span>${dateText}</div>
-        <div class="vote-row">
-          <button class="btn small ${myVotes.includes(f.id) ? "voted" : ""}" data-act="vote" data-id="${esc(f.id)}" aria-pressed="${myVotes.includes(f.id)}">${myVotes.includes(f.id) ? "✓ You want this" : "I want this"}</button>
-          ${f.votes ? `<span class="sub">${plural(f.votes, "person wants", "people want")} this</span>` : ""}
+        <h3>${esc(f.flavor)}</h3>
+        <p class="price">${f.price ? peso(f.price) : ""}</p>
+        ${f.batch && f.batch !== "current" ? `<p class="sub" style="font-size:13px">${esc(f.batch)}</p>` : ""}
+        <div class="buy">
+          <button class="btn small add ${voted ? "voted" : ""}" data-act="vote" data-id="${esc(f.id)}" aria-pressed="${voted}">${voted ? "✓ You want this" : "I want this"}</button>
+          ${f.votes ? `<p class="sub" style="margin-top:6px;font-size:12.5px">${plural(f.votes, "person wants", "people want")} this</p>` : ""}
         </div>
       </div>
     </article>`;
@@ -849,7 +1127,7 @@ function renderCart() {
     ? `<ul class="lines">${lines.map(l => `<li><span>${esc(nameOf(l.f))} × ${l.q}</span><span>${peso(l.sum)}</span></li>`).join("")}
        ${bx ? `<li><span>${esc(pickedBox.name)} × ${bx.qty}<small>${esc(boxRule(pickedBox))}</small></span><span>${peso(bx.total)}</span></li>` : ""}</ul>
        <p class="total-row"><span>Total</span><strong>${peso(total)}</strong></p>`
-    : '<p class="empty">Tap + on a flavor to add it here.</p>');
+    : '<p class="empty">Tap Add on a cookie to put it here.</p>');
   renderBoxChoice(count);
   renderDeliverChoice();
   $("place").disabled = !lines.length || (delivery.on && !delivery.dates.length);
@@ -986,26 +1264,79 @@ $("place").onclick = async () => {
   if (!name) { $("msg").textContent = "Enter your name so the baker knows whose order it is."; $("name").focus(); return; }
   const items = cartLines().map(l => ({ id: l.f.id, qty: l.q }));
   if (!items.length) { $("msg").textContent = "Add at least one cookie."; return; }
+  if (delivery.on && !deliverPick) { $("msg").textContent = "Pick a delivery date."; if ($("deliver-on")) $("deliver-on").focus(); return; }
+  $("msg").textContent = "";
   $("place").disabled = true;
-  $("msg").textContent = "Placing your order…";
+  const conf = startConfirm();
   try {
-    if (delivery.on && !deliverPick) { $("msg").textContent = "Pick a delivery date."; $("deliver-on") && $("deliver-on").focus(); return; }
     const d = await api({ action: "order", name, items, box: boxChoice, deliverOn: deliverPick });
-    if (d.error) { $("msg").textContent = d.error; return; }
+    if (d.error) { await conf.fail(d.error); return; }
     try { localStorage.setItem("myName", name); } catch (_) {}
     setMyIds([...myIds(), d.id]);
     cart = {};
-    openAfterPlace = d.id;
     deliverPick = "";
-    $("msg").textContent = "";
-    await loadShop();
+    const refresh = loadShop().catch(() => {});
+    await conf.ok(shortId(d.id), refresh);
     showCTab("mine");
+    openAfterPlace = d.id;
+    renderMine();
   } catch (_) {
-    $("msg").textContent = "Couldn't place the order. Check your connection and try again.";
+    await conf.fail("Couldn't reach the shop. Check your connection and try again.");
   } finally {
     $("place").disabled = !cartLines().length;
   }
 };
+
+// ---------- "Confirming your order" ----------
+const LOADER_SVG = `<svg viewBox="0 0 100 100" aria-hidden="true">
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#efe9df" stroke-width="6"/>
+  <circle class="ring" cx="50" cy="50" r="45" fill="none" stroke="#c07a2c" stroke-width="6" stroke-linecap="round" stroke-dasharray="70 213"/>
+  <g class="bob"><circle cx="50" cy="50" r="30" fill="#d9a35f"/><circle cx="50" cy="50" r="30" fill="none" stroke="#c48a45" stroke-width="2"/>
+    <circle cx="40" cy="41" r="4.2" fill="#4a2c1d"/><circle cx="58" cy="38" r="3.6" fill="#4a2c1d"/><circle cx="47" cy="57" r="4" fill="#4a2c1d"/>
+    <circle cx="62" cy="56" r="3.4" fill="#4a2c1d"/><circle cx="35" cy="58" r="3" fill="#4a2c1d"/></g></svg>`;
+const OK_SVG = `<svg viewBox="0 0 100 100" aria-hidden="true"><circle class="pop-in" cx="50" cy="50" r="45" fill="#e7f6ec"/>
+  <path class="tick" d="M31 52l13 13 25-28" fill="none" stroke="#17692f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const ERR_SVG = `<svg viewBox="0 0 100 100" aria-hidden="true"><circle class="pop-in" cx="50" cy="50" r="45" fill="#fdecea"/>
+  <path d="M50 30v26" stroke="#b3261e" stroke-width="7" stroke-linecap="round"/><circle cx="50" cy="69" r="4.5" fill="#b3261e"/></svg>`;
+let confirmBusy = false;
+$("confirm").addEventListener("cancel", e => { if (confirmBusy) e.preventDefault(); });
+$("bake-sheet").addEventListener("click", e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+function startConfirm() {
+  const dlg = $("confirm"), t0 = Date.now(), steps = ["Checking what's left", "Saving your order", "Almost there"];
+  let i = 0;
+  confirmBusy = true;
+  $("confirm-art").innerHTML = LOADER_SVG;
+  $("confirm-title").textContent = "Confirming your order";
+  $("confirm-step").textContent = steps[0];
+  $("confirm-actions").innerHTML = "";
+  if (!dlg.open) dlg.showModal();
+  const timer = setInterval(() => {
+    if (i < steps.length - 1) { i++; const el = $("confirm-step"); el.textContent = steps[i]; reveal(el); }
+  }, 1000);
+  const atLeast = ms => sleep(Math.max(0, ms - (Date.now() - t0)));
+  return {
+    async ok(num, refresh) {
+      await atLeast(1300);
+      clearInterval(timer);
+      $("confirm-art").innerHTML = OK_SVG;
+      $("confirm-title").textContent = "Order confirmed!";
+      $("confirm-step").textContent = "Order " + num + ". Here comes your receipt.";
+      await Promise.all([sleep(1400), Promise.race([refresh, sleep(3000)])]);
+      confirmBusy = false;
+      dlg.close();
+    },
+    async fail(msg) {
+      await atLeast(900);
+      clearInterval(timer);
+      confirmBusy = false;
+      $("confirm-art").innerHTML = ERR_SVG;
+      $("confirm-title").textContent = "Your order didn't go through";
+      $("confirm-step").textContent = msg;
+      $("confirm-actions").innerHTML = '<button class="btn primary wide" data-act="confirm-close" autofocus>Back to my order</button>';
+      $("confirm-actions").querySelector("button").focus();
+    }
+  };
+}
 
 /* ---------------- Receipt ---------------- */
 let receiptOrder = null, receiptOwner = false, receiptDelArmed = false;
@@ -1070,8 +1401,25 @@ let ownerPay = { info: "", hasQr: false }, payLoaded = false, qrPreview = "", pa
 const isOwnerView = () => location.hash === "#admin";
 const stamp = o => new Date(o.completedAt || o.createdAt).getTime() || 0;
 
+// Owner taps feel instant: show the change now, save it, then refresh from the sheet.
+let ownWrites = 0;
+async function ownerWrite(mutate, body, msg) {
+  mutate();
+  ownApplied = ++ownSeq; // ignore refreshes that started before this change
+  renderOwner();
+  if (msg) toast(msg);
+  ownWrites++;
+  let d;
+  try { d = await api(body); }
+  catch (_) { d = { error: "Couldn't reach the shop. Try again." }; }
+  finally { ownWrites--; }
+  if (d.error) toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+  if (!ownWrites) await loadOwner().catch(() => {});
+  return d;
+}
+
 async function loadOwner() {
-  const my = ++ownSeq;
+  const my = ++ownSeq, bv = bakeVer;
   const d = await api({ action: "ownerData" });
   if (my < ownApplied) return;
   ownApplied = my;
@@ -1081,14 +1429,20 @@ async function loadOwner() {
     $("live-text").textContent = "Update the Apps Script";
     return;
   }
+  applyOwner(d, bv);
+  setLive(true);
+}
+function applyOwner(d, bv) {
   orders = d.orders || [];
   ownerFl = d.flavors || [];
   if (d.boxes) ownerBoxes = d.boxes;
   if (d.delivery) ownerDelivery = d.delivery;
   if (d.categories) ownerCats = d.categories;
+  if (d.drops) { ownerDrops = d.drops; if (d.drops.now) clockOffset = d.drops.now - Date.now(); }
+  // Baking taps save a moment later; don't let an older copy undo them.
+  if (d.baked && bv === bakeVer && !bakeTimer && !bakeSaving) ownerBaked = d.baked;
   ownerShop = d.shop || ownerShop;
   ownerPay = d.pay || ownerPay;
-  setLive(true);
   renderOwner();
 }
 
@@ -1133,7 +1487,9 @@ function renderOwner() {
   renderDayChips(active);
   const shown = active.filter(o => matchesSearch(o, orderSearch) &&
     (orderDay === "all" || (orderDay === "none" ? !o.deliverOn : o.deliverOn === orderDay)));
-  renderBakeList(shown);
+  ownerActive = active;
+  renderBake();
+  renderDrops();
   renderUnpaid();
 
   $("count-orders").textContent = active.length;
@@ -1180,7 +1536,7 @@ function flavorRow(f, canMove) {
     const opt = (val, label) => `<button data-act="set-vis" data-vis="${val}" data-id="${id}" class="${v === val ? "on" : ""}" aria-pressed="${v === val}">${label}</button>`;
     return `<div class="frow ${v === "hidden" ? "is-hidden" : ""} ${main ? "variant-row" : ""}" ${main ? `data-sort-id="${id}"` : ""}>
       <div class="order-top"><div><h3>${esc(f.flavor)}</h3><p class="sub">${main ? "Variant of " + esc(main.flavor) + ", " : ""}${peso(f.price)}${f.batch ? ", " + esc(f.batch) : ""}</p></div>
-        <div class="row-end">${v === "hidden" ? '<span class="tag">Hidden</span>' : v === "soon" ? '<span class="tag soon">Coming soon</span>' : ""}
+        <div class="row-end">${!main && ownerDrops.on ? dropTag(f.id) : ""}${v === "hidden" ? '<span class="tag">Hidden</span>' : v === "soon" ? '<span class="tag soon">Coming soon</span>' : ""}
         ${canMove ? dragHandle(main ? "variant-row" : "fgroup", f.id, f.flavor) : ""}</div></div>
       <p class="sub" style="margin-top:6px">${f.stock} on hand, ${f.reserved} reserved by orders, ${l} left to order</p>
       ${f.cost !== null && f.cost !== undefined ? `<p class="sub">Costs ${peso(f.cost)} each, so ${peso(+(f.price - f.cost).toFixed(2))} profit per cookie</p>` : '<p class="sub">No cost yet. Add one with Edit to see profit.</p>'}
@@ -1196,6 +1552,11 @@ function flavorRow(f, canMove) {
     </div>`;
 }
 
+function dropTag(id) {
+  const cur = ownerDrops.drops.find(x => x.id === ownerDrops.current), nxt = ownerDrops.drops.find(x => x.id === ownerDrops.next);
+  return cur && cur.flavors.includes(id) ? '<span class="tag t-live">In this drop</span>'
+       : nxt && nxt.flavors.includes(id) ? '<span class="tag t-next">Next drop</span>' : "";
+}
 function renderShopSwitch() {
   const box = $("shop-state"), open = ownerShop.open !== false;
   const ae = document.activeElement;
@@ -1215,33 +1576,245 @@ function renderShopSwitch() {
       <button class="btn" data-act="shop-msg">Save</button></div></div>`}`);
 }
 
-// Adds up every open order (pending and delayed) by flavor.
-function renderBakeList(active) {
+// ---------- Baking clipboard (owner) ----------
+let ownerActive = [], ownerBaked = {}, bakeDay = null, bakeTimer = null, bakeVer = 0, bakeSaving = 0, bakeResetArmed = false;
+const bakePending = new Set();
+const CHECK_SVG = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 10.5 3.2 3.2L15 6.6"/></svg>';
+const bakeFor = day => day === "all" ? "all open orders" : day === "none" ? "orders with no delivery date" : dayLabel(day);
+
+// Adds up open orders (pending and delayed) for one day, by cookie, with how many are baked.
+function bakeNeed(day) {
+  const list = ownerActive.filter(o => day === "all" || (day === "none" ? !o.deliverOn : o.deliverOn === day));
   const need = new Map();
-  active.forEach(o => parseItems(o.items).forEach(i => {
-    const key = String(i.id), cur = need.get(key) || { name: i.flavor, qty: 0 };
-    const now = ownerFl.find(f => f.id === key);
+  list.forEach(o => parseItems(o.items).forEach(i => {
+    const id = String(i.id), cur = need.get(id) || { id, name: i.flavor, qty: 0 };
+    const now = ownerFl.find(f => f.id === id);
     if (now) cur.name = ownerName(now);
     cur.qty += Number(i.qty) || 0;
-    need.set(key, cur);
+    need.set(id, cur);
   }));
-  const list = [...need.values()].filter(x => x.qty > 0).sort((a, b) => b.qty - a.qty);
-  const total = list.reduce((s, x) => s + x.qty, 0);
-  const forWhat = orderDay === "all" ? "Everything in open orders, pending and delayed."
-    : orderDay === "none" ? "Open orders without a delivery date." : "Orders for " + dayLabel(orderDay) + ".";
-  paint($("bake"), list.length ? `<div class="box bake">
-      <div class="order-top"><h2>Baking list</h2><span class="bake-total">${plural(total, "cookie", "cookies")}
-        <button class="btn small" data-act="copy-bake" style="min-height:30px;margin-left:6px;padding:0 12px">Copy</button></span></div>
-      <p class="sub">${esc(forWhat)}</p>
-      <ul class="lines">${list.map(x => `<li><span>${esc(x.name)}</span><strong>${x.qty}</strong></li>`).join("")}</ul>
-      ${boxNeed(active)}
-    </div>` : "");
+  const done = ownerBaked[day] || {};
+  const rows = [...need.values()].filter(x => x.qty > 0).sort((a, b) => b.qty - a.qty || a.name.localeCompare(b.name));
+  rows.forEach(x => (x.baked = Math.min(x.qty, Number(done[x.id]) || 0)));
+  const total = rows.reduce((t, x) => t + x.qty, 0), baked = rows.reduce((t, x) => t + x.baked, 0);
+  return { orders: list, rows, total, baked };
 }
+function boxCounts(list) {
+  const need = new Map();
+  list.forEach(o => { if (o.box) need.set(o.box.name, (need.get(o.box.name) || 0) + (Number(o.box.qty) || 0)); });
+  return [...need].map(([n, q]) => q + " " + n).join(", ");
+}
+
+function renderBake() {
+  const fab = $("bake-fab"), show = isOwnerView() && !!token;
+  fab.classList.toggle("hidden", !show);
+  if (!show) return;
+  // First time: the next delivery day that has orders, else everything.
+  if (bakeDay === null) {
+    const t = todayYmd(), days = [...new Set(ownerActive.map(o => o.deliverOn).filter(Boolean))].sort();
+    bakeDay = days.find(d => d >= t) || "all";
+  }
+  const B = bakeNeed(bakeDay), left = B.total - B.baked, badge = $("bake-badge");
+  badge.classList.toggle("hidden", !B.total);
+  badge.classList.toggle("done", B.total > 0 && !left);
+  badge.textContent = left ? left : "✓";
+  fab.setAttribute("aria-label", "Baking list" + (B.total ? ", " + plural(left, "cookie", "cookies") + " left to bake" : ""));
+  if (!$("bake-sheet").open) return;
+
+  // Day chips: everything, each delivery day with open orders, no date, and any date you picked.
+  const counts = new Map();
+  ownerActive.forEach(o => { const k = o.deliverOn || "none"; counts.set(k, (counts.get(k) || 0) + 1); });
+  const days = [...counts.keys()].filter(k => k !== "none");
+  if (/^\d{4}-/.test(bakeDay) && !days.includes(bakeDay)) days.push(bakeDay);
+  days.sort();
+  const t = todayYmd();
+  const chip = (v, label, n, late) => `<button class="chip ${bakeDay === v ? "on" : ""} ${late ? "late" : ""}" data-act="bake-day" data-id="${v}" aria-pressed="${bakeDay === v}">${esc(label)}${n !== undefined ? `<span>${n}</span>` : ""}</button>`;
+  paint($("bake-days"), chip("all", "All open", ownerActive.length) +
+    days.map(d => chip(d, (d < t && counts.has(d) ? "Late: " : "") + (d === t ? "Today" : dayLabel(d)), counts.get(d) || 0, d < t && counts.has(d))).join("") +
+    (counts.has("none") ? chip("none", "No date", counts.get("none")) : ""));
+  const di = $("bake-date");
+  if (document.activeElement !== di) di.value = /^\d{4}-/.test(bakeDay) ? bakeDay : "";
+
+  // Rows are drawn once per day/cookie list, then updated in place so the bars can slide.
+  const body = $("bake-body"), shape = bakeDay + "|" + B.rows.map(x => x.id + ":" + x.name).join(",");
+  if (body._shape !== shape) {
+    body._shape = shape;
+    body.innerHTML = B.rows.length ? `<div class="bake-sum"><div class="bake-big"><b data-b="big"></b><span data-b="lbl"></span></div>
+        <p class="sub" data-b="sub"></p><div class="meter"><i data-b="bar"></i></div></div>
+      <ul class="bake-rows">${B.rows.map(x => `<li class="brow" data-bake-id="${esc(x.id)}">
+        <button class="bcheck" data-act="bake-check" data-id="${esc(x.id)}">${CHECK_SVG}</button>
+        <div class="bname"><strong>${esc(x.name)}</strong><span class="sub" data-b="txt"></span><div class="meter small"><i data-b="bar"></i></div></div>
+        <div class="stepper sm"><button data-act="bake-dec" data-id="${esc(x.id)}" aria-label="One less ${esc(x.name)} baked">−</button><span data-b="n"></span><button data-act="bake-inc" data-id="${esc(x.id)}" aria-label="One more ${esc(x.name)} baked">+</button></div>
+      </li>`).join("")}</ul>
+      <p class="sub" data-b="boxes" style="margin-top:12px"></p>
+      <div class="actions"><button class="btn grow" data-act="copy-bake">Copy list</button><button class="btn ghost danger" data-act="bake-reset" data-b="reset"></button></div>`
+      : `<p class="empty">Nothing to bake for ${esc(bakeFor(bakeDay))}.</p>`;
+  }
+  if (!B.rows.length) return;
+  const set = (el, v) => { if (el.textContent !== String(v)) el.textContent = v; };
+  const q = k => body.querySelector(`[data-b="${k}"]`);
+  set(q("big"), left ? left : "All baked");
+  set(q("lbl"), left ? (left === 1 ? "cookie left" : "cookies left") : "");
+  set(q("sub"), B.baked + " of " + B.total + " baked for " + bakeFor(bakeDay) + ", " + plural(B.orders.length, "order", "orders") + ".");
+  q("bar").style.width = (B.total ? B.baked / B.total * 100 : 0) + "%";
+  q("bar").parentElement.classList.toggle("done", !left);
+  const bx = boxCounts(B.orders);
+  set(q("boxes"), bx ? "Boxes to get ready: " + bx : "");
+  set(q("reset"), bakeResetArmed ? "Tap again to reset" : "Reset");
+  B.rows.forEach(x => {
+    const li = body.querySelector(`[data-bake-id="${CSS.escape(x.id)}"]`); if (!li) return;
+    const done = x.baked >= x.qty, b = sel => li.querySelector(sel);
+    li.classList.toggle("done", done);
+    b(".bcheck").setAttribute("aria-pressed", done);
+    b(".bcheck").setAttribute("aria-label", done ? "Unmark " + x.name : "Mark all " + x.qty + " " + x.name + " baked");
+    set(b('[data-b="txt"]'), done ? "All " + x.qty + " baked" : x.baked ? x.baked + " of " + x.qty + " baked, " + (x.qty - x.baked) + " left" : x.qty + " to bake");
+    b('[data-b="bar"]').style.width = (x.baked / x.qty * 100) + "%";
+    set(b('[data-b="n"]'), x.baked);
+    b('[data-act="bake-dec"]').setAttribute("aria-disabled", x.baked <= 0);
+    b('[data-act="bake-inc"]').setAttribute("aria-disabled", done);
+  });
+}
+// Saves taps half a second after the last one, so quick tapping is one save.
+function setBakedCount(id, n) {
+  const key = bakeDay, counts = Object.assign({}, ownerBaked[key] || {});
+  if (n > 0) counts[id] = n; else delete counts[id];
+  ownerBaked = Object.assign({}, ownerBaked, { [key]: counts });
+  bakeVer++;
+  bakePending.add(key);
+  clearTimeout(bakeTimer);
+  bakeTimer = setTimeout(flushBaked, 500);
+  renderBake();
+}
+async function flushBaked() {
+  clearTimeout(bakeTimer);
+  bakeTimer = null;
+  const keys = [...bakePending];
+  bakePending.clear();
+  if (!keys.length) return;
+  bakeSaving++;
+  try {
+    for (const key of keys) {
+      const d = await api({ action: "setBaked", key, counts: ownerBaked[key] || {} });
+      if (d.error) toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
+    }
+  } catch (_) {
+    toast("Couldn't save baking progress. Check your connection.");
+  } finally {
+    bakeSaving--;
+    bakeVer++;
+  }
+}
+document.addEventListener("visibilitychange", () => { if (document.hidden && bakeTimer) flushBaked(); });
 function bakeText() {
-  const head = "Baking list" + (orderDay !== "all" && orderDay !== "none" ? " for " + dayLabel(orderDay) : "");
-  const lines = [...$("bake").querySelectorAll("li")].map(li => li.querySelector("strong").textContent + " " + li.querySelector("span").textContent);
-  const boxes = $("bake").querySelector("p:last-child strong") ? $("bake").querySelector("p:last-child").textContent : "";
-  return [head, ...lines, boxes].filter(Boolean).join("\n");
+  const B = bakeNeed(bakeDay);
+  const head = "Baking list" + (bakeDay === "all" ? "" : bakeDay === "none" ? " (no delivery date)" : " for " + dayLabel(bakeDay));
+  const lines = B.rows.map(x => x.qty + " " + x.name + (x.baked >= x.qty ? " ✓" : x.baked ? " (" + (x.qty - x.baked) + " left)" : ""));
+  const bx = boxCounts(B.orders);
+  return [head, ...lines, "Total " + B.total + (B.baked ? ", " + (B.total - B.baked) + " left" : ""), bx ? "Boxes: " + bx : ""].filter(Boolean).join("\n");
+}
+
+// ---------- Weekly drops (owner) ----------
+let ownerDrops = { on: false, drops: [], current: null, next: null }, dropDraft = null, dropDelArmed = null;
+const DAY_MS = 86400000;
+const dropName = x => x.name || "Drop on " + new Date(x.at).toLocaleDateString("en-PH", { month: "short", day: "numeric" });
+const dropStatus = x => x.id === ownerDrops.current ? "live" : x.id === ownerDrops.next ? "next" : x.at > serverNow() ? "later" : "ended";
+function relTime(ms) {
+  const a = Math.abs(ms), d = Math.floor(a / DAY_MS), h = Math.floor(a % DAY_MS / 3600000), m = Math.floor(a % 3600000 / 60000);
+  const txt = d ? plural(d, "day", "days") + (h ? " " + plural(h, "hr", "hrs") : "")
+    : h ? plural(h, "hr", "hrs") + (m ? " " + m + " min" : "") : Math.max(1, m) + " min";
+  return ms > 0 ? "starts in " + txt : "started " + txt + " ago";
+}
+const toLocalInput = ms => {
+  const d = new Date(ms), z = n => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}T${z(d.getHours())}:${z(d.getMinutes())}`;
+};
+const fromLocalInput = v => { const t = new Date(v).getTime(); return isNaN(t) ? 0 : t; };
+// A week after the latest drop (moved ahead week by week until it's in the future), else the next full hour.
+function suggestStart() {
+  const last = ownerDrops.drops.reduce((m, x) => Math.max(m, x.at), 0), now = serverNow();
+  if (!last) { const d = new Date(now + 3600000); d.setMinutes(0, 0, 0); return d.getTime(); }
+  let at = last + 7 * DAY_MS;
+  while (at <= now) at += 7 * DAY_MS;
+  return at;
+}
+function dropChips(ids) {
+  return ids.map(id => ownerFl.find(f => f.id === id)).filter(Boolean).map(f =>
+    `<span class="${visOf(f) === "hidden" ? "off" : ""}" ${visOf(f) === "hidden" ? 'title="Hidden, so it stays off the menu"' : ""}>${esc(f.flavor)}</span>`).join("");
+}
+const STATUS_TAG = { live: '<span class="tag t-live">Live now</span>', next: '<span class="tag t-next">Up next</span>',
+                     later: '<span class="tag t-later">Later</span>', ended: '<span class="tag t-ended">Ended</span>' };
+function renderDrops() {
+  const D = ownerDrops, list = D.drops || [];
+  const cur = list.find(x => x.id === D.current), nxt = list.find(x => x.id === D.next);
+  $("rot-note").classList.toggle("hidden", !D.on);
+  const box = $("rot-box");
+  box.className = "state-box" + (D.on ? " on-now" : "");
+  paint(box, `<div class="state"><div class="state-text"><span class="state-dot ${D.on ? "" : "off"}"></span>
+      <div><strong>${D.on ? "Weekly drops are on" : "Weekly drops are off"}</strong>
+      <p class="sub">${D.on
+        ? (cur ? "Customers can order " + esc(dropName(cur)) + "." : "No drop is live yet, so the menu is empty until the first one starts.") +
+          (nxt ? " The countdown to " + esc(dropName(nxt)) + " is showing." : " Plan the next drop so customers see a countdown.")
+        : "Customers see every cookie set to On menu. Turn drops on and the menu changes by itself when each drop starts."}</p></div></div>
+      ${D.on ? '<button class="btn small" data-act="rot-toggle" data-id="off">Turn off</button>'
+             : '<button class="btn small primary" data-act="rot-toggle" data-id="on">Turn on</button>'}</div>`);
+
+  if (!dropDraft) paint($("drop-form"), (list.length ? "" : `<div class="how"><strong>How weekly drops work</strong><ol>
+      <li>Plan a drop: pick its cookies and when it starts.</li>
+      <li>Turn weekly drops on.</li>
+      <li>When a drop starts, its cookies become the menu by themselves. Customers see a countdown to the next one.</li></ol></div>`) +
+    '<button class="btn primary wide" data-act="dr-new" style="margin-bottom:22px">Plan a drop</button>');
+
+  const now = serverNow();
+  const live = list.filter(x => x.id === D.current);
+  const upcoming = list.filter(x => x.at > now && x.id !== D.current).sort((a, b) => a.at - b.at);
+  const ended = list.filter(x => x.at <= now && x.id !== D.current).sort((a, b) => b.at - a.at);
+  const card = x => {
+    const st = dropStatus(x), id = esc(x.id);
+    return `<article class="drop-card is-${st}">
+      <div class="order-top"><div><h3>${esc(dropName(x))}</h3><p class="sub">${esc(dropWhen(x.at))}, ${relTime(x.at - now)}</p></div>${STATUS_TAG[st]}</div>
+      <div class="mini-chips">${dropChips(x.flavors) || '<span class="off">No cookies</span>'}</div>
+      <div class="actions">
+        ${st === "ended" ? "" : `<button class="btn small" data-act="dr-edit" data-id="${id}">Edit</button>`}
+        <button class="btn small" data-act="dr-again" data-id="${id}">Plan again</button>
+        <button class="btn small ghost danger" data-act="dr-del" data-id="${id}">${dropDelArmed === x.id ? "Tap again to delete" : "Delete"}</button>
+      </div></article>`;
+  };
+  paint($("drop-list"), (live.length || upcoming.length ? '<p class="section-label">Live and upcoming</p>' + live.concat(upcoming).map(card).join("") : "") +
+    (ended.length ? '<p class="section-label">Ended</p>' + ended.map(card).join("") : ""));
+}
+function readDropDraft() {
+  if (!dropDraft || !$("dr-name")) return;
+  dropDraft.name = $("dr-name").value.trim();
+  dropDraft.at = fromLocalInput($("dr-at").value);
+}
+function renderDropForm() {
+  const d = dropDraft;
+  if (!d) { $("drop-form")._html = null; renderDrops(); return; }
+  const mains = ownerFl.filter(f => !ownerMain(f)), cur = ownerDrops.drops.find(x => x.id === ownerDrops.current);
+  const note = f => visOf(f) === "hidden" ? "<small>hidden</small>" : visOf(f) === "soon" ? "<small>soon</small>" : "";
+  paint($("drop-form"), `<div class="box drop-form">
+    <h2>${d.id ? "Edit drop" : "Plan a drop"}</h2>
+    <label class="field"><span>Name customers see</span><input id="dr-name" maxlength="40" placeholder="Week 3, Holiday drop" value="${esc(d.name)}"></label>
+    <label class="field"><span>Starts</span><input type="datetime-local" id="dr-at" value="${d.at ? toLocalInput(d.at) : ""}"></label>
+    <div class="quick"><button class="btn" type="button" data-act="dr-week">A week after the last drop</button><button class="btn" type="button" data-act="dr-now">Start now</button></div>
+    <div class="field"><span>Cookies in this drop (${d.flavors.length} picked)</span>
+      <div class="pick-grid">${mains.map(f => `<button type="button" class="chip ${d.flavors.includes(f.id) ? "on" : ""}" data-act="dr-pick" data-id="${esc(f.id)}" aria-pressed="${d.flavors.includes(f.id)}">${esc(f.flavor)}${note(f)}</button>`).join("") || '<span class="sub">Add flavors first.</span>'}</div>
+      <div class="quick">${cur && cur.id !== d.id ? '<button class="btn" type="button" data-act="dr-same">Same as the live drop</button>' : ""}
+        <button class="btn" type="button" data-act="dr-all">Pick all</button><button class="btn" type="button" data-act="dr-clear">Clear</button></div>
+    </div>
+    <p class="sub">Variants come along with their cookie. A cookie set to Hidden stays off the menu even in a drop, so you can pull one if you run out.</p>
+    <p class="msg" id="dr-msg" role="status"></p>
+    <div class="actions"><button class="btn primary grow" data-act="dr-save">Save drop</button><button class="btn" data-act="dr-cancel">Cancel</button></div>
+  </div>`);
+}
+async function saveDrops(on, drops, okMsg) {
+  const d = await api({ action: "setDrops", on, drops });
+  if (d.error) { toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error); return false; }
+  ownerDrops = d.drops;
+  if (okMsg) toast(okMsg, 3200);
+  renderDrops();
+  renderFlavorList();
+  return true;
 }
 
 // Delivery-date chips above open orders: All, then each date with its count.
@@ -1320,13 +1893,6 @@ function renderDlEditor() {
       <div>${d.off.map(x => `<span class="off-chip">${esc(dayLabel(x))}<button type="button" data-act="dl-off-rm" data-id="${x}" aria-label="Remove ${esc(dayLabel(x))}">×</button></span>`).join("")}</div>
     </div>
     <div class="actions"><button class="btn primary" data-act="dl-save">Save delivery dates</button><button class="btn" data-act="dl-cancel">Cancel</button></div>`);
-}
-
-// "Boxes to get ready: 5 Kraft box, 1 Gift box"
-function boxNeed(active) {
-  const need = new Map();
-  active.forEach(o => { if (o.box) need.set(o.box.name, (need.get(o.box.name) || 0) + (Number(o.box.qty) || 0)); });
-  return need.size ? `<p class="sub" style="margin-top:10px"><strong>Boxes to get ready:</strong> ${[...need].map(([n, q]) => q + " " + esc(n)).join(", ")}</p>` : "";
 }
 
 // ---------- Boxes (owner) ----------
@@ -1599,7 +2165,7 @@ const VIS_TOAST = { menu: " is on the menu.", soon: " is under Coming soon.", hi
 
 function showTab(t) {
   tab = t;
-  ["orders", "history", "payments", "flavors"].forEach(x => $("tab-" + x).classList.toggle("hidden", x !== t));
+  ["orders", "drops", "flavors", "history", "payments"].forEach(x => $("tab-" + x).classList.toggle("hidden", x !== t));
   if (t === "payments" && !payLoaded) loadPayment().catch(() => {});
   document.querySelectorAll("#owner-tabs button").forEach(b => b.classList.toggle("on", b.dataset.id === t));
   placePill($("owner-tabs"));
@@ -1625,10 +2191,7 @@ $("unlock").onclick = async () => {
     $("token").value = "";
     $("login-msg").textContent = "";
     route();
-    orders = d.orders || []; ownerFl = d.flavors || []; ownerShop = d.shop || ownerShop; ownerBoxes = d.boxes || ownerBoxes;
-    ownerDelivery = d.delivery || ownerDelivery;
-    ownerCats = d.categories || ownerCats;
-    renderOwner();
+    applyOwner(d, bakeVer);
   } catch (_) {
     token = "";
     $("login-msg").textContent = "Couldn't reach the shop. Check your connection.";
@@ -1637,6 +2200,7 @@ $("unlock").onclick = async () => {
 $("token").addEventListener("keydown", e => { if (e.key === "Enter") $("unlock").click(); });
 
 document.addEventListener("change", e => {
+  if (e.target.id === "bake-date") { if (e.target.value) { bakeDay = e.target.value; bakeResetArmed = false; renderBake(); } return; }
   if (e.target.dataset && e.target.dataset.deliver) { changeDeliverOn(e.target.dataset.deliver, e.target.value); return; }
   if (e.target.id === "f-parent") { renderFormCats(); return; }
   if (e.target.name === "box") { boxChoice = e.target.value; renderCart(); return; }
@@ -2044,6 +2608,7 @@ const acts = {
     await loadShop();
   },
   ctab(id) { showCTab(id); },
+  "confirm-close"() { $("confirm").close(); },
   cat(id) { catPick = id; renderCatChips(); renderMenu(); renderSoon(); },
   "order-again"(id) {
     const o = mine.find(x => x.id === id); if (!o) return;
@@ -2070,9 +2635,9 @@ const acts = {
 
   tab(id) { showTab(id); },
   async "set-status"(id, b) {
-    const o = orders.find(x => x.id === id); if (!o) return;
-    await api({ action: "updateOrder", id, status: b.dataset.status, note: noteDraft[id] ?? o.note ?? "" });
-    await loadOwner();
+    const o = orders.find(x => x.id === id); if (!o || (o.status || "pending") === b.dataset.status) return;
+    const status = b.dataset.status;
+    await ownerWrite(() => { o.status = status; }, { action: "updateOrder", id, status, note: noteDraft[id] ?? o.note ?? "" });
   },
   async "save-note"(id) {
     const o = orders.find(x => x.id === id); if (!o) return;
@@ -2082,18 +2647,14 @@ const acts = {
   },
   async complete(id) {
     const o = orders.find(x => x.id === id); if (!o) return;
-    const d = await api({ action: "updateOrder", id, status: "completed", note: noteDraft[id] ?? o.note ?? "" });
-    if (d.error) return toast(d.error);
-    delete noteDraft[id];
-    toast("Completed. Moved to History.");
-    await loadOwner();
+    const note = noteDraft[id] ?? o.note ?? "";
+    await ownerWrite(() => { o.status = "completed"; o.completedAt = new Date().toISOString(); o.note = note; delete noteDraft[id]; },
+      { action: "updateOrder", id, status: "completed", note }, "Completed. It's in Sales now.");
   },
   async "del-order"(id) {
     if (delArmed !== id) { delArmed = id; $("orders")._html = null; return renderOwner(); }
     delArmed = null;
-    await api({ action: "deleteOrder", id });
-    toast("Order deleted.");
-    await loadOwner();
+    await ownerWrite(() => { orders = orders.filter(x => x.id !== id); }, { action: "deleteOrder", id }, "Order deleted.");
   },
   "receipt-owner"(id) { const o = orders.find(x => x.id === id); if (o) showReceipt(o, true); },
   async "r-reopen"() {
@@ -2133,12 +2694,8 @@ const acts = {
   },
   async "toggle-paid"(id) {
     const o = orders.find(x => x.id === id); if (!o) return;
-    const d = await api({ action: "setPaid", id, paid: !o.paid });
-    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
-    o.paid = !o.paid;
-    toast(o.name + (o.paid ? " marked paid." : " marked unpaid."));
-    renderOwner();
-    await loadOwner();
+    const paid = !o.paid;
+    await ownerWrite(() => { o.paid = paid; }, { action: "setPaid", id, paid }, o.name + (paid ? " marked paid." : " marked unpaid."));
   },
   async "paid-all"() {
     const ids = orders.filter(o => o.status !== "cancelled" && !o.paid).map(o => o.id);
@@ -2177,11 +2734,8 @@ const acts = {
     const f = ownerFl.find(x => x.id === id); if (!f) return;
     const v = b.dataset.vis;
     if (visOf(f) === v) return;
-    const d = await api({ action: "setVisibility", id, visibility: v });
-    if (d.error) return toast(d.error === "Unknown action" ? "Update the Apps Script first." : d.error);
-    toast(f.flavor + VIS_TOAST[v]);
     photosAt = 0;
-    await loadOwner();
+    await ownerWrite(() => { f.visibility = v; }, { action: "setVisibility", id, visibility: v }, f.flavor + VIS_TOAST[v]);
   },
   "edit-flavor"(id) {
     const f = ownerFl.find(x => x.id === id); if (!f) return;
@@ -2211,6 +2765,93 @@ const acts = {
   "form-vis"(v) { setFormVis(v); },
   "cancel-flavor-edit"() { clearFlavorForm(); $("save-msg").textContent = ""; },
   day(id) { orderDay = id; $("orders")._html = null; renderOwner(); },
+  "bake-open"() {
+    bakeResetArmed = false;
+    $("bake-sheet").showModal();
+    $("bake-body")._shape = null;
+    renderBake();
+  },
+  "bake-close"() { $("bake-sheet").close(); },
+  "bake-day"(id) { bakeDay = id; bakeResetArmed = false; renderBake(); },
+  "bake-check"(id) {
+    const x = bakeNeed(bakeDay).rows.find(r => r.id === id); if (!x) return;
+    setBakedCount(id, x.baked >= x.qty ? 0 : x.qty);
+    if (x.baked < x.qty) pop(document.querySelector(`[data-bake-id="${CSS.escape(id)}"] .bcheck`));
+  },
+  "bake-inc"(id) { const x = bakeNeed(bakeDay).rows.find(r => r.id === id); if (x && x.baked < x.qty) setBakedCount(id, x.baked + 1); },
+  "bake-dec"(id) { const x = bakeNeed(bakeDay).rows.find(r => r.id === id); if (x && x.baked > 0) setBakedCount(id, x.baked - 1); },
+  "bake-reset"() {
+    if (!bakeResetArmed) { bakeResetArmed = true; return renderBake(); }
+    bakeResetArmed = false;
+    ownerBaked = Object.assign({}, ownerBaked, { [bakeDay]: {} });
+    bakeVer++;
+    bakePending.add(bakeDay);
+    flushBaked();
+    renderBake();
+    toast("Progress reset.");
+  },
+  async "rot-toggle"(id) {
+    const on = id === "on";
+    if (on && !ownerDrops.drops.length) { toast("Plan a drop first, then turn weekly drops on."); return acts["dr-new"](); }
+    await saveDrops(on, ownerDrops.drops, on ? "Weekly drops are on. The menu follows the live drop." : "Weekly drops are off. Customers see every cookie set to On menu.");
+  },
+  "dr-new"() { dropDraft = { id: "", name: "", at: suggestStart(), flavors: [] }; renderDropForm(); $("dr-name").focus(); },
+  "dr-edit"(id) {
+    const x = ownerDrops.drops.find(d => d.id === id); if (!x) return;
+    dropDraft = { id: x.id, name: x.name, at: x.at, flavors: x.flavors.slice() };
+    renderDropForm();
+    $("drop-form").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  },
+  "dr-again"(id) {
+    const x = ownerDrops.drops.find(d => d.id === id); if (!x) return;
+    dropDraft = { id: "", name: "", at: suggestStart(), flavors: x.flavors.slice() };
+    renderDropForm();
+    $("drop-form").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  },
+  "dr-pick"(id) {
+    readDropDraft();
+    const i = dropDraft.flavors.indexOf(id);
+    if (i === -1) dropDraft.flavors.push(id); else dropDraft.flavors.splice(i, 1);
+    renderDropForm();
+  },
+  "dr-same"() {
+    readDropDraft();
+    const cur = ownerDrops.drops.find(x => x.id === ownerDrops.current);
+    if (cur) dropDraft.flavors = cur.flavors.filter(id => ownerFl.some(f => f.id === id));
+    renderDropForm();
+  },
+  "dr-all"() { readDropDraft(); dropDraft.flavors = ownerFl.filter(f => !ownerMain(f) && visOf(f) !== "hidden").map(f => f.id); renderDropForm(); },
+  "dr-clear"() { readDropDraft(); dropDraft.flavors = []; renderDropForm(); },
+  "dr-week"() { readDropDraft(); const keep = dropDraft.id; dropDraft.at = (() => {
+      const others = ownerDrops.drops.filter(x => x.id !== keep), last = others.reduce((m, x) => Math.max(m, x.at), 0);
+      if (!last) return suggestStart();
+      let at = last + 7 * DAY_MS; while (at <= serverNow()) at += 7 * DAY_MS; return at; })();
+    renderDropForm(); },
+  "dr-now"() { readDropDraft(); dropDraft.at = serverNow(); renderDropForm(); },
+  "dr-cancel"() { dropDraft = null; renderDropForm(); },
+  async "dr-save"() {
+    readDropDraft();
+    const d = dropDraft, msg = $("dr-msg");
+    if (!d.at) { msg.textContent = "Pick when this drop starts."; return $("dr-at").focus(); }
+    if (!d.flavors.length) { msg.textContent = "Pick at least one cookie."; return; }
+    const clash = ownerDrops.drops.find(x => x.id !== d.id && Math.abs(x.at - d.at) < 60000);
+    if (clash) { msg.textContent = dropName(clash) + " starts at the same time. Pick a different time."; return; }
+    msg.textContent = "Saving…";
+    const item = { name: d.name, at: d.at, flavors: d.flavors };
+    if (d.id) item.id = d.id;
+    const list = ownerDrops.drops.filter(x => x.id !== d.id).concat([item]);
+    const first = !ownerDrops.on && !ownerDrops.drops.length;
+    const ok = await saveDrops(ownerDrops.on, list, first ? "Drop saved. Turn weekly drops on when you're ready." : d.id ? "Drop updated." : "Drop planned.");
+    if (!ok) { if ($("dr-msg")) $("dr-msg").textContent = ""; return; }
+    dropDraft = null;
+    renderDropForm();
+  },
+  async "dr-del"(id) {
+    if (dropDelArmed !== id) { dropDelArmed = id; return renderDrops(); }
+    dropDelArmed = null;
+    const list = ownerDrops.drops.filter(x => x.id !== id);
+    await saveDrops(ownerDrops.on && list.length > 0, list, ownerDrops.on && !list.length ? "Drop deleted. Weekly drops are off now." : "Drop deleted.");
+  },
   async "copy-bake"() {
     try { await navigator.clipboard.writeText(bakeText()); toast("Baking list copied."); }
     catch (_) { toast("Couldn't copy on this browser."); }
@@ -2330,6 +2971,9 @@ document.addEventListener("click", async e => {
 /* ---------------- Start ---------------- */
 function route() {
   const owner = isOwnerView();
+  document.body.classList.toggle("owner-mode", owner && !!token);
+  $("bake-fab").classList.toggle("hidden", !(owner && token));
+  if (!(owner && token) && $("bake-sheet").open) $("bake-sheet").close();
   $("shop").classList.toggle("hidden", owner);
   $("admin").classList.toggle("hidden", !owner);
   $("lede").innerHTML = !owner
@@ -2358,13 +3002,25 @@ async function tick() {
   busy = true;
   try {
     if (!isOwnerView()) await loadShop();
-    else if (token) await loadOwner();
+    else if (token && !ownWrites) await loadOwner();
   } catch (_) {
     setLive(false);
   } finally {
     busy = false;
   }
 }
+
+// Show last visit's menu right away, then refresh it.
+(function warmStart() {
+  if (isOwnerView()) return;
+  try {
+    const ph = JSON.parse(localStorage.getItem("shopPhotos:v1") || "null");
+    if (ph) { photos = ph; photosAt = Date.now() - 25000; }
+    const c = JSON.parse(localStorage.getItem("shopCache:v1") || "null");
+    if (c) { cacheStr = JSON.stringify(c); applyShop(c, null); $("live-text").textContent = "Updating…"; }
+  } catch (_) {}
+  if (!loaded) renderMenu();
+})();
 
 route();
 tick();
