@@ -235,6 +235,25 @@ select:disabled{opacity:.5;cursor:default}
 }
 @keyframes sheet-up{from{transform:translateY(100%)}}
 
+/* Photos in the owner view */
+.vh,.field input.vh{position:absolute;width:1px;height:1px;min-height:0;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.photo-box{display:flex;align-items:center;gap:14px;padding:12px;border-radius:16px;background:var(--flour)}
+.photo-box.removing{background:#fdecea}
+.photo-box.removing #photo-text{color:var(--danger)}
+.photo-thumb{display:grid;place-items:center;flex-shrink:0;width:76px;height:76px;overflow:hidden;border-radius:14px;background:var(--paper);font-size:34px}
+.photo-thumb img{width:100%;height:100%;object-fit:cover}
+.photo-info{flex:1;min-width:0}
+.photo-info p{font-size:14px;line-height:1.4}
+.photo-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.photo-btns label{cursor:pointer}
+.photo-btns .btn{min-height:34px;padding:0 13px;background:var(--paper)}
+#f-photo:focus-visible + .photo-box #photo-pick{outline:2px solid var(--ink);outline-offset:2px}
+.ftitle{display:flex;align-items:center;gap:12px;min-width:0}
+.fthumb{display:grid;place-items:center;flex-shrink:0;width:46px;height:46px;overflow:hidden;border-radius:12px;background:var(--flour);font-size:22px}
+.fthumb img{width:100%;height:100%;object-fit:cover}
+.variant-row .fthumb{width:38px;height:38px;font-size:18px}
+.sorting .fthumb{display:none}
+
 /* Confirming your order */
 #confirm{width:min(340px,calc(100% - 40px))}
 .confirm-box{padding:28px 22px 24px;border-radius:26px;background:var(--paper);text-align:center}
@@ -666,7 +685,15 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
           </div>
           <label class="field"><span>Batch</span><input id="f-batch" placeholder="Nov 14 pickup"></label>
           <label class="field"><span>Description</span><textarea id="f-desc" placeholder="Toasted marshmallow, graham and chocolate"></textarea></label>
-          <label class="field"><span>Photo</span><input id="f-photo" type="file" accept="image/*"></label>
+          <div class="field"><span id="photo-label">Photo</span>
+            <input id="f-photo" class="vh" type="file" accept="image/*" aria-labelledby="photo-label">
+            <div class="photo-box" id="photo-box">
+              <div class="photo-thumb" id="photo-thumb"></div>
+              <div class="photo-info"><p id="photo-text"></p>
+                <div class="photo-btns"><label class="btn small" for="f-photo" id="photo-pick">Choose photo</label><button type="button" class="btn small danger hidden" data-act="photo-rm" id="photo-rm-btn"></button></div>
+              </div>
+            </div>
+          </div>
           <div class="field"><span id="vis-label">Show this flavor</span>
             <div class="seg" role="group" aria-labelledby="vis-label" id="f-vis">
               <button type="button" data-act="form-vis" data-id="menu" class="on" aria-pressed="true">On menu</button>
@@ -732,7 +759,7 @@ dialog::backdrop{background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(3px);ba
 
 <script>
 // Paste your Apps Script Web app URL here.
-const API = "https://script.google.com/macros/s/AKfycbyP0g4pq8T5cnpISSNrlsjFxZEyAnCIpdGKQHJnLrgsI1gOLvxhRRMINLRW51AYd-28-g/exec";
+const API = "https://script.google.com/macros/s/AKfycbzMpi-5xSZUzYIIe4elofmF8bIPnqxBB7umD7RYLjQn71oazTbQMXdbNsJ17gXCKh15dA/exec";
 // Your shop name, shown at the top and on receipts.
 const SHOP_NAME = "Cookie Pre-Order";
 
@@ -1443,6 +1470,7 @@ function applyOwner(d, bv) {
   if (d.baked && bv === bakeVer && !bakeTimer && !bakeSaving) ownerBaked = d.baked;
   ownerShop = d.shop || ownerShop;
   ownerPay = d.pay || ownerPay;
+  checkOwnerPhotos();
   renderOwner();
 }
 
@@ -1535,7 +1563,7 @@ function flavorRow(f, canMove) {
     const id = esc(f.id), l = Math.max(0, f.stock - f.reserved), v = visOf(f), main = ownerMain(f);
     const opt = (val, label) => `<button data-act="set-vis" data-vis="${val}" data-id="${id}" class="${v === val ? "on" : ""}" aria-pressed="${v === val}">${label}</button>`;
     return `<div class="frow ${v === "hidden" ? "is-hidden" : ""} ${main ? "variant-row" : ""}" ${main ? `data-sort-id="${id}"` : ""}>
-      <div class="order-top"><div><h3>${esc(f.flavor)}</h3><p class="sub">${main ? "Variant of " + esc(main.flavor) + ", " : ""}${peso(f.price)}${f.batch ? ", " + esc(f.batch) : ""}</p></div>
+      <div class="order-top"><div class="ftitle"><span class="fthumb">${thumbHtml(f)}</span><div><h3>${esc(f.flavor)}</h3><p class="sub">${main ? "Variant of " + esc(main.flavor) + ", " : ""}${peso(f.price)}${f.batch ? ", " + esc(f.batch) : ""}</p></div></div>
         <div class="row-end">${!main && ownerDrops.on ? dropTag(f.id) : ""}${v === "hidden" ? '<span class="tag">Hidden</span>' : v === "soon" ? '<span class="tag soon">Coming soon</span>' : ""}
         ${canMove ? dragHandle(main ? "variant-row" : "fgroup", f.id, f.flavor) : ""}</div></div>
       <p class="sub" style="margin-top:6px">${f.stock} on hand, ${f.reserved} reserved by orders, ${l} left to order</p>
@@ -2200,9 +2228,10 @@ $("unlock").onclick = async () => {
 $("token").addEventListener("keydown", e => { if (e.key === "Enter") $("unlock").click(); });
 
 document.addEventListener("change", e => {
+  if (e.target.id === "f-photo") { setPickedPhoto(e.target.files[0] || null); return; }
   if (e.target.id === "bake-date") { if (e.target.value) { bakeDay = e.target.value; bakeResetArmed = false; renderBake(); } return; }
   if (e.target.dataset && e.target.dataset.deliver) { changeDeliverOn(e.target.dataset.deliver, e.target.value); return; }
-  if (e.target.id === "f-parent") { renderFormCats(); return; }
+  if (e.target.id === "f-parent") { renderFormCats(); renderPhotoBox(); return; }
   if (e.target.name === "box") { boxChoice = e.target.value; renderCart(); return; }
   if (e.target.id === "deliver-on") { deliverPick = e.target.value; $("msg").textContent = ""; renderDeliverChoice(); return; }
   if (e.target.dataset && e.target.dataset.editDeliver) { editDeliver = e.target.value; renderMine(); return; }
@@ -2229,26 +2258,95 @@ function readPhoto(file) {
     reader.onload = () => {
       const img = new Image();
       img.onload = () => {
-        const s = Math.min(1, 300 / Math.max(img.width, img.height));
-        const cv = document.createElement("canvas");
-        cv.width = img.width * s; cv.height = img.height * s;
-        cv.getContext("2d").drawImage(img, 0, 0, cv.width, cv.height);
-        resolve(cv.toDataURL("image/jpeg", 0.7));
+        // Sheets cells hold 50,000 characters, so shrink until the picture fits.
+        for (const [px, q] of [[400, 0.75], [400, 0.6], [320, 0.6], [260, 0.55], [200, 0.5]]) {
+          const s = Math.min(1, px / Math.max(img.width, img.height));
+          const cv = document.createElement("canvas");
+          cv.width = Math.round(img.width * s); cv.height = Math.round(img.height * s);
+          const g = cv.getContext("2d");
+          g.fillStyle = "#fff"; // see-through PNGs would turn black as a JPEG
+          g.fillRect(0, 0, cv.width, cv.height);
+          g.drawImage(img, 0, 0, cv.width, cv.height);
+          const url = cv.toDataURL("image/jpeg", q);
+          if (url.length <= 45000 || px === 200) return resolve(url);
+        }
       };
+      img.onerror = () => resolve("");
       img.src = reader.result;
     };
     reader.readAsDataURL(file);
   });
 }
 
+// Photos for the owner view: fetched once, and again after a photo changes.
+let ownerPhotos = null, ownerPhotoSig = null, removePhoto = false, newPhotoUrl = "";
+async function loadOwnerPhotos() {
+  try {
+    const d = await api({ action: "flavorPhotos" });
+    ownerPhotos = d.photos || ownerPhotos || {};
+  } catch (_) { ownerPhotoSig = null; return; } // try again on the next refresh
+  $("flavors")._html = null;
+  renderFlavorList();
+  renderPhotoBox();
+}
+function checkOwnerPhotos() {
+  const sig = ownerFl.filter(f => f.hasPhoto).map(f => f.id).sort().join(",");
+  if (sig !== ownerPhotoSig) { ownerPhotoSig = sig; loadOwnerPhotos(); }
+}
+// What customers see for a cookie: its photo, a variant's main cookie photo, or the 🍪.
+function thumbHtml(f) {
+  const main = ownerMain(f), src = ownerPhotos && (ownerPhotos[f.id] || (main && ownerPhotos[main.id]));
+  return src ? `<img src="${esc(src)}" alt="">` : f.hasPhoto ? "" : '<span aria-hidden="true">🍪</span>';
+}
+
+// The Photo part of the flavor form: shows the current photo, a new one you picked, or the 🍪.
+function renderPhotoBox() {
+  const f = editingFlavor && ownerFl.find(x => x.id === editingFlavor);
+  const main = ownerFl.find(x => x.id === $("f-parent").value);
+  const mainSrc = main && ownerPhotos && ownerPhotos[main.id];
+  const cur = f && f.hasPhoto ? (ownerPhotos && ownerPhotos[f.id]) || "" : "";
+  const has = !!(f && f.hasPhoto), picked = !!newPhotoUrl;
+  const fallback = main ? (mainSrc ? `customers see ${main.flavor}'s photo` : "customers see the 🍪") : "customers see the 🍪";
+  let thumb, text;
+  if (picked) {
+    thumb = `<img src="${newPhotoUrl}" alt="New photo">`;
+    text = has ? "New photo. It replaces the current one when you save." : "New photo. It's added when you save.";
+  } else if (has && removePhoto) {
+    thumb = mainSrc ? `<img src="${esc(mainSrc)}" alt="">` : '<span aria-hidden="true">🍪</span>';
+    text = "The photo goes when you save, so " + fallback + ".";
+  } else if (has) {
+    thumb = cur ? `<img src="${esc(cur)}" alt="Current photo">` : "";
+    text = "This is the current photo. It stays when you save.";
+  } else {
+    thumb = mainSrc ? `<img src="${esc(mainSrc)}" alt="">` : '<span aria-hidden="true">🍪</span>';
+    text = "No photo yet, so " + fallback + ".";
+  }
+  $("photo-box").classList.toggle("removing", has && removePhoto && !picked);
+  paint($("photo-thumb"), thumb);
+  $("photo-text").textContent = text;
+  $("photo-pick").textContent = picked ? "Choose another" : has ? "Change photo" : "Choose photo";
+  const rm = $("photo-rm-btn");
+  rm.classList.toggle("hidden", !picked && !has);
+  rm.textContent = picked ? "Undo" : removePhoto ? "Keep it" : "Remove";
+  rm.classList.toggle("danger", !picked && !removePhoto);
+}
+function setPickedPhoto(file) {
+  if (newPhotoUrl) URL.revokeObjectURL(newPhotoUrl);
+  newPhotoUrl = file ? URL.createObjectURL(file) : "";
+  if (file) removePhoto = false;
+  renderPhotoBox();
+}
+
 function clearFlavorForm() {
   editingFlavor = null;
+  removePhoto = false;
   formCats = new Set();
   $("f-parent").disabled = false;
   fillParentSelect();
   $("f-parent").value = "";
   ["f-flavor", "f-price", "f-desc", "f-stock", "f-batch", "f-cost", "f-max"].forEach(id => ($(id).value = ""));
   $("f-photo").value = "";
+  setPickedPhoto(null);
   setFormVis("menu");
   $("form-title").textContent = "Add a flavor";
   $("save").textContent = "Save flavor";
@@ -2272,7 +2370,7 @@ $("flavor-form").onsubmit = async e => {
       for (let n = 2; ownerFl.some(x => x.id === id); n++) id = base + "-" + n;
     }
     const photo = await readPhoto($("f-photo").files[0]); // blank keeps the current photo
-    const d = await api({ action: "saveFlavor", flavor: { id, flavor, price, description: $("f-desc").value.trim(), batch, stock: Number($("f-stock").value) || 0, photo, visibility: formVis, parent,
+    const d = await api({ action: "saveFlavor", flavor: { id, flavor, price, description: $("f-desc").value.trim(), batch, stock: Number($("f-stock").value) || 0, photo, removePhoto: removePhoto && !photo, visibility: formVis, parent,
       cost: $("f-cost").value.trim(), max: $("f-max").value.trim() } });
     $("save-msg").textContent = d.error ? d.error : (editingFlavor ? "Flavor updated." : "Flavor saved.");
     if (!d.error && !parent) {
@@ -2283,6 +2381,7 @@ $("flavor-form").onsubmit = async e => {
       });
       if (next.some((c, i) => c !== ownerCats[i])) await saveCats(next);
     }
+    if (!d.error && (photo || removePhoto)) ownerPhotoSig = null; // the photo changed: fetch them again
     if (!d.error) clearFlavorForm();
     photosAt = 0;
     await loadOwner();
@@ -2754,15 +2853,22 @@ const acts = {
     $("f-cost").value = f.cost ?? "";
     $("f-max").value = f.max || "";
     $("f-photo").value = "";
+    removePhoto = false;
+    setPickedPhoto(null);
     setFormVis(visOf(f));
     $("form-title").textContent = "Edit " + f.flavor;
     $("save").textContent = "Update flavor";
     $("cancel-edit").classList.remove("hidden");
-    $("save-msg").textContent = f.hasPhoto ? "Leave the photo empty to keep the current one." : "";
+    $("save-msg").textContent = "";
     $("flavor-form").scrollIntoView({ block: "start" });
     $("f-flavor").focus({ preventScroll: true });
   },
   "form-vis"(v) { setFormVis(v); },
+  "photo-rm"() {
+    if (newPhotoUrl) { $("f-photo").value = ""; setPickedPhoto(null); return; } // undo the new pick
+    removePhoto = !removePhoto;
+    renderPhotoBox();
+  },
   "cancel-flavor-edit"() { clearFlavorForm(); $("save-msg").textContent = ""; },
   day(id) { orderDay = id; $("orders")._html = null; renderOwner(); },
   "bake-open"() {
@@ -2944,7 +3050,8 @@ const acts = {
     $("form-title").textContent = "Add a variant to " + main.flavor;
     $("save").textContent = "Save variant";
     $("cancel-edit").classList.remove("hidden");
-    $("save-msg").textContent = "It gets its own price, stock and photo. No photo uses " + main.flavor + "'s.";
+    $("save-msg").textContent = "It gets its own price, stock and photo.";
+    renderPhotoBox();
     $("flavor-form").scrollIntoView({ block: "start" });
     $("f-flavor").focus({ preventScroll: true });
   },
